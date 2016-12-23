@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="listPreferredItemPaddingBottom" format="dimension"/>
+    <attr name="listPreferredItemPaddingTop" format="dimension"/>
+    <attr name="listPreferredItemPaddingStart" format="dimension"/>
+    <attr name="listPreferredItemPaddingEnd" format="dimension"/>
+
+    <declare-styleable name="AppTheme">
+        <attr name="isFloatingWindow" format="boolean"/>
+    </declare-styleable>
+</resources>

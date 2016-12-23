@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.EventsDetailFragment">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="miyagi389.android.apps.tr.presentation.ui.EventsDetailFragmentViewModel"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/body_padding_bottom"
+                android:layout_marginTop="@dimen/body_padding_top"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/body_padding_end"
+                    android:layout_marginStart="@dimen/body_padding_start"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_access_time_black_24dp"
+                        tools:ignore="ContentDescription"/>
+
+                    <TextView
+                        android:id="@+id/dt_start_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:text="@{viewModel.formatDtStart(context) ?? @string/unselected}"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        tools:text="2017/1/1 11:00"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/body_padding_end"
+                    android:layout_marginStart="@dimen/body_padding_start"
+                    android:orientation="horizontal">
+
+                    <!-- dummy -->
+                    <View
+                        android:layout_width="24dp"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/dt_end_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:text="@{viewModel.formatDtEnd(context) ?? @string/unselected}"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        tools:text="2017/1/1 12:00"/>
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_divider"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="@dimen/body_padding_end"
+                    android:layout_marginStart="@dimen/body_padding_start"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_description_black_24dp"
+                        tools:ignore="ContentDescription"/>
+
+                    <TextView
+                        android:id="@+id/description_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:text="@{viewModel.description}"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        tools:text="Memo1\nMemo2"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/events_detail_fragment_empty_text"
+            android:visibility="@{viewModel.isEmpty ? View.VISIBLE : View.GONE}"/>
+
+    </RelativeLayout>
+
+</layout>

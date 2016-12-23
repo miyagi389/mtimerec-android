@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="miyagi389.android.apps.tr.data">
+
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+
+    <application>
+
+        <provider
+            android:name=".provider.entity.MasterDataProvider"
+            android:authorities="miyagi389.android.apps.tr.data.provider.entity.master"
+            android:exported="false"/>
+
+    </application>
+
+</manifest>

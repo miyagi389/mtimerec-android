@@ -1,0 +1,6 @@
+include ":app-presentation"
+include ":app-data"
+include ":app-domain"
+include ":lib-android-commons"
+include ":lib-rx-android-content"
+include ":lib-rx-eventbus"

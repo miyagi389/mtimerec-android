@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="activity_floating_width">600dp</dimen>
+    <dimen name="activity_floating_height">750dp</dimen>
+
+</resources>

@@ -1,0 +1,50 @@
+apply plugin: "com.android.library"
+apply plugin: "com.neenbedankt.android-apt"
+apply plugin: "me.tatarka.retrolambda"
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+    }
+
+    defaultPublishConfig "release"
+    publishNonDefault true
+}
+
+dependencies {
+    compile project(path: ":app-domain")
+
+    debugCompile project(path: ":lib-android-commons", configuration: "debug")
+    releaseCompile project(path: ":lib-android-commons", configuration: "release")
+
+    debugCompile project(path: ":lib-rx-android-content", configuration: "debug")
+    releaseCompile project(path: ":lib-rx-android-content", configuration: "release")
+
+    compile project(path: ":lib-rx-eventbus")
+
+    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    compile "com.google.dagger:dagger:${daggerVersion}"
+
+    // Android Support Library
+    compile "com.android.support:appcompat-v7:${androidSupportPackageVersion}"
+
+    // Rx
+    compile "io.reactivex:rxjava:${rxJavaVersion}"
+    compile "io.reactivex:rxandroid:${rxAndroidVersion}"
+    compile "com.trello:rxlifecycle:${rxLifecycleVersion}"
+    compile "com.trello:rxlifecycle-components:${rxLifecycleVersion}"
+
+    compile "com.jakewharton.threetenabp:threetenabp:${threetenabpVersion}"
+    compile "com.jakewharton.timber:timber:${timberVersion}"
+
+    testCompile "junit:junit:${jUnitVersion}"
+}

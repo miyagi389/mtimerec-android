@@ -1,0 +1,27 @@
+apply plugin: "com.android.library"
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+    }
+
+    defaultPublishConfig "release"
+    publishNonDefault true
+}
+
+dependencies {
+    compile "com.android.support:support-v4:${rootProject.ext.androidSupportPackageVersion}"
+
+    compile "io.reactivex:rxjava:${rxJavaVersion}"
+
+    testCompile "junit:junit:${jUnitVersion}"
+}

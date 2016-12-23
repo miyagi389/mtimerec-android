@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_edit"
+        android:icon="@drawable/ic_menu_edit_black_24dp"
+        android:title="@string/template_list_fragment_menu_edit_title"/>
+
+    <item
+        android:id="@+id/menu_events"
+        android:icon="@drawable/template_list_fragment_menu_events"
+        android:title="@string/template_list_fragment_menu_events_title"/>
+
+</menu>

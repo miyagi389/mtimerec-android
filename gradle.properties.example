@@ -1,0 +1,4 @@
+app_storeFile=../buildsystem/release.keystore
+app_storePassword=[INPUT PASSWORD]
+app_keyAlias=miyagi389.android.apps.tr
+app_keyPassword=[INPUT PASSWORD]

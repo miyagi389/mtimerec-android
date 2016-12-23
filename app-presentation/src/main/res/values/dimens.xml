@@ -1,0 +1,22 @@
+<resources>
+
+    <dimen name="body_padding_top">16dp</dimen>
+    <dimen name="body_padding_bottom">8dp</dimen>
+    <dimen name="body_padding_end">16dp</dimen>
+    <dimen name="body_padding_start">16dp</dimen>
+
+    <dimen name="dialog_padding_bottom">24dp</dimen>
+    <dimen name="dialog_padding_end">24dp</dimen>
+    <dimen name="dialog_padding_start">24dp</dimen>
+
+    <dimen name="listPreferredItemPaddingBottom">8dp</dimen>
+    <dimen name="listPreferredItemPaddingTop">8dp</dimen>
+    <dimen name="listPreferredItemPaddingStart">16dp</dimen>
+    <dimen name="listPreferredItemPaddingEnd">16dp</dimen>
+
+    <fraction name="activity_floating_width">80%</fraction>
+    <fraction name="activity_floating_height">75%</fraction>
+
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

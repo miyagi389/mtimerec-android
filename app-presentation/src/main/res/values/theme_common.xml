@@ -1,0 +1,47 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:alertDialogTheme">@style/AppTheme.Dialog.Alert</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="listPreferredItemPaddingBottom">@dimen/listPreferredItemPaddingBottom</item>
+        <item name="listPreferredItemPaddingTop">@dimen/listPreferredItemPaddingTop</item>
+        <item name="listPreferredItemPaddingStart">@dimen/listPreferredItemPaddingStart</item>
+        <item name="listPreferredItemPaddingEnd">@dimen/listPreferredItemPaddingEnd</item>
+
+        <item name="buttonStyle">@style/Widget.Button</item>
+        <item name="borderlessButtonStyle">@style/Widget.Button.Borderless</item>
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Toolbar" parent="AppTheme.NoActionBar"/>
+
+    <style name="AppTheme.Toolbar.HomeAsUp">
+        <item name="toolbarStyle">@style/Widget.Toolbar.HomeAsUp</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.Close">
+        <item name="toolbarStyle">@style/Widget.Toolbar.Close</item>
+    </style>
+
+    <style name="AppTheme.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+    </style>
+
+</resources>

@@ -1,0 +1,51 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
+        classpath "me.tatarka:gradle-retrolambda:3.3.1"
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+// http://www.gradle.org/docs/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html
+ext {
+    // Android
+    androidCompileSdkVersion = 24
+    androidBuildToolsVersion = "25.0.2"
+    androidMinSdkVersion = 23
+    androidTargetSdkVersion = 25
+    androidSupportPackageVersion = "25.1.0"
+    googlePlayServicesVersion = "9.6.1"
+
+    // Libraries
+    guavaVersion = "20.0"
+    daggerVersion = "2.8"
+    rxJavaVersion = "1.2.4"         // https://github.com/ReactiveX/RxJava/releases
+    rxAndroidVersion = "1.2.1"      // https://github.com/ReactiveX/RxAndroid/releases supported rxJava2
+    rxLifecycleVersion = "0.8.0"    // https://github.com/trello/RxLifecycle/releases supported rxJava2
+    rxPermissionsVersion = "0.9.1"  // https://github.com/tbruyelle/RxPermissions supported rxJava2
+    threetenabpVersion = "1.0.4"    // https://github.com/JakeWharton/ThreeTenABP/releases
+    timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
+    stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases
+
+    // Testing
+    jUnitVersion = "4.12"
+
+    // Development
+    leakCanaryVersion = "1.5"       // https://github.com/square/leakcanary/releases
+}

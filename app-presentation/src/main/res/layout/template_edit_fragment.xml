@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.TemplateEditFragment">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="miyagi389.android.apps.tr.presentation.ui.TemplateEditFragmentViewModel"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/body_padding_end"
+                    android:layout_marginStart="@dimen/body_padding_start"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_subject_black_24dp"
+                        tools:ignore="ContentDescription"/>
+
+                    <miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout
+                        android:id="@+id/event_title_error_label_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="32dp">
+
+                        <EditText
+                            android:id="@+id/event_title_edit"
+                            style="@style/Widget.EditText.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/template_edit_fragment_event_title_edit_hint"
+                            android:imeOptions="flagNoFullscreen|flagNoExtractUi"
+                            android:inputType="textNoSuggestions"
+                            android:text="@={viewModel.eventTitle}"
+                            app:theme="@style/Widget.EditText.Borderless"/>
+
+                    </miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout>
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_divider"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="@dimen/body_padding_end"
+                    android:layout_marginStart="@dimen/body_padding_start"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_event_note_black_24dp"
+                        tools:ignore="ContentDescription"/>
+
+                    <miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout
+                        android:id="@+id/calendar_error_label_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="32dp">
+
+                        <Button
+                            android:id="@+id/calendar_button"
+                            style="@style/Widget.Button.Borderless"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start|center"
+                            android:text="@{viewModel.calendarDisplayName ?? @string/unselected}"
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:textColor="?attr/editTextColor"/>
+
+                    </miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/template_edit_fragment_empty_text"
+            android:visibility="@{viewModel.isEmpty ? View.VISIBLE : View.GONE}"/>
+
+    </RelativeLayout>
+
+</layout>

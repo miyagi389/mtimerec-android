@@ -1,0 +1,130 @@
+apply plugin: "com.android.application"
+apply plugin: "com.neenbedankt.android-apt"
+apply plugin: "me.tatarka.retrolambda"
+apply plugin: "com.getkeepsafe.dexcount"
+
+ext {
+    archivesBaseName = "miyagi389.android.apps.tr"
+}
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId archivesBaseName
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode 3
+        versionName "0.0.3"
+    }
+
+    signingConfigs {
+        release {
+            // 環境変数、gradle.properties の順でリリース署名用の設定があれば署名を有効化します。
+            if (System.getenv("APP_KEYSTORE_FILE")) {
+                storeFile file(System.getenv("APP_KEYSTORE_FILE"))
+            } else if (project.hasProperty("app_storeFile")) {
+                storeFile file(project.properties.app_storeFile)
+            }
+
+            if (System.getenv("APP_KEYSTORE_PASSWORD")) {
+                storePassword System.getenv("APP_KEYSTORE_PASSWORD")
+            } else if (project.hasProperty("app_storePassword")) {
+                storePassword project.properties.app_storePassword
+            }
+
+            if (System.getenv("APP_KEY_ALIAS")) {
+                keyAlias System.getenv("APP_KEY_ALIAS")
+            } else if (project.hasProperty("app_keyAlias")) {
+                keyAlias project.properties.app_keyAlias
+            }
+
+            if (System.getenv("APP_KEY_PASSWORD")) {
+                keyPassword System.getenv("APP_KEY_PASSWORD")
+            } else if (project.hasProperty("app_keyPassword")) {
+                keyPassword project.properties.app_keyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"),
+                    "proguard/app.pro",
+                    "../proguard/android.pro",
+                    "../proguard/android-databinding.pro",
+                    "../proguard/android-support-design.pro",
+                    "../proguard/android-support-fragment.pro",
+                    "../proguard/android-support-v7-appcompat.pro",
+                    "../proguard/dagger.pro",
+                    "../proguard/retrolambda.pro",
+                    "../proguard/rxjava.pro",
+                    "../proguard/timber.pro"
+        }
+    }
+
+    packagingOptions {
+        exclude "LICENSE.txt"
+        exclude "META-INF/DEPENDENCIES"
+        exclude "META-INF/ASL2.0"
+        exclude "META-INF/NOTICE"
+        exclude "META-INF/LICENSE"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    // Android Studio 2.1 + Databinding + Dagger 2.x のビルド環境で
+    // 明示的に guava のバージョンをしていないと、コンパイルエラー: "java.lang.NoSuchMethodError: com.google.common.collect.ImmutableSetMultimap$Builder.putAll(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableSetMultimap$Builder;" になる。
+    // 詳細: http://qiita.com/chibatching/items/e5a0f5016093abec884b
+    apt "com.google.guava:guava:${guavaVersion}"
+
+    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    compile "com.google.dagger:dagger:${daggerVersion}"
+
+    debugCompile project(path: ":app-data", configuration: "debug")
+    releaseCompile project(path: ":app-data", configuration: "release")
+
+    debugCompile project(path: ":lib-rx-android-content", configuration: "debug")
+    releaseCompile project(path: ":lib-rx-android-content", configuration: "release")
+
+    compile project(path: ":lib-rx-eventbus")
+
+    // Android Support Library
+    compile "com.android.support:appcompat-v7:${androidSupportPackageVersion}"
+    compile "com.android.support:design:${androidSupportPackageVersion}"
+    compile "com.android.support:cardview-v7:${androidSupportPackageVersion}"
+    compile "com.android.support:preference-v14:${androidSupportPackageVersion}"
+    compile "com.android.support:recyclerview-v7:${androidSupportPackageVersion}"
+
+    // Rx
+    compile "io.reactivex:rxjava:${rxJavaVersion}"
+    compile "io.reactivex:rxandroid:${rxAndroidVersion}"
+    compile "com.trello:rxlifecycle:${rxLifecycleVersion}"
+    compile "com.trello:rxlifecycle-components:${rxLifecycleVersion}"
+    compile "com.tbruyelle.rxpermissions:rxpermissions:${rxPermissionsVersion}@aar"
+
+    compile "com.jakewharton.threetenabp:threetenabp:${threetenabpVersion}"
+    compile "com.jakewharton.timber:timber:${timberVersion}"
+
+    debugCompile "com.facebook.stetho:stetho:${stethoVersion}"
+
+    //Development
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryVersion}"
+
+    testCompile "junit:junit:${jUnitVersion}"
+}

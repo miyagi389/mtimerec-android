@@ -1,0 +1,35 @@
+<resources>
+
+    <style name="Widget"/>
+
+    <style name="Widget.Button" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Widget.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+        <!-- ボタンタッチ時に、Material 特有のフィードバックを表示する。 -->
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Widget.EditText" parent="Widget.AppCompat.EditText">
+    </style>
+
+    <style name="Widget.EditText.Borderless">
+        <item name="android:background">#00000000</item>
+    </style>
+
+    <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.Toolbar.HomeAsUp">
+        <item name="navigationIcon">?attr/homeAsUpIndicator</item>
+    </style>
+
+    <style name="Widget.Toolbar.Close">
+        <item name="navigationIcon">@drawable/abc_ic_clear_material</item>
+    </style>
+
+</resources>

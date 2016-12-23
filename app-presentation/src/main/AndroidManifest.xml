@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="miyagi389.android.apps.tr.presentation">
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ui.CalendarsChoiceActivity"
+            android:exported="false"
+            android:label="@string/calendars_choice_activity_title"
+            android:theme="@style/AppTheme.Toolbar.Close.Floating">
+        </activity>
+
+        <activity
+            android:name=".ui.EventsDetailActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.Toolbar.HomeAsUp">
+        </activity>
+
+        <activity
+            android:name=".ui.EventsEditActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.Toolbar.Close"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
+        <activity
+            android:name=".ui.EventsListActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.Toolbar.HomeAsUp">
+        </activity>
+
+        <activity
+            android:name=".ui.TemplateAddActivity"
+            android:exported="false"
+            android:label="@string/template_add_activity_title"
+            android:theme="@style/AppTheme.Toolbar.Close"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
+        <activity
+            android:name=".ui.TemplateEditActivity"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.Toolbar.Close"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
+        <activity
+            android:name=".ui.TemplateListActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Toolbar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:label="@string/settings_activity_title"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.Toolbar.HomeAsUp">
+        </activity>
+
+    </application>
+
+</manifest>
