@@ -10,6 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,6 +29,7 @@ import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
+import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
@@ -52,6 +56,8 @@ public class EventsListFragment
 
     private EventsListAdapter adapter;
 
+    private EventsRepository.SortOrder sortOrder;
+
     @Inject
     EventsRepository eventsRepository;
 
@@ -60,6 +66,7 @@ public class EventsListFragment
 
     // Required empty public constructor
     public EventsListFragment() {
+        setHasOptionsMenu(true);
     }
 
     @NonNull
@@ -141,6 +148,12 @@ public class EventsListFragment
     }
 
     @Override
+    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        self.sortOrder = PreferenceUtils.UI.EventsList.getSortOrder(getContext());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         registerObservable();
@@ -181,11 +194,11 @@ public class EventsListFragment
             return;
         }
 
+        final long calendarId = template.getCalendarId();
+        final String eventTitle = template.getEventTitle();
         final long fromDate = getArgumentsFromDate();
-
         final long toDate = getArgumentsToDate();
-
-        self.eventsRepository.findByCalendarId(template.getCalendarId(), template.getEventTitle(), fromDate, toDate)
+        self.eventsRepository.findByCalendarId(calendarId, eventTitle, fromDate, toDate, self.sortOrder)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(() -> {
@@ -216,6 +229,47 @@ public class EventsListFragment
 
     private EventsListFragmentViewModel createViewModel() {
         return new EventsListFragmentViewModel();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+        final Menu menu,
+        final MenuInflater inflater
+    ) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.events_list_fragment, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(final Menu menu) {
+        switch (self.sortOrder) {
+            case DT_START_ASCENDING:
+                menu.findItem(R.id.menu_sort_by_dt_start_ascending).setChecked(true);
+                break;
+            case DT_START_DESCENDING:
+                menu.findItem(R.id.menu_sort_by_dt_start_descending).setChecked(true);
+                break;
+            default:
+                super.onPrepareOptionsMenu(menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort_by_dt_start_ascending:
+                self.sortOrder = EventsRepository.SortOrder.DT_START_ASCENDING;
+                PreferenceUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            case R.id.menu_sort_by_dt_start_descending:
+                self.sortOrder = EventsRepository.SortOrder.DT_START_DESCENDING;
+                PreferenceUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -299,7 +353,6 @@ public class EventsListFragment
     @Override
     public void onClickPositive(@NonNull final AlertDialogFragment dialog) {
         if (TextUtils.equals(dialog.getTag(), REQUEST_TAG_DELETE)) {
-            final Bundle args = dialog.getArguments();
             final long id = dialog.getArguments().getLong(EXTRA_DIALOG_ID);
             deleteInternal(id);
         }

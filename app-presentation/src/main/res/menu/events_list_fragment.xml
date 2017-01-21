@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_sort"
+        android:title="@string/events_list_fragment_menu_sort_title"
+        app:showAsAction="never">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/menu_sort_by_dt_start_ascending"
+                    android:title="@string/events_list_fragment_menu_sort_by_dt_start_ascending_title"/>
+
+                <item
+                    android:id="@+id/menu_sort_by_dt_start_descending"
+                    android:title="@string/events_list_fragment_menu_sort_by_dt_start_descending_title"/>
+
+            </group>
+
+        </menu>
+
+    </item>
+
+</menu>

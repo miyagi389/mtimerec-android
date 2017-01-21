@@ -1,11 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">"mTimeRec"</string>
 
-    <!-- preferences -->
-    <string name="pref_about_title">"About"</string>
-    <string name="pref_about_app_version_key" translatable="false">pref_about_app_version_key</string>
-    <string name="pref_about_app_version_title">"Version"</string>
-
     <string name="ic_menu_settings_title">"Settings"</string>
 
     <string name="unselected">(unselected)</string>
@@ -27,6 +22,9 @@
     <string name="events_list_fragment_empty_text">"empty"</string>
     <string name="events_list_fragment_delete_button_message">"Delete %1$s?"</string>
     <string name="events_list_fragment_delete_button_positive">"Delete"</string>
+    <string name="events_list_fragment_menu_sort_title">"Sort"</string>
+    <string name="events_list_fragment_menu_sort_by_dt_start_ascending_title">"Date (Ascending)"</string>
+    <string name="events_list_fragment_menu_sort_by_dt_start_descending_title">"Date (Descending)"</string>
     <string name="events_list_fragment_item_menu_edit_title">"Edit"</string>
     <string name="events_list_fragment_item_menu_delete_title">"Delete…"</string>
 

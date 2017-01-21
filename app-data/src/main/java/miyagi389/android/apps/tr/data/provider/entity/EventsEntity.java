@@ -13,6 +13,8 @@ import android.provider.CalendarContract.Events;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import miyagi389.android.apps.tr.domain.repository.EventsRepository;
+
 /**
  * {@link android.provider.CalendarContract.Events} wrapper
  */
@@ -157,7 +159,8 @@ public class EventsEntity implements Parcelable {
             final long calendarId,
             @NonNull final String title,
             final long fromDate,
-            final long toDate
+            final long toDate,
+            @NonNull final EventsRepository.SortOrder sortOrder
         ) {
             final Uri uri = Events.CONTENT_URI;
             final String selection = Events.CALENDAR_ID + " = ? AND " +
@@ -173,14 +176,26 @@ public class EventsEntity implements Parcelable {
                 Long.toString(fromDate),
                 Long.toString(toDate),
             };
-            final String sortOrder = Events.DTSTART + " ASC";
+            final String querySortOrder = toSortOrder(sortOrder);
             final ContentResolver cr = context.getContentResolver();
             //noinspection MissingPermission Permission check は呼び出し元で行う。
-            @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, selection, selectionArgs, sortOrder);
+            @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, selection, selectionArgs, querySortOrder);
             if (cursor == null) {
                 return null;
             }
             return new CursorWrapper(cursor);
+        }
+
+        @Nullable
+        private static String toSortOrder(@NonNull final EventsRepository.SortOrder sortOrder) {
+            switch (sortOrder) {
+                case DT_START_ASCENDING:
+                    return Events.DTSTART + " ASC";
+                case DT_START_DESCENDING:
+                    return Events.DTSTART + " DESC";
+                default:
+                    return null;
+            }
         }
 
         public static Uri insert(
