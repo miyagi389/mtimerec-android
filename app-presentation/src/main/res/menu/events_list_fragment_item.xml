@@ -5,11 +5,11 @@
     <item
         android:id="@+id/menu_edit"
         android:icon="@drawable/ic_menu_edit_black_24dp"
-        android:title="@string/events_list_fragment_menu_edit_title"/>
+        android:title="@string/events_list_fragment_item_menu_edit_title"/>
 
     <item
         android:id="@+id/menu_delete"
         android:icon="@drawable/ic_menu_delete_black_24dp"
-        android:title="@string/events_list_fragment_menu_delete_title"/>
+        android:title="@string/events_list_fragment_item_menu_delete_title"/>
 
 </menu>
