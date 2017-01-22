@@ -49,8 +49,8 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Observable<Template> findAll() {
-        return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperByAll(context, TemplateEntity.Columns._EVENT_TITLE))
+    public Observable<Template> findAll(final SortOrder sortOrder) {
+        return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperByAll(context))
             .asObservable()
             .map(cursor -> mapper.transform(new TemplateEntity.CursorWrapper(cursor)))
             .map(entity -> {
@@ -61,7 +61,8 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                     }
                 }
                 return entity;
-            });
+            }).toSortedList(TemplateSortOrder.ITEMS.get(sortOrder))
+            .flatMapIterable(entities -> entities);
     }
 
     @Override

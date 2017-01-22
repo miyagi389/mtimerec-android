@@ -126,12 +126,11 @@ public class TemplateEntity implements Parcelable {
 
         @Nullable
         public static CursorWrapper toCursorWrapperByAll(
-            @NonNull final Context context,
-            @Nullable final String sortOrder
+            @NonNull final Context context
         ) {
             final Uri uri = CONTENT_URI;
             final ContentResolver cr = context.getContentResolver();
-            @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, null, null, sortOrder);
+            @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, null, null, null);
             if (cursor == null) {
                 return null;
             }

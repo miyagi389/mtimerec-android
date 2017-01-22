@@ -1,5 +1,6 @@
 <resources>
     <string name="pref_ui_events_list_sort_order_key" translatable="false">pref_ui_events_list_sort_order_key</string>
+    <string name="pref_ui_template_list_sort_order_key" translatable="false">pref_ui_template_list_sort_order_key</string>
 
     <string name="pref_about_title">"About"</string>
     <string name="pref_about_app_version_key" translatable="false">pref_about_app_version_key</string>

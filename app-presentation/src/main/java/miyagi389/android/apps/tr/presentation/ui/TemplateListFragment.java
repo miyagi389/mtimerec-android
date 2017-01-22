@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -27,6 +30,7 @@ import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.TemplateListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.IconWithItemAdapter;
+import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
@@ -51,6 +55,8 @@ public class TemplateListFragment
     private TemplateListAdapter adapter;
 
     private Template selectedTemplate;
+
+    private TemplateRepository.SortOrder sortOrder;
 
     @Inject
     TemplateRepository templateRepository;
@@ -113,6 +119,8 @@ public class TemplateListFragment
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        self.sortOrder = PreferenceUtils.UI.TemplateList.getSortOrder(getContext());
+
         if (savedInstanceState != null) {
             self.selectedTemplate = (Template) savedInstanceState.getSerializable(STATE_SELECTED_TEMPLATE);
         }
@@ -174,7 +182,7 @@ public class TemplateListFragment
 
     @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadData() {
-        self.templateRepository.findAll()
+        self.templateRepository.findAll(self.sortOrder)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(() -> {
@@ -205,6 +213,63 @@ public class TemplateListFragment
 
     private TemplateListFragmentViewModel createViewModel() {
         return new TemplateListFragmentViewModel();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+        final Menu menu,
+        final MenuInflater inflater
+    ) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.template_list_fragment, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(final Menu menu) {
+        switch (self.sortOrder) {
+            case DT_START_ASCENDING:
+                menu.findItem(R.id.menu_sort_by_dt_start_ascending).setChecked(true);
+                break;
+            case DT_START_DESCENDING:
+                menu.findItem(R.id.menu_sort_by_dt_start_descending).setChecked(true);
+                break;
+            case EVENT_TITLE_ASCENDING:
+                menu.findItem(R.id.menu_sort_by_event_title_ascending).setChecked(true);
+                break;
+            case EVENT_TITLE_DESCENDING:
+                menu.findItem(R.id.menu_sort_by_event_title_descending).setChecked(true);
+                break;
+            default:
+                super.onPrepareOptionsMenu(menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort_by_dt_start_ascending:
+                self.sortOrder = TemplateRepository.SortOrder.DT_START_ASCENDING;
+                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            case R.id.menu_sort_by_dt_start_descending:
+                self.sortOrder = TemplateRepository.SortOrder.DT_START_DESCENDING;
+                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            case R.id.menu_sort_by_event_title_ascending:
+                self.sortOrder = TemplateRepository.SortOrder.EVENT_TITLE_ASCENDING;
+                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            case R.id.menu_sort_by_event_title_descending:
+                self.sortOrder = TemplateRepository.SortOrder.EVENT_TITLE_DESCENDING;
+                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                requestLoadData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

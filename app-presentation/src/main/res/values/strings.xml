@@ -51,6 +51,11 @@
     <string name="template_list_activity_title">"Template"</string>
 
     <string name="template_list_fragment_empty_text">"empty"</string>
+    <string name="template_list_fragment_menu_sort_title">"Sort"</string>
+    <string name="template_list_fragment_menu_sort_by_dt_start_ascending_title">"Date (Ascending)"</string>
+    <string name="template_list_fragment_menu_sort_by_dt_start_descending_title">"Date (Descending)"</string>
+    <string name="template_list_fragment_menu_sort_by_event_title_ascending_title">"Title (Ascending)"</string>
+    <string name="template_list_fragment_menu_sort_by_event_title_descending_title">"Title (Descending)"</string>
     <string name="template_list_fragment_item_start_text">"Start"</string>
     <string name="template_list_fragment_item_end_text">"End"</string>
     <string name="template_list_fragment_item_menu_edit_title">"Edit"</string>
