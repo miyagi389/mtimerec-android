@@ -106,7 +106,11 @@ class TemplateListAdapter
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return self.items.size();
+        int itemCount = self.items.size();
+        if (itemCount > 0) {
+            itemCount += 1; // add footer item
+        }
+        return itemCount;
     }
 
     Template getItem(final int position) {
