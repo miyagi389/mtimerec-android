@@ -1,7 +1,6 @@
 package miyagi389.android.apps.tr.presentation.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -255,10 +254,7 @@ public class EventsDetailFragment extends BaseFragment {
         }
     }
 
-    private void onActivityResultEventsEdit(
-        final int resultCode
-    ) {
-        Timber.v("%s, resultCode=%d", new Throwable().getStackTrace()[0].getMethodName(), resultCode);
+    private void onActivityResultEventsEdit(final int resultCode) {
         switch (resultCode) {
             case EventsEditActivity.RESULT_SAVED:
                 self.listener.onSaved(self);
