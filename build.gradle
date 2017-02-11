@@ -29,7 +29,7 @@ ext {
     androidBuildToolsVersion = "25.0.2"
     androidMinSdkVersion = 23
     androidTargetSdkVersion = 25
-    androidSupportPackageVersion = "25.1.0"
+    androidSupportPackageVersion = "25.1.1"
     googlePlayServicesVersion = "9.6.1"
 
     // Libraries
