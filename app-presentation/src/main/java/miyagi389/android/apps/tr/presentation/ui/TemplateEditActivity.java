@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
-import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.TemplateEditActivityBinding;
 
 public class TemplateEditActivity extends BaseActivity implements TemplateEditFragment.Listener {
 
-    public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     private final TemplateEditActivity self = this;
 
@@ -25,10 +23,10 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
     @NonNull
     public static Intent newIntent(
         @NonNull final Context context,
-        @NonNull final Template template
+        final long id
     ) {
         final Intent intent = new Intent(context, TemplateEditActivity.class);
-        intent.putExtra(EXTRA_TEMPLATE, template);
+        intent.putExtra(EXTRA_ID, id);
         return intent;
     }
 
@@ -50,18 +48,17 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
         final FragmentManager fm = getSupportFragmentManager();
         self.templateEditFragment = (TemplateEditFragment) fm.findFragmentById(R.id.content_wrapper);
         if (self.templateEditFragment == null) {
-            final Template template = getIntentTemplate();
-            if (template != null) {
-                self.templateEditFragment = TemplateEditFragment.newInstance(getIntentTemplate());
+            final long id = getIntentId();
+            if (id > 0) {
+                self.templateEditFragment = TemplateEditFragment.newInstance(id);
                 replaceFragment(R.id.content_wrapper, self.templateEditFragment);
             }
         }
     }
 
-    @Nullable
-    private Template getIntentTemplate() {
+    private long getIntentId() {
         final Intent intent = getIntent();
-        return intent == null ? null : (Template) intent.getSerializableExtra(EXTRA_TEMPLATE);
+        return intent == null ? 0L : intent.getLongExtra(EXTRA_ID, 0L);
     }
 
     /**

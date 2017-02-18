@@ -4,9 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
-import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.presentation.BR;
 
 public class TemplateEditFragmentViewModel extends BaseObservable implements Parcelable {
@@ -61,7 +59,7 @@ public class TemplateEditFragmentViewModel extends BaseObservable implements Par
     }
 
     @Bindable
-    private void setCalendarDisplayName(final String calendarDisplayName) {
+    public void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
     }
@@ -76,11 +74,6 @@ public class TemplateEditFragmentViewModel extends BaseObservable implements Par
         this.loading = loading;
         notifyPropertyChanged(BR.loading);
         notifyPropertyChanged(BR.empty);
-    }
-
-    void setCalendars(@Nullable final Calendars calendars) {
-        setCalendarId(calendars == null ? 0 : calendars.getId());
-        setCalendarDisplayName(calendars == null ? "" : calendars.getCalendarDisplayName() + " (" + calendars.getAccountName() + ")");
     }
 
     /**

@@ -45,7 +45,7 @@ public class TemplateEditFragment extends BaseFragment {
 
     private static final int REQUEST_CODE_CALENDARS_CHOICE = 1;
 
-    public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     private static final String STATE_MODEL = "STATE_MODEL";
 
@@ -71,19 +71,18 @@ public class TemplateEditFragment extends BaseFragment {
 
     @NonNull
     /*package*/ static TemplateEditFragment newInstance(
-        @NonNull final Template template
+        final long id
     ) {
         final TemplateEditFragment f = new TemplateEditFragment();
         final Bundle args = new Bundle();
-        args.putSerializable(EXTRA_TEMPLATE, template);
+        args.putLong(EXTRA_ID, id);
         f.setArguments(args);
         return f;
     }
 
-    @Nullable
-    private Template getArgumentsTemplate() {
+    private long getArgumentsId() {
         final Bundle args = getArguments();
-        return args == null ? null : (Template) args.getSerializable(EXTRA_TEMPLATE);
+        return args == null ? 0L : args.getLong(EXTRA_ID);
     }
 
     @Override
@@ -122,10 +121,7 @@ public class TemplateEditFragment extends BaseFragment {
 
         if (savedInstanceState == null) {
             self.viewModel = new TemplateEditFragmentViewModel();
-            final Template template = getArgumentsTemplate();
-            if (template != null) {
-                self.dataMapper.transform(getArgumentsTemplate(), self.viewModel);
-            }
+            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -140,6 +136,10 @@ public class TemplateEditFragment extends BaseFragment {
         self.binding.calendarButton.setOnClickListener(v -> choiceCalendar());
 
         renderViewModel();
+
+        if (savedInstanceState == null) {
+            requestLoadData();
+        }
     }
 
     @Override
@@ -153,7 +153,6 @@ public class TemplateEditFragment extends BaseFragment {
         Timber.v(new Throwable().getStackTrace()[0].getMethodName());
         super.onResume();
         registerObservable();
-        requestLoadData();
     }
 
     private void registerObservable() {
@@ -177,14 +176,38 @@ public class TemplateEditFragment extends BaseFragment {
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadData();
+                        loadDataTemplate();
                     }
                 }
             );
     }
 
     @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
-    private void loadData() {
+    private void loadDataTemplate() {
+        self.templateRepository.findById(self.viewModel.getId())
+            .toObservable()
+            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> self.viewModel.setLoading(true))
+            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .subscribe(
+                template -> {
+                    self.dataMapper.transform(template, self.viewModel);
+                },
+                throwable -> {
+                    Timber.e(throwable, throwable.getMessage());
+                    renderViewModel();
+                    showError(throwable.getMessage());  // TODO error message
+                },
+                () -> {
+                    loadDataCalendars();
+                }
+            );
+    }
+
+    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
+    private void loadDataCalendars() {
         final long calendarId = self.viewModel.getCalendarId();
         final boolean isEmptyCalendarId = (calendarId <= 0);
         final Observable<Calendars> calendarsObservable;
@@ -202,8 +225,8 @@ public class TemplateEditFragment extends BaseFragment {
             .doOnSubscribe(() -> self.viewModel.setLoading(true))
             .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
             .subscribe(
-                item -> {
-                    self.viewModel.setCalendars(item);
+                calendars -> {
+                    self.dataMapper.transform(calendars, self.viewModel);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -332,8 +355,8 @@ public class TemplateEditFragment extends BaseFragment {
             return;
         }
 
-        final Calendars item = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
-        self.viewModel.setCalendars(item);
+        final Calendars calendars = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
+        self.dataMapper.transform(calendars, self.viewModel);
 
         renderViewModel();
     }
