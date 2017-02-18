@@ -23,8 +23,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import miyagi389.android.apps.tr.domain.model.Calendars;
-import miyagi389.android.apps.tr.domain.model.Events;
-import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.CalendarsRepository;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
@@ -46,7 +44,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
-    public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     private static final String STATE_MODEL = "STATE_MODEL";
 
@@ -75,19 +73,18 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     @NonNull
     /*package*/ static TemplateDetailFragment newInstance(
-        @NonNull final Template template
+        final long id
     ) {
         final TemplateDetailFragment f = new TemplateDetailFragment();
         final Bundle args = new Bundle();
-        args.putSerializable(EXTRA_TEMPLATE, template);
+        args.putLong(EXTRA_ID, id);
         f.setArguments(args);
         return f;
     }
 
-    @Nullable
-    private Template getArgumentsTemplate() {
+    private long getArgumentsId() {
         final Bundle args = getArguments();
-        return args == null ? null : (Template) args.getSerializable(EXTRA_TEMPLATE);
+        return args == null ? 0L : args.getLong(EXTRA_ID);
     }
 
     @Override
@@ -126,10 +123,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
         if (savedInstanceState == null) {
             self.viewModel = new TemplateDetailFragmentViewModel();
-            final Template template = getArgumentsTemplate();
-            if (template != null) {
-                self.dataMapper.transform(getArgumentsTemplate(), self.viewModel);
-            }
+            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -137,14 +131,13 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         self.binding = TemplateDetailFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
 
-        self.binding.eventsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                goEvents();
-            }
-        });
+        self.binding.eventsButton.setOnClickListener(v -> goEvents());
 
         renderViewModel();
+
+        if (savedInstanceState == null) {
+            requestLoadData();
+        }
     }
 
     @Override
@@ -182,8 +175,32 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadDataCalendar();
+                        loadDataTemplate();
                     }
+                }
+            );
+    }
+
+    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
+    private void loadDataTemplate() {
+        self.templateRepository.findById(self.viewModel.getId())
+            .toObservable()
+            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> self.viewModel.setLoading(true))
+            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .subscribe(
+                template -> {
+                    self.dataMapper.transform(template, self.viewModel);
+                },
+                throwable -> {
+                    Timber.e(throwable, throwable.getMessage());
+                    renderViewModel();
+                    showError(throwable.getMessage());  // TODO error message
+                },
+                () -> {
+                    loadDataCalendar();
                 }
             );
     }
@@ -207,8 +224,8 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .doOnSubscribe(() -> self.viewModel.setLoading(true))
             .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
             .subscribe(
-                item -> {
-                    self.viewModel.setCalendars(item);
+                calendars -> {
+                    self.dataMapper.transform(calendars, self.viewModel);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -233,7 +250,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .toList()
             .subscribe(
                 events -> {
-                    self.viewModel.setEvents(events);
+                    self.dataMapper.transform(events, self.viewModel);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -307,20 +324,14 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
     }
 
     private void edit() {
-        final Template template = getArgumentsTemplate();
-        final Intent intent = TemplateEditActivity.newIntent(
-            getContext(),
-            template
-        );
+        final long id = getArgumentsId();
+        final Intent intent = TemplateEditActivity.newIntent(getContext(), id);
         startActivity(intent);
     }
 
     private void goEvents() {
-        final Template template = getArgumentsTemplate();
-        final Intent intent = EventsListActivity.newIntent(
-            getContext(),
-            template
-        );
+        final long id = getArgumentsId();
+        final Intent intent = EventsListActivity.newIntent(getContext(), id);
         startActivity(intent);
     }
 

@@ -292,11 +292,8 @@ public class TemplateListFragment
         @NonNull final TemplateListAdapter adapter,
         final int position
     ) {
-        final Template template = adapter.getItem(position);
-        final Intent intent = TemplateDetailActivity.newIntent(
-            getContext(),
-            template
-        );
+        final long id = adapter.getItemId(position);
+        final Intent intent = TemplateDetailActivity.newIntent(getContext(), id);
         startActivity(intent);
     }
 

@@ -6,19 +6,14 @@ import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 
-import java.util.List;
-
-import miyagi389.android.apps.tr.domain.model.Calendars;
-import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.presentation.BR;
 import miyagi389.android.apps.tr.presentation.R;
 
 public class TemplateDetailFragmentViewModel extends BaseObservable implements Parcelable {
 
-    private static final long DT_EMPTY = 0;
+    static final long DT_EMPTY = 0;
 
     private long id;
 
@@ -76,7 +71,7 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
     }
 
     @Bindable
-    private void setCalendarDisplayName(final String calendarDisplayName) {
+    public void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
     }
@@ -121,26 +116,6 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         this.loading = loading;
         notifyPropertyChanged(BR.loading);
         notifyPropertyChanged(BR.empty);
-    }
-
-    void setCalendars(@Nullable final Calendars calendars) {
-        setCalendarId(calendars == null ? 0 : calendars.getId());
-        setCalendarDisplayName(calendars == null ? "" : calendars.getCalendarDisplayName() + " (" + calendars.getAccountName() + ")");
-    }
-
-    void setEvents(@Nullable final List<Events> events) {
-        final boolean isEmpty = events == null || events.isEmpty();
-        if (isEmpty) {
-            setEventsCount(0);
-            setEventsDtStart(DT_EMPTY);
-            setEventsDtStart(DT_EMPTY);
-        } else {
-            setEventsCount(events.size());
-            final Events first = events.get(0);
-            final Events last = events.get(events.size() - 1);
-            setEventsDtStart(first.getDtStart().getTime());
-            setEventsDtEnd(last.getDtEnd().getTime());
-        }
     }
 
     @NonNull

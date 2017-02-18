@@ -92,7 +92,11 @@ class TemplateListAdapter
 
     @Override
     public long getItemId(final int position) {
-        return super.getItemId(position);
+        final Template template = self.items.get(position);
+        if (template == null) {
+            return super.getItemId(position);
+        }
+        return template.getId();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
