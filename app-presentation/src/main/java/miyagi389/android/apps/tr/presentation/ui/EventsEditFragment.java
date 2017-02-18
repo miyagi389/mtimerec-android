@@ -48,7 +48,7 @@ public class EventsEditFragment
         void onSaved(@NonNull EventsEditFragment fragment);
     }
 
-    public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     private static final String STATE_MODEL = "STATE_MODEL";
 
@@ -76,18 +76,18 @@ public class EventsEditFragment
 
     @NonNull
     /*package*/ static EventsEditFragment newInstance(
-        final long eventsId
+        final long id
     ) {
         final EventsEditFragment f = new EventsEditFragment();
         final Bundle args = new Bundle();
-        args.putLong(EXTRA_EVENTS_ID, eventsId);
+        args.putLong(EXTRA_ID, id);
         f.setArguments(args);
         return f;
     }
 
-    private long getArgumentsEventsId() {
+    private long getArgumentsId() {
         final Bundle args = getArguments();
-        return args == null ? 0L : args.getLong(EXTRA_EVENTS_ID);
+        return args == null ? 0L : args.getLong(EXTRA_ID);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class EventsEditFragment
 
         if (savedInstanceState == null) {
             self.viewModel = new EventsEditFragmentViewModel();
-            self.viewModel.setId(getArgumentsEventsId());
+            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -199,7 +199,7 @@ public class EventsEditFragment
     }
 
     private void registerObservable() {
-        final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsEventsId());
+        final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsId());
         ContentObservable.fromContentObserver(getContext(), contentObserverUri, true)
             .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
             .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
