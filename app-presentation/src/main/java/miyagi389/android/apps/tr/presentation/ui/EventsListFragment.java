@@ -23,17 +23,19 @@ import javax.inject.Inject;
 
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
+import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class EventsListFragment extends BaseFragment implements EventsListAdapter.Listener {
 
-    public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
+    public static final String EXTRA_TEMPLATE_ID = "EXTRA_TEMPLATE_ID";
     public static final String EXTRA_FROM_DATE = "EXTRA_FROM_DATE";
     public static final String EXTRA_TO_DATE = "EXTRA_TO_DATE";
 
@@ -51,6 +53,9 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     EventsRepository eventsRepository;
 
     @Inject
+    TemplateRepository templateRepository;
+
+    @Inject
     RxEventBus eventBus;
 
     // Required empty public constructor
@@ -60,23 +65,22 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
 
     @NonNull
     /*package*/ static EventsListFragment newInstance(
-        @NonNull final Template template,
+        final long templateId,
         final long fromDate,
         final long toDate
     ) {
         final EventsListFragment f = new EventsListFragment();
         final Bundle args = new Bundle();
-        args.putSerializable(EXTRA_TEMPLATE, template);
+        args.putLong(EXTRA_TEMPLATE_ID, templateId);
         args.putLong(EXTRA_FROM_DATE, fromDate);
         args.putLong(EXTRA_TO_DATE, toDate);
         f.setArguments(args);
         return f;
     }
 
-    @Nullable
-    private Template getArgumentsTemplate() {
+    private long getArgumentsTemplateId() {
         final Bundle args = getArguments();
-        return args == null ? null : (Template) args.getSerializable(EXTRA_TEMPLATE);
+        return args == null ? 0L : args.getLong(EXTRA_TEMPLATE_ID);
     }
 
     private long getArgumentsFromDate() {
@@ -170,19 +174,35 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadData();
+                        loadDataTemplate();
                     }
                 }
             );
     }
 
     @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
-    private void loadData() {
-        final Template template = getArgumentsTemplate();
-        if (template == null) {
-            return;
-        }
+    private void loadDataTemplate() {
+        self.templateRepository.findById(getArgumentsTemplateId())
+            .toObservable()
+            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> self.viewModel.setLoading(true))
+            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .subscribe(
+                template -> {
+                    loadDataEvents(template);
+                },
+                throwable -> {
+                    Timber.e(throwable, throwable.getMessage());
+                    renderViewModel();
+                    showError(throwable.getMessage());  // TODO error message
+                }
+            );
+    }
 
+    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
+    private void loadDataEvents(@NonNull final Template template) {
         final long calendarId = template.getCalendarId();
         final String eventTitle = template.getEventTitle();
         final long fromDate = getArgumentsFromDate();

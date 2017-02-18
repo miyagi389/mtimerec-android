@@ -6,16 +6,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
-import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListActivityBinding;
 
 public class EventsListActivity extends BaseActivity implements EventsListFromToDateDialogFragment.Listener {
 
-    public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
+    public static final String EXTRA_TEMPLATE_ID = "EXTRA_TEMPLATE_ID";
 
     private static final int REQUEST_CODE_EVENTS_LIST_FROM_TO_DATE = 1;
 
@@ -30,10 +28,10 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
     @NonNull
     public static Intent newIntent(
         @NonNull final Context context,
-        @NonNull final Template template
+        final long templateId
     ) {
         final Intent intent = new Intent(context, EventsListActivity.class);
-        intent.putExtra(EXTRA_TEMPLATE, template);
+        intent.putExtra(EXTRA_TEMPLATE_ID, templateId);
         return intent;
     }
 
@@ -50,10 +48,7 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
         self.viewModel = createViewModel();
         self.binding.setViewModel(self.viewModel);
 
-        //noinspection CodeBlock2Expr
-        self.binding.periodButton.setOnClickListener(v -> {
-            choiceFromToDate();
-        });
+        self.binding.periodButton.setOnClickListener(v -> choiceFromToDate());
 
         setSupportActionBar(self.binding.toolbar);
     }
@@ -62,10 +57,10 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
         final FragmentManager fm = getSupportFragmentManager();
         self.eventsListFragment = (EventsListFragment) fm.findFragmentById(R.id.content_wrapper);
         if (self.eventsListFragment == null) {
-            final Template template = getIntentTemplate();
-            if (template != null) {
+            final long templateId = getIntentTemplateId();
+            if (templateId > 0) {
                 self.eventsListFragment = EventsListFragment.newInstance(
-                    template,
+                    templateId,
                     self.viewModel.getFromDate(),
                     self.viewModel.getToDate()
                 );
@@ -74,10 +69,9 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
         }
     }
 
-    @Nullable
-    private Template getIntentTemplate() {
+    private long getIntentTemplateId() {
         final Intent intent = getIntent();
-        return intent == null ? null : (Template) intent.getSerializableExtra(EXTRA_TEMPLATE);
+        return intent == null ? 0L : intent.getLongExtra(EXTRA_TEMPLATE_ID, 0L);
     }
 
     private EventsListActivityViewModel createViewModel() {
