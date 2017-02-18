@@ -36,13 +36,13 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 tools:text="2016/05/01 10:00〜18:00"/>
 
-            <miyagi389.android.apps.tr.presentation.ui.widget.NonScrollImageButton
+            <ImageButton
                 android:id="@android:id/icon"
                 style="?attr/borderlessButtonStyle"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_more_vert_black_24dp"/>
+                android:src="@drawable/ic_info_outline_black_24dp"/>
 
         </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,23 +24,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsDetailFragmentBinding;
+import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class EventsDetailFragment extends BaseFragment {
+public class EventsDetailFragment extends BaseFragment implements AlertDialogFragment.OnClickPositiveListener {
 
     public interface Listener {
-
-        void onLoaded(
-            @NonNull EventsDetailFragment fragment,
-            @NonNull Events events
-        );
 
         void onSaved(@NonNull EventsDetailFragment fragment);
 
@@ -47,6 +43,8 @@ public class EventsDetailFragment extends BaseFragment {
     }
 
     public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
+
+    private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
     private static final String STATE_MODEL = "STATE_MODEL";
 
@@ -193,7 +191,6 @@ public class EventsDetailFragment extends BaseFragment {
             .subscribe(
                 events -> {
                     self.dataMapper.transform(events, self.viewModel);
-                    self.listener.onLoaded(self, events);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -218,6 +215,9 @@ public class EventsDetailFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_delete:
+                delete();
+                return true;
             case R.id.menu_edit:
                 edit();
                 return true;
@@ -229,6 +229,38 @@ public class EventsDetailFragment extends BaseFragment {
     private void renderViewModel() {
         self.binding.setViewModel(self.viewModel);
         setHasOptionsMenu(!self.viewModel.isEmpty());
+    }
+
+    private void delete() {
+        final AlertDialogFragment.Builder builder = new AlertDialogFragment.Builder(
+            getContext(),
+            R.style.AppTheme_Dialog_Alert
+        );
+        builder.setMessage(
+            getString(R.string.events_detail_fragment_delete_button_message, self.viewModel.getTitle())
+        );
+        builder.setPositiveButton(R.string.events_detail_fragment_delete_button_positive, self);
+        builder.setNegativeButton(android.R.string.cancel);
+        builder.show(getFragmentManager(), REQUEST_TAG_DELETE);
+    }
+
+    private void deleteInternal() {
+        hideKeyboard(self.binding.getRoot());
+
+        //noinspection CodeBlock2Expr
+        self.eventsRepository.deleteById(self.viewModel.getId())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> self.viewModel.setLoading(true))
+            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .subscribe(
+                id -> {
+                    self.listener.onDeleted(self);
+                },
+                throwable -> {
+                    Timber.e(throwable, throwable.getMessage());
+                    showError(throwable.getMessage());  // TODO error message
+                }
+            );
     }
 
     private void edit() {
@@ -260,11 +292,18 @@ public class EventsDetailFragment extends BaseFragment {
                 self.listener.onSaved(self);
                 requestLoadData();
                 break;
-            case EventsEditActivity.RESULT_DELETED:
-                self.listener.onDeleted(self);
-                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * {@link AlertDialogFragment.OnClickListener#onClickPositive(AlertDialogFragment)}
+     */
+    @Override
+    public void onClickPositive(@NonNull final AlertDialogFragment dialog) {
+        if (TextUtils.equals(dialog.getTag(), REQUEST_TAG_DELETE)) {
+            deleteInternal();
         }
     }
 }

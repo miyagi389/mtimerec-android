@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListActivityBinding;
-import timber.log.Timber;
 
 public class EventsListActivity extends BaseActivity implements EventsListFromToDateDialogFragment.Listener {
 

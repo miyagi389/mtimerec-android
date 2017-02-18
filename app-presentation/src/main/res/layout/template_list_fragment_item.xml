@@ -51,7 +51,7 @@
 
             </LinearLayout>
 
-            <miyagi389.android.apps.tr.presentation.ui.widget.NonScrollImageButton
+            <ImageButton
                 android:id="@android:id/icon"
                 style="?attr/borderlessButtonStyle"
                 android:layout_width="?attr/actionBarSize"

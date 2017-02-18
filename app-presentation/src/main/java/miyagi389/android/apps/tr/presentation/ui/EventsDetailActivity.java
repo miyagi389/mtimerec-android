@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 
-import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsDetailActivityBinding;
 
@@ -62,17 +61,6 @@ public class EventsDetailActivity extends BaseActivity implements EventsDetailFr
     private long getIntentEventsId() {
         final Intent intent = getIntent();
         return intent == null ? 0L : intent.getLongExtra(EXTRA_EVENTS_ID, 0L);
-    }
-
-    /**
-     * {@link EventsDetailFragment.Listener#onLoaded(EventsDetailFragment, Events)}
-     */
-    @Override
-    public void onLoaded(
-        @NonNull final EventsDetailFragment fragment,
-        @NonNull final Events events
-    ) {
-        self.binding.toolbar.setTitle(events.getTitle());
     }
 
     /**

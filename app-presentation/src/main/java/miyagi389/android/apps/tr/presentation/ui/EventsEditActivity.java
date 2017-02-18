@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 
-import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsEditActivityBinding;
 
@@ -16,7 +15,6 @@ public class EventsEditActivity extends BaseActivity implements EventsEditFragme
     public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
 
     public static final int RESULT_SAVED = RESULT_FIRST_USER + 1;
-    public static final int RESULT_DELETED = RESULT_FIRST_USER + 2;
 
     private final EventsEditActivity self = this;
 
@@ -65,31 +63,11 @@ public class EventsEditActivity extends BaseActivity implements EventsEditFragme
     }
 
     /**
-     * {@link EventsEditFragment.Listener#onLoaded(EventsEditFragment, Events)}
-     */
-    @Override
-    public void onLoaded(
-        @NonNull final EventsEditFragment fragment,
-        @NonNull final Events events
-    ) {
-        self.binding.toolbar.setTitle(events.getTitle());
-    }
-
-    /**
      * {@link EventsEditFragment.Listener#onSaved(EventsEditFragment)}
      */
     @Override
     public void onSaved(@NonNull final EventsEditFragment fragment) {
         setResult(RESULT_SAVED);
-        finish();
-    }
-
-    /**
-     * {@link EventsEditFragment.Listener#onDeleted(EventsEditFragment)}
-     */
-    @Override
-    public void onDeleted(@NonNull final EventsEditFragment fragment) {
-        setResult(RESULT_DELETED);
         finish();
     }
 }

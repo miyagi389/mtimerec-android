@@ -3,7 +3,6 @@ package miyagi389.android.apps.tr.presentation.ui;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Events;
-import miyagi389.android.apps.tr.presentation.R;
-import miyagi389.android.apps.tr.presentation.ui.widget.PopupWindowCompat;
 
 class EventsListAdapter
     extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -27,12 +24,7 @@ class EventsListAdapter
             int position
         );
 
-        void onMenuEditClick(
-            @NonNull EventsListAdapter adapter,
-            int position
-        );
-
-        void onMenuDeleteClick(
+        void onMenuInfoClick(
             @NonNull EventsListAdapter adapter,
             int position
         );
@@ -114,24 +106,7 @@ class EventsListAdapter
             return;
         }
 
-        final PopupMenu popup = new PopupMenu(iconButton.getContext(), iconButton);
-        popup.getMenuInflater().inflate(R.menu.events_list_fragment_item, popup.getMenu());
-        PopupWindowCompat.setForceShowIcon(popup);
-        popup.show();
-        popup.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    self.listener.onMenuEditClick(self, position);
-                    break;
-                case R.id.menu_delete:
-                    self.listener.onMenuDeleteClick(self, position);
-                    break;
-                default:
-                    break;
-            }
-            return true;
-        });
-
+        self.listener.onItemClick(self, position);
     }
 
     /**

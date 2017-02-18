@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,30 +21,21 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListFragmentBinding;
-import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
 import timber.log.Timber;
 
-public class EventsListFragment
-    extends BaseFragment
-    implements
-    AlertDialogFragment.OnClickPositiveListener,
-    EventsListAdapter.Listener {
+public class EventsListFragment extends BaseFragment implements EventsListAdapter.Listener {
 
     public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
     public static final String EXTRA_FROM_DATE = "EXTRA_FROM_DATE";
     public static final String EXTRA_TO_DATE = "EXTRA_TO_DATE";
-
-    private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
-    private static final String EXTRA_DIALOG_ID = "EXTRA_DIALOG_ID";
 
     private final EventsListFragment self = this;
 
@@ -288,73 +277,17 @@ public class EventsListFragment
     }
 
     /**
-     * {@link EventsListAdapter.Listener#onMenuEditClick(EventsListAdapter, int)}
+     * {@link EventsListAdapter.Listener#onMenuInfoClick(EventsListAdapter, int)}
      */
     @Override
-    public void onMenuEditClick(
+    public void onMenuInfoClick(
         @NonNull final EventsListAdapter adapter,
         final int position
     ) {
-        final Intent intent = EventsEditActivity.newIntent(
+        final Intent intent = EventsDetailActivity.newIntent(
             getContext(),
             adapter.getItemId(position)
         );
         startActivity(intent);
-    }
-
-    /**
-     * {@link EventsListAdapter.Listener#onMenuDeleteClick(EventsListAdapter, int)}
-     */
-    @Override
-    public void onMenuDeleteClick(
-        @NonNull final EventsListAdapter adapter,
-        final int position
-    ) {
-        final Events events = adapter.getItem(position);
-        delete(events);
-    }
-
-    private void delete(@NonNull final Events events) {
-        final AlertDialogFragment.Builder builder = new AlertDialogFragment.Builder(
-            getContext(),
-            R.style.AppTheme_Dialog_Alert
-        );
-        builder.setMessage(
-            getString(R.string.events_list_fragment_delete_button_message, events.getTitle())
-        );
-        builder.setPositiveButton(R.string.events_list_fragment_delete_button_positive, self);
-        builder.setNegativeButton(android.R.string.cancel);
-
-        final DialogFragment f = builder.create();
-        f.getArguments().putLong(EXTRA_DIALOG_ID, events.getId());
-        f.show(getFragmentManager(), REQUEST_TAG_DELETE);
-    }
-
-    private void deleteInternal(final long eventsId) {
-        //noinspection CodeBlock2Expr
-        self.eventsRepository.deleteById(eventsId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                id -> {
-                    requestLoadData();
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    showError(throwable.getMessage());  // TODO error message
-                }
-            );
-    }
-
-    /**
-     * {@link AlertDialogFragment.OnClickListener#onClickPositive(AlertDialogFragment)}
-     */
-    @Override
-    public void onClickPositive(@NonNull final AlertDialogFragment dialog) {
-        if (TextUtils.equals(dialog.getTag(), REQUEST_TAG_DELETE)) {
-            final long id = dialog.getArguments().getLong(EXTRA_DIALOG_ID);
-            deleteInternal(id);
-        }
     }
 }

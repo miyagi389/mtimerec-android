@@ -105,32 +105,6 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return instant.atZone(ZoneOffset.systemDefault());
     }
 
-    public void setDtStartDate(
-        final int year,
-        final int month,
-        final int day
-    ) {
-        final long value = getDtStartAsZonedDateTime()
-            .withYear(year)
-            .withMonth(month + 1)
-            .withDayOfMonth(day)
-            .toInstant()
-            .toEpochMilli();
-        setDtStart(value);
-    }
-
-    public void setDtStartTime(
-        final int hourOfDay,
-        final int minute
-    ) {
-        final long value = getDtStartAsZonedDateTime()
-            .withHour(hourOfDay)
-            .withMinute(minute)
-            .toInstant()
-            .toEpochMilli();
-        setDtStart(value);
-    }
-
     @NonNull
     public ZonedDateTime getDtEndAsZonedDateTime() {
         final Instant instant = Instant.ofEpochMilli(this.dtEnd);

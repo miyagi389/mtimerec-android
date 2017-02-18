@@ -21,14 +21,14 @@
         <activity
             android:name=".ui.EventsDetailActivity"
             android:exported="false"
-            android:label=""
+            android:label="@string/events_detail_activity_title"
             android:theme="@style/AppTheme.Toolbar.HomeAsUp">
         </activity>
 
         <activity
             android:name=".ui.EventsEditActivity"
             android:exported="false"
-            android:label=""
+            android:label="@string/events_edit_activity_title"
             android:theme="@style/AppTheme.Toolbar.Close"
             android:windowSoftInputMode="stateHidden">
         </activity>
@@ -58,7 +58,7 @@
         <activity
             android:name=".ui.TemplateEditActivity"
             android:exported="false"
-            android:label=""
+            android:label="@string/template_edit_activity_title"
             android:theme="@style/AppTheme.Toolbar.Close"
             android:windowSoftInputMode="stateHidden">
         </activity>

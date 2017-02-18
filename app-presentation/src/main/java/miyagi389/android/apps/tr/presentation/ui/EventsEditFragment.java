@@ -9,7 +9,6 @@ import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +29,6 @@ import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsEditFragmentBinding;
-import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.DatePickerDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout;
 import miyagi389.android.apps.tr.presentation.ui.widget.TimePickerDialogFragment;
@@ -42,27 +40,17 @@ import timber.log.Timber;
 public class EventsEditFragment
     extends BaseFragment
     implements
-    AlertDialogFragment.OnClickPositiveListener,
     DatePickerDialogFragment.Listener,
     TimePickerDialogFragment.Listener {
 
     public interface Listener {
 
-        void onLoaded(
-            @NonNull EventsEditFragment fragment,
-            @NonNull Events events
-        );
-
         void onSaved(@NonNull EventsEditFragment fragment);
-
-        void onDeleted(@NonNull EventsEditFragment fragment);
     }
 
     public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
 
     private static final String STATE_MODEL = "STATE_MODEL";
-
-    private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
     private static final int REQUEST_CODE_DT_START_DATE = 1;
     private static final int REQUEST_CODE_DT_START_TIME = 2;
@@ -254,7 +242,6 @@ public class EventsEditFragment
             .subscribe(
                 events -> {
                     self.dataMapper.transform(events, self.viewModel);
-                    self.listener.onLoaded(self, events);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -281,9 +268,6 @@ public class EventsEditFragment
         switch (item.getItemId()) {
             case R.id.menu_save:
                 save();
-                return true;
-            case R.id.menu_delete:
-                delete();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -335,48 +319,6 @@ public class EventsEditFragment
                     showError(throwable.getMessage());  // TODO error message
                 }
             );
-    }
-
-    private void delete() {
-        final AlertDialogFragment.Builder builder = new AlertDialogFragment.Builder(
-            getContext(),
-            R.style.AppTheme_Dialog_Alert
-        );
-        builder.setMessage(
-            getString(R.string.events_edit_fragment_delete_button_message, self.viewModel.getTitle())
-        );
-        builder.setPositiveButton(R.string.events_edit_fragment_delete_button_positive, self);
-        builder.setNegativeButton(android.R.string.cancel);
-        builder.show(getFragmentManager(), REQUEST_TAG_DELETE);
-    }
-
-    private void deleteInternal() {
-        hideKeyboard(self.binding.getRoot());
-
-        //noinspection CodeBlock2Expr
-        self.eventsRepository.deleteById(self.viewModel.getId())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                id -> {
-                    self.listener.onDeleted(self);
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    showError(throwable.getMessage());  // TODO error message
-                }
-            );
-    }
-
-    /**
-     * {@link AlertDialogFragment.OnClickListener#onClickPositive(AlertDialogFragment)}
-     */
-    @Override
-    public void onClickPositive(@NonNull final AlertDialogFragment dialog) {
-        if (TextUtils.equals(dialog.getTag(), REQUEST_TAG_DELETE)) {
-            deleteInternal();
-        }
     }
 
     /**

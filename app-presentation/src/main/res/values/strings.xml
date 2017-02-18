@@ -9,24 +9,24 @@
 
     <string name="calendars_choice_fragment_empty_text">"Not Found"</string>
 
+    <string name="events_detail_activity_title">"Events"</string>
+
     <string name="events_detail_fragment_empty_text">"Not Found"</string>
+    <string name="events_detail_fragment_menu_delete_title">"Delete…"</string>
     <string name="events_detail_fragment_menu_edit_title">"Edit"</string>
+    <string name="events_detail_fragment_delete_button_message">"Delete %1$s?"</string>
+    <string name="events_detail_fragment_delete_button_positive">"Delete"</string>
+
+    <string name="events_edit_activity_title">"Events Edit"</string>
 
     <string name="events_edit_fragment_description_edit_hint">"Description"</string>
     <string name="events_edit_fragment_empty_text">"Not Found"</string>
-    <string name="events_edit_fragment_menu_delete_title">"Delete…"</string>
     <string name="events_edit_fragment_menu_save_title">"Save"</string>
-    <string name="events_edit_fragment_delete_button_message">"Delete %1$s?"</string>
-    <string name="events_edit_fragment_delete_button_positive">"Delete"</string>
 
     <string name="events_list_fragment_empty_text">"empty"</string>
-    <string name="events_list_fragment_delete_button_message">"Delete %1$s?"</string>
-    <string name="events_list_fragment_delete_button_positive">"Delete"</string>
     <string name="events_list_fragment_menu_sort_title">"Sort"</string>
     <string name="events_list_fragment_menu_sort_by_dt_start_ascending_title">"Date (Ascending)"</string>
     <string name="events_list_fragment_menu_sort_by_dt_start_descending_title">"Date (Descending)"</string>
-    <string name="events_list_fragment_item_menu_edit_title">"Edit"</string>
-    <string name="events_list_fragment_item_menu_delete_title">"Delete…"</string>
 
     <string name="events_list_from_to_date_dialog_fragment_from_date_button_text">"From"</string>
     <string name="events_list_from_to_date_dialog_fragment_to_date_button_text">"To"</string>
@@ -47,6 +47,8 @@
     <string name="template_detail_fragment_menu_edit_title">"Edit"</string>
     <string name="template_detail_fragment_delete_button_message">"Delete %1$s?"</string>
     <string name="template_detail_fragment_delete_button_positive">"Delete"</string>
+
+    <string name="template_edit_activity_title">"Template Edit"</string>
 
     <string name="template_edit_fragment_event_title_edit_hint">"Add title"</string>
     <string name="template_edit_fragment_event_title_edit_error">"Required"</string>
