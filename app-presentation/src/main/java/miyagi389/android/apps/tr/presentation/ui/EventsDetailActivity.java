@@ -12,7 +12,7 @@ import miyagi389.android.apps.tr.presentation.databinding.EventsDetailActivityBi
 
 public class EventsDetailActivity extends BaseActivity implements EventsDetailFragment.Listener {
 
-    public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     public static final int RESULT_SAVED = RESULT_FIRST_USER + 1;
     public static final int RESULT_DELETED = RESULT_FIRST_USER + 2;
@@ -26,10 +26,10 @@ public class EventsDetailActivity extends BaseActivity implements EventsDetailFr
     @NonNull
     public static Intent newIntent(
         @NonNull final Context context,
-        final long eventsId
+        final long id
     ) {
         final Intent intent = new Intent(context, EventsDetailActivity.class);
-        intent.putExtra(EXTRA_EVENTS_ID, eventsId);
+        intent.putExtra(EXTRA_ID, id);
         return intent;
     }
 
@@ -50,17 +50,17 @@ public class EventsDetailActivity extends BaseActivity implements EventsDetailFr
         final FragmentManager fm = getSupportFragmentManager();
         self.eventsDetailFragment = (EventsDetailFragment) fm.findFragmentById(R.id.content_wrapper);
         if (self.eventsDetailFragment == null) {
-            final long eventsId = getIntentEventsId();
-            if (eventsId > 0) {
-                self.eventsDetailFragment = EventsDetailFragment.newInstance(getIntentEventsId());
+            final long id = getIntentId();
+            if (id > 0) {
+                self.eventsDetailFragment = EventsDetailFragment.newInstance(getIntentId());
                 replaceFragment(R.id.content_wrapper, self.eventsDetailFragment);
             }
         }
     }
 
-    private long getIntentEventsId() {
+    private long getIntentId() {
         final Intent intent = getIntent();
-        return intent == null ? 0L : intent.getLongExtra(EXTRA_EVENTS_ID, 0L);
+        return intent == null ? 0L : intent.getLongExtra(EXTRA_ID, 0L);
     }
 
     /**

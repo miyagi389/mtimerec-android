@@ -42,7 +42,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
         void onDeleted(@NonNull EventsDetailFragment fragment);
     }
 
-    public static final String EXTRA_EVENTS_ID = "EXTRA_EVENTS_ID";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
@@ -69,18 +69,18 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
     @NonNull
     /*package*/ static EventsDetailFragment newInstance(
-        final long eventsId
+        final long id
     ) {
         final EventsDetailFragment f = new EventsDetailFragment();
         final Bundle args = new Bundle();
-        args.putLong(EXTRA_EVENTS_ID, eventsId);
+        args.putLong(EXTRA_ID, id);
         f.setArguments(args);
         return f;
     }
 
-    private long getArgumentsEventsId() {
+    private long getArgumentsId() {
         final Bundle args = getArguments();
-        return args == null ? 0L : args.getLong(EXTRA_EVENTS_ID);
+        return args == null ? 0L : args.getLong(EXTRA_ID);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
         if (savedInstanceState == null) {
             self.viewModel = new EventsDetailFragmentViewModel();
-            self.viewModel.setId(getArgumentsEventsId());
+            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -148,7 +148,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     }
 
     private void registerObservable() {
-        final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsEventsId());
+        final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsId());
         ContentObservable.fromContentObserver(getContext(), contentObserverUri, true)
             .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
             .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
