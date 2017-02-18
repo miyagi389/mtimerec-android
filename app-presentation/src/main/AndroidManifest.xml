@@ -49,6 +49,13 @@
         </activity>
 
         <activity
+            android:name=".ui.TemplateDetailActivity"
+            android:exported="false"
+            android:label="@string/template_detail_activity_title"
+            android:theme="@style/AppTheme.Toolbar.HomeAsUp">
+        </activity>
+
+        <activity
             android:name=".ui.TemplateEditActivity"
             android:exported="false"
             android:label=""

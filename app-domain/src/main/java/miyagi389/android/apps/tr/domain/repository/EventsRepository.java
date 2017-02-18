@@ -36,6 +36,11 @@ public interface EventsRepository {
         }
     }
 
+    Observable<Events> findByCalendarId(
+        long calendarId,
+        String title,
+        SortOrder sortOrder
+    );
 
     Observable<Events> findByCalendarId(
         long calendarId,

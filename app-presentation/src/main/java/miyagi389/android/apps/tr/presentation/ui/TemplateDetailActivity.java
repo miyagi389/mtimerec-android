@@ -10,24 +10,24 @@ import android.support.v4.app.FragmentManager;
 
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.presentation.R;
-import miyagi389.android.apps.tr.presentation.databinding.TemplateEditActivityBinding;
+import miyagi389.android.apps.tr.presentation.databinding.TemplateDetailActivityBinding;
 
-public class TemplateEditActivity extends BaseActivity implements TemplateEditFragment.Listener {
+public class TemplateDetailActivity extends BaseActivity implements TemplateDetailFragment.Listener {
 
     public static final String EXTRA_TEMPLATE = "EXTRA_TEMPLATE";
 
-    private final TemplateEditActivity self = this;
+    private final TemplateDetailActivity self = this;
 
-    private TemplateEditActivityBinding binding;
+    private TemplateDetailActivityBinding binding;
 
-    private TemplateEditFragment templateEditFragment;
+    private TemplateDetailFragment templateDetailFragment;
 
     @NonNull
     public static Intent newIntent(
         @NonNull final Context context,
         @NonNull final Template template
     ) {
-        final Intent intent = new Intent(context, TemplateEditActivity.class);
+        final Intent intent = new Intent(context, TemplateDetailActivity.class);
         intent.putExtra(EXTRA_TEMPLATE, template);
         return intent;
     }
@@ -40,7 +40,7 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
     }
 
     private void bindingContentView() {
-        self.binding = DataBindingUtil.setContentView(self, R.layout.template_edit_activity);
+        self.binding = DataBindingUtil.setContentView(self, R.layout.template_detail_activity);
 
         self.binding.toolbar.setTitle(getTitle());
         setSupportActionBar(self.binding.toolbar);
@@ -48,12 +48,12 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
 
     private void initializeActivity() {
         final FragmentManager fm = getSupportFragmentManager();
-        self.templateEditFragment = (TemplateEditFragment) fm.findFragmentById(R.id.content_wrapper);
-        if (self.templateEditFragment == null) {
+        self.templateDetailFragment = (TemplateDetailFragment) fm.findFragmentById(R.id.content_wrapper);
+        if (self.templateDetailFragment == null) {
             final Template template = getIntentTemplate();
             if (template != null) {
-                self.templateEditFragment = TemplateEditFragment.newInstance(getIntentTemplate());
-                replaceFragment(R.id.content_wrapper, self.templateEditFragment);
+                self.templateDetailFragment = TemplateDetailFragment.newInstance(getIntentTemplate());
+                replaceFragment(R.id.content_wrapper, self.templateDetailFragment);
             }
         }
     }
@@ -65,10 +65,10 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
     }
 
     /**
-     * {@link TemplateEditFragment.Listener#onSaved(TemplateEditFragment)}
+     * {@link TemplateDetailFragment.Listener#onDeleted(TemplateDetailFragment)}
      */
     @Override
-    public void onSaved(@NonNull final TemplateEditFragment fragment) {
+    public void onDeleted(@NonNull final TemplateDetailFragment fragment) {
         setResult(RESULT_OK);
         finish();
     }

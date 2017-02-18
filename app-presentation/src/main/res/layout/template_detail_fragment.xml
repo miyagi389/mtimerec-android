@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.TemplateDetailFragment">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="miyagi389.android.apps.tr.presentation.ui.TemplateDetailFragmentViewModel"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:elevation="8dp"
+                    card_view:cardCornerRadius="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="?attr/listPreferredItemHeight"
+                        android:orientation="horizontal"
+                        android:paddingBottom="?attr/listPreferredItemPaddingBottom"
+                        android:paddingStart="?attr/listPreferredItemPaddingStart"
+                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:src="@drawable/ic_subject_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/event_title_text"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="32dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@={viewModel.eventTitle}"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            tools:text="Title"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:elevation="8dp"
+                    card_view:cardCornerRadius="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="?attr/listPreferredItemHeight"
+                        android:orientation="horizontal"
+                        android:paddingBottom="?attr/listPreferredItemPaddingBottom"
+                        android:paddingStart="?attr/listPreferredItemPaddingStart"
+                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_event_note_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/calendar_text"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="32dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="@{viewModel.calendarDisplayName ?? @string/unselected}"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            tools:text="calendar name (example@gmail.com)"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:elevation="8dp"
+                    card_view:cardCornerRadius="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="?attr/listPreferredItemHeight"
+                        android:orientation="horizontal"
+                        android:paddingBottom="?attr/listPreferredItemPaddingBottom"
+                        android:paddingStart="?attr/listPreferredItemPaddingStart"
+                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_empty_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="32dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/events_count_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="@{viewModel.formatEventsCount(context)}"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                tools:text="128 events"/>
+
+                            <TextView
+                                android:id="@+id/events_dt_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.formatEventsDt(context)}"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                tools:text="2016/05/01 10:00〜18:00"/>
+
+                        </LinearLayout>
+
+                        <ImageButton
+                            android:id="@+id/events_button"
+                            style="?attr/borderlessButtonStyle"
+                            android:layout_width="?attr/actionBarSize"
+                            android:layout_height="match_parent"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_info_outline_black_24dp"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:text="@string/template_detail_fragment_empty_text"
+            android:visibility="@{viewModel.isEmpty ? View.VISIBLE : View.GONE}"/>
+
+    </RelativeLayout>
+
+</layout>

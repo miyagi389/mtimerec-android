@@ -285,31 +285,15 @@ public class TemplateListFragment
     }
 
     /**
-     * {@link TemplateListAdapter.Listener#onMenuEditClick(TemplateListAdapter, int)}
+     * {@link TemplateListAdapter.Listener#onMenuInfoClick(TemplateListAdapter, int)}
      */
     @Override
-    public void onMenuEditClick(
+    public void onMenuInfoClick(
         @NonNull final TemplateListAdapter adapter,
         final int position
     ) {
         final Template template = adapter.getItem(position);
-        final Intent intent = TemplateEditActivity.newIntent(
-            getContext(),
-            template
-        );
-        startActivity(intent);
-    }
-
-    /**
-     * {@link TemplateListAdapter.Listener#onMenuEventsClick(TemplateListAdapter, int)}
-     */
-    @Override
-    public void onMenuEventsClick(
-        @NonNull final TemplateListAdapter adapter,
-        final int position
-    ) {
-        final Template template = adapter.getItem(position);
-        final Intent intent = EventsListActivity.newIntent(
+        final Intent intent = TemplateDetailActivity.newIntent(
             getContext(),
             template
         );

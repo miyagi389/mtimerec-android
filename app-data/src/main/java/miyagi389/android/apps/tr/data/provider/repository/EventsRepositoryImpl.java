@@ -44,6 +44,17 @@ public class EventsRepositoryImpl implements EventsRepository {
     public Observable<Events> findByCalendarId(
         final long calendarId,
         final String title,
+        final SortOrder sortOrder
+    ) {
+        return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title, sortOrder))
+            .asObservable()
+            .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
+    }
+
+    @Override
+    public Observable<Events> findByCalendarId(
+        final long calendarId,
+        final String title,
         final long fromDate,
         final long toDate,
         final SortOrder sortOrder
