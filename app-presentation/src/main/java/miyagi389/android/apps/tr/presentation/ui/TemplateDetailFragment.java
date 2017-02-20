@@ -156,11 +156,11 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), CalendarContract.Calendars.CONTENT_URI, true)
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
+            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
             .subscribe(
                 uri -> {
                     requestLoadData();
@@ -244,10 +244,11 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         final String eventTitle = self.viewModel.getEventTitle();
         self.eventsRepository.findByCalendarId(calendarId, eventTitle, EventsRepository.SortOrder.DT_START_ASCENDING)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .onBackpressureBuffer()
             .observeOn(AndroidSchedulers.mainThread())
+            .toList()
             .doOnSubscribe(() -> self.viewModel.setLoading(true))
             .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
-            .toList()
             .subscribe(
                 events -> {
                     self.dataMapper.transform(events, self.viewModel);

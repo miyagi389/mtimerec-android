@@ -155,11 +155,11 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), android.provider.CalendarContract.Events.CONTENT_URI, true)
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
+            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
             .subscribe(
                 uri -> {
                     requestLoadData();

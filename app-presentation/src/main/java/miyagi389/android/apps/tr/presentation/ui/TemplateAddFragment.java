@@ -140,11 +140,11 @@ public class TemplateAddFragment extends BaseFragment {
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), CalendarContract.Calendars.CONTENT_URI, true)
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
+            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
             .subscribe(
                 uri -> {
                     requestLoadData();

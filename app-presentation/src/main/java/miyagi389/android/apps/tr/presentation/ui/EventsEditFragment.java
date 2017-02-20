@@ -201,11 +201,11 @@ public class EventsEditFragment
     private void registerObservable() {
         final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsId());
         ContentObservable.fromContentObserver(getContext(), contentObserverUri, true)
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
+            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
             .subscribe(
                 uri -> {
                     requestLoadData();
