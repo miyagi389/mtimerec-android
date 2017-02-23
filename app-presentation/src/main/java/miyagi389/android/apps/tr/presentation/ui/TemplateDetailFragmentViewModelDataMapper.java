@@ -36,7 +36,7 @@ class TemplateDetailFragmentViewModelDataMapper {
         if (isEmpty) {
             destination.setEventsCount(0);
             destination.setEventsDtStart(TemplateDetailFragmentViewModel.DT_EMPTY);
-            destination.setEventsDtStart(TemplateDetailFragmentViewModel.DT_EMPTY);
+            destination.setEventsDtEnd(TemplateDetailFragmentViewModel.DT_EMPTY);
         } else {
             destination.setEventsCount(events.size());
             final Events first = events.get(0);
