@@ -8,14 +8,15 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
 import miyagi389.android.apps.tr.data.provider.mapper.EventsMapper;
 import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
-import rx.Observable;
-import rx.Single;
-import rx.SingleSubscriber;
 import rx.android.content.ContentObservable;
 
 public class EventsRepositoryImpl implements EventsRepository {
@@ -36,7 +37,6 @@ public class EventsRepositoryImpl implements EventsRepository {
         final String title
     ) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperLastDtStart(context, calendarId, title))
-            .asObservable()
             .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
     }
 
@@ -47,7 +47,6 @@ public class EventsRepositoryImpl implements EventsRepository {
         final SortOrder sortOrder
     ) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title, sortOrder))
-            .asObservable()
             .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
     }
 
@@ -60,16 +59,14 @@ public class EventsRepositoryImpl implements EventsRepository {
         final SortOrder sortOrder
     ) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title, fromDate, toDate, sortOrder))
-            .asObservable()
             .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
     }
 
     @Override
     public Single<Events> findById(final long id) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperById(context, id))
-            .asObservable()
             .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)))
-            .toSingle();
+            .firstOrError();
     }
 
     @Override
@@ -83,19 +80,19 @@ public class EventsRepositoryImpl implements EventsRepository {
             return Single.error(new Exception("events entity is null."));
         }
 
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 final Uri uri = EventsEntity.Utils.insert(context, entity);
 
                 if (uri == null) {
-                    singleSubscriber.onError(new Exception("insert error."));
+                    e.onError(new Exception("insert error."));
                 } else {
-                    singleSubscriber.onSuccess(ContentUris.parseId(uri));
+                    e.onSuccess(ContentUris.parseId(uri));
                 }
             }
         });
@@ -114,24 +111,24 @@ public class EventsRepositoryImpl implements EventsRepository {
 
         final EventsEntity entity = mapper.transform(model);
 
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 if (entity == null) {
-                    singleSubscriber.onError(new Exception("model transform error. model is null."));
+                    e.onError(new Exception("model transform error. model is null."));
                     return;
                 }
 
                 final int numberOfRowsUpdated = EventsEntity.Utils.update(context, entity);
 
                 if (numberOfRowsUpdated == 0) {
-                    singleSubscriber.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
+                    e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
                 } else {
-                    singleSubscriber.onSuccess(entity.id);
+                    e.onSuccess(entity.id);
                 }
             }
         });
@@ -139,19 +136,19 @@ public class EventsRepositoryImpl implements EventsRepository {
 
     @Override
     public Single<Long> deleteById(final long id) {
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 final int numberOfRowsDeleted = EventsEntity.Utils.deleteById(context, id);
 
                 if (numberOfRowsDeleted == 0) {
-                    singleSubscriber.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
+                    e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
                 } else {
-                    singleSubscriber.onSuccess(id);
+                    e.onSuccess(id);
                 }
             }
         });

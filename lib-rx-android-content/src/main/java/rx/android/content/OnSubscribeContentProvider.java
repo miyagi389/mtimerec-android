@@ -17,13 +17,13 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
 /**
  * Emits a {@link Cursor} for every available position.
  */
-final class OnSubscribeContentProvider implements Observable.OnSubscribe<Cursor> {
+final class OnSubscribeContentProvider implements ObservableOnSubscribe<Cursor> {
 
     private final ContentResolver cr;
     private final Uri uri;
@@ -49,21 +49,21 @@ final class OnSubscribeContentProvider implements Observable.OnSubscribe<Cursor>
     }
 
     @Override
-    public void call(final Subscriber<? super Cursor> subscriber) {
+    public void subscribe(final ObservableEmitter<Cursor> e) throws Exception {
         Cursor cursor = null;
         try {
             cursor = cr.query(uri, projection, selection, selectionArgs, sortOrder);
             if (cursor != null) {
-                while (!subscriber.isUnsubscribed() && cursor.moveToNext()) {
-                    subscriber.onNext(cursor);
+                while (!e.isDisposed() && cursor.moveToNext()) {
+                    e.onNext(cursor);
                 }
             }
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onCompleted();
+            if (!e.isDisposed()) {
+                e.onComplete();
             }
-        } catch (Throwable e) {
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onError(e);
+        } catch (final Throwable throwable) {
+            if (!e.isDisposed()) {
+                e.onError(throwable);
             }
         } finally {
             if (cursor != null && !cursor.isClosed()) {

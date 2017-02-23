@@ -19,13 +19,13 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 
-class OnSubscribeContentObserver implements Observable.OnSubscribe<Uri> {
+class OnSubscribeContentObserver implements ObservableOnSubscribe<Uri> {
 
     private final Context context;
     private final Uri uri;
@@ -42,25 +42,25 @@ class OnSubscribeContentObserver implements Observable.OnSubscribe<Uri> {
     }
 
     @Override
-    public void call(final Subscriber<? super Uri> subscriber) {
+    public void subscribe(final ObservableEmitter<Uri> e) throws Exception {
         final ContentObserver contentObserver = new ContentObserver(new Handler()) {
             @Override
             public void onChange(
                 final boolean selfChange,
                 final Uri uri
             ) {
-                subscriber.onNext(uri);
+                e.onNext(uri);
             }
         };
 
-        final Subscription subscription = Subscriptions.create(new Action0() {
+        final Disposable disposable = Disposables.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() throws Exception {
                 context.getContentResolver().unregisterContentObserver(contentObserver);
             }
         });
+        e.setDisposable(disposable);
 
-        subscriber.add(subscription);
         context.getContentResolver().registerContentObserver(uri, notifyForDescendents, contentObserver);
     }
 }

@@ -12,7 +12,7 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import miyagi389.android.apps.tr.presentation.MainApplication;
 import miyagi389.android.apps.tr.presentation.R;
@@ -67,7 +67,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         final TypedValue floatingWindowFlag = new TypedValue();
 
         // Check isFloatingWindow flag is defined in theme.
-        //noinspection SimplifiableIfStatement
         if (theme == null || !theme
             .resolveAttribute(R.attr.isFloatingWindow, floatingWindowFlag, true)) {
             return false;

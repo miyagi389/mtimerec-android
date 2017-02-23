@@ -14,13 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.android.FragmentEvent;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
@@ -28,9 +30,7 @@ import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class EventsListFragment extends BaseFragment implements EventsListAdapter.Listener {
@@ -158,8 +158,8 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
+            .doOnSubscribe(o -> Timber.d("Subscribe: Events"))
+            .doOnTerminate(() -> Timber.d("Terminate: Events"))
             .subscribe(
                 uri -> {
                     requestLoadData();
@@ -180,17 +180,17 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadDataTemplate() {
         self.templateRepository.findById(getArgumentsTemplateId())
             .toObservable()
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 template -> {
+                    //noinspection Convert2MethodRef
                     loadDataEvents(template);
                 },
                 throwable -> {
@@ -201,7 +201,6 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadDataEvents(@NonNull final Template template) {
         final long calendarId = template.getCalendarId();
         final String eventTitle = template.getEventTitle();
@@ -210,13 +209,14 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
         self.eventsRepository.findByCalendarId(calendarId, eventTitle, fromDate, toDate, self.sortOrder)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> {
+            .doOnSubscribe(o -> {
                 self.viewModel.clearItems();
                 self.viewModel.setLoading(true);
             })
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 events -> {
+                    //noinspection Convert2MethodRef
                     self.viewModel.addItem(events);
                 },
                 throwable -> {
@@ -225,6 +225,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
                     showError(throwable.getMessage());  // TODO error message
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     renderViewModel();
                 }
             );

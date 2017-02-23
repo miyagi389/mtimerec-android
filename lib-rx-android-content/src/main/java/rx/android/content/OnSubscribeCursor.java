@@ -15,13 +15,13 @@ package rx.android.content;
 
 import android.database.Cursor;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
 /**
  * Emits a {@link Cursor} for every available position.
  */
-final class OnSubscribeCursor<E extends Cursor> implements Observable.OnSubscribe<E> {
+final class OnSubscribeCursor<E extends Cursor> implements ObservableOnSubscribe<E> {
 
     private final E cursor;
 
@@ -30,17 +30,17 @@ final class OnSubscribeCursor<E extends Cursor> implements Observable.OnSubscrib
     }
 
     @Override
-    public void call(final Subscriber<? super E> subscriber) {
+    public void subscribe(final ObservableEmitter<E> e) throws Exception {
         try {
-            while (!subscriber.isUnsubscribed() && cursor.moveToNext()) {
-                subscriber.onNext(cursor);
+            while (!e.isDisposed() && cursor.moveToNext()) {
+                e.onNext(cursor);
             }
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onCompleted();
+            if (!e.isDisposed()) {
+                e.onComplete();
             }
-        } catch (Throwable e) {
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onError(e);
+        } catch (final Throwable throwable) {
+            if (!e.isDisposed()) {
+                e.onError(throwable);
             }
         } finally {
             if (!cursor.isClosed()) {

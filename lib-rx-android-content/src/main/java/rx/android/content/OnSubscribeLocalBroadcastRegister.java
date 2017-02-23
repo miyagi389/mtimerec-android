@@ -17,48 +17,49 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 
-class OnSubscribeLocalBroadcastRegister implements Observable.OnSubscribe<Intent> {
+class OnSubscribeLocalBroadcastRegister implements ObservableOnSubscribe<Intent> {
 
     private final Context context;
     private final IntentFilter intentFilter;
 
-    public OnSubscribeLocalBroadcastRegister(
-        Context context,
-        IntentFilter intentFilter
+    OnSubscribeLocalBroadcastRegister(
+        @NonNull final Context context,
+        @NonNull final IntentFilter intentFilter
     ) {
         this.context = context;
         this.intentFilter = intentFilter;
     }
 
     @Override
-    public void call(final Subscriber<? super Intent> subscriber) {
+    public void subscribe(final ObservableEmitter<Intent> e) throws Exception {
         final LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
         final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(
-                Context context,
-                Intent intent
+                final Context context,
+                final Intent intent
             ) {
-                subscriber.onNext(intent);
+                e.onNext(intent);
             }
         };
 
-        final Subscription subscription = Subscriptions.create(new Action0() {
+        final Disposable disposable = Disposables.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() throws Exception {
                 localBroadcastManager.unregisterReceiver(broadcastReceiver);
             }
         });
+        e.setDisposable(disposable);
 
-        subscriber.add(subscription);
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 }

@@ -16,8 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.android.FragmentEvent;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -25,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.presentation.R;
@@ -33,8 +35,6 @@ import miyagi389.android.apps.tr.presentation.ui.widget.DatePickerDialogFragment
 import miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout;
 import miyagi389.android.apps.tr.presentation.ui.widget.TimePickerDialogFragment;
 import rx.android.content.ContentObservable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class EventsEditFragment
@@ -204,8 +204,8 @@ public class EventsEditFragment
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Events"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Events"))
+            .doOnSubscribe(o -> Timber.d("Subscribe: Events"))
+            .doOnTerminate(() -> Timber.d("Terminate: Events"))
             .subscribe(
                 uri -> {
                     requestLoadData();
@@ -226,7 +226,6 @@ public class EventsEditFragment
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadData() {
         if (self.viewModel.isEmpty()) {
             return;
@@ -237,10 +236,11 @@ public class EventsEditFragment
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 events -> {
+                    //noinspection Convert2MethodRef
                     self.dataMapper.transform(events, self.viewModel);
                 },
                 throwable -> {
@@ -249,6 +249,7 @@ public class EventsEditFragment
                     showError(throwable.getMessage());  // TODO error message
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     renderViewModel();
                 }
             );
@@ -287,8 +288,8 @@ public class EventsEditFragment
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 existEvents -> {
                     final Events updateEvents = new Events();

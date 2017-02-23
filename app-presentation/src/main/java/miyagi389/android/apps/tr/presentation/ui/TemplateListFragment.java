@@ -17,13 +17,15 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
-import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.android.FragmentEvent;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
@@ -32,9 +34,7 @@ import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.IconWithItemAdapter;
 import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.eventbus.RxEventBus;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class TemplateListFragment
@@ -142,12 +142,12 @@ public class TemplateListFragment
     }
 
     private void registerObservable() {
-        self.eventBus.observable(Template.Changed.class)
+        self.eventBus.toObservable(Template.Changed.class)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Template"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Template"))
+            .doOnSubscribe(o -> Timber.d("Subscribe: Template"))
+            .doOnTerminate(() -> Timber.d("Terminate: Template"))
             .subscribe(
                 event -> {
                     requestLoadData();
@@ -157,8 +157,8 @@ public class TemplateListFragment
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
+            .doOnSubscribe(o -> Timber.d("Subscribe: Calendars"))
+            .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
                     requestLoadData();
@@ -180,18 +180,21 @@ public class TemplateListFragment
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadData() {
         self.templateRepository.findAll(self.sortOrder)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> {
+            .doOnSubscribe(o -> {
                 self.viewModel.clearItems();
                 self.viewModel.setLoading(true);
             })
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnTerminate(() -> {
+                //noinspection Convert2MethodRef
+                self.viewModel.setLoading(false);
+            })
             .subscribe(
                 template -> {
+                    //noinspection Convert2MethodRef
                     self.viewModel.addItem(template);
                 },
                 throwable -> {
@@ -200,6 +203,7 @@ public class TemplateListFragment
                     showError(throwable.getMessage());  // TODO error message
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     renderViewModel();
                 }
             );
@@ -340,7 +344,6 @@ public class TemplateListFragment
         }
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
     private void startEvent() {
         if (selectedTemplate == null) {
             Timber.w("selectedTemplate is null.");
@@ -353,6 +356,7 @@ public class TemplateListFragment
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 id -> {
+                    //noinspection Convert2MethodRef
                     Timber.d("startEvent() id=%d", id);
                 },
                 throwable -> {
@@ -361,12 +365,12 @@ public class TemplateListFragment
                     selectedTemplate = null;
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     selectedTemplate = null;
                 }
             );
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
     private void endEvent() {
         if (selectedTemplate == null) {
             Timber.w("selectedTemplate is null.");
@@ -379,6 +383,7 @@ public class TemplateListFragment
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 id -> {
+                    //noinspection Convert2MethodRef
                     Timber.d("endEvent() id=%d", id);
                 },
                 throwable -> {
@@ -387,6 +392,7 @@ public class TemplateListFragment
                     selectedTemplate = null;
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     selectedTemplate = null;
                 }
             );

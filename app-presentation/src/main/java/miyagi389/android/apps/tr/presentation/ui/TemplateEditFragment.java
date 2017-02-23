@@ -16,13 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.android.FragmentEvent;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.CalendarsRepository;
@@ -30,10 +33,7 @@ import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.TemplateEditFragmentBinding;
 import miyagi389.android.apps.tr.presentation.ui.widget.ErrorLabelLayout;
-import rx.Observable;
 import rx.android.content.ContentObservable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class TemplateEditFragment extends BaseFragment {
@@ -160,8 +160,8 @@ public class TemplateEditFragment extends BaseFragment {
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> Timber.d("Subscribing subscription: Calendars"))
-            .doOnUnsubscribe(() -> Timber.d("Unsubscribing subscription: Calendars"))
+            .doOnSubscribe(o -> Timber.d("Subscribe: Calendars"))
+            .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
                     requestLoadData();
@@ -182,17 +182,17 @@ public class TemplateEditFragment extends BaseFragment {
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadDataTemplate() {
         self.templateRepository.findById(self.viewModel.getId())
             .toObservable()
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 template -> {
+                    //noinspection Convert2MethodRef
                     self.dataMapper.transform(template, self.viewModel);
                 },
                 throwable -> {
@@ -201,12 +201,12 @@ public class TemplateEditFragment extends BaseFragment {
                     showError(throwable.getMessage());  // TODO error message
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     loadDataCalendars();
                 }
             );
     }
 
-    @SuppressWarnings({"CodeBlock2Expr", "Convert2MethodRef"})
     private void loadDataCalendars() {
         final long calendarId = self.viewModel.getCalendarId();
         final boolean isEmptyCalendarId = (calendarId <= 0);
@@ -218,14 +218,15 @@ public class TemplateEditFragment extends BaseFragment {
         }
 
         calendarsObservable
-            .limit(1)
+            .take(1)
             .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 calendars -> {
+                    //noinspection Convert2MethodRef
                     self.dataMapper.transform(calendars, self.viewModel);
                 },
                 throwable -> {
@@ -234,6 +235,7 @@ public class TemplateEditFragment extends BaseFragment {
                     showError(throwable.getMessage());  // TODO error message
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     renderViewModel();
                 }
             );
@@ -274,13 +276,14 @@ public class TemplateEditFragment extends BaseFragment {
         final Template template = new Template();
         self.dataMapper.transform(self.viewModel, template);
 
-        //noinspection CodeBlock2Expr
         self.templateRepository.update(template)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(() -> self.viewModel.setLoading(true))
-            .doOnUnsubscribe(() -> self.viewModel.setLoading(false))
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnSuccess(o -> self.viewModel.setLoading(false))
+            .doOnError(throwable -> self.viewModel.setLoading(false))
             .subscribe(
                 id -> {
+                    //noinspection Convert2MethodRef
                     self.listener.onSaved(self);
                 },
                 throwable -> {

@@ -12,6 +12,10 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
 import miyagi389.android.apps.tr.data.provider.entity.TemplateEntity;
@@ -20,9 +24,6 @@ import miyagi389.android.apps.tr.domain.model.Events;
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
-import rx.Observable;
-import rx.Single;
-import rx.SingleSubscriber;
 import rx.android.content.ContentObservable;
 import rx.eventbus.RxEventBus;
 
@@ -51,24 +52,6 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     @Override
     public Observable<Template> findAll(final SortOrder sortOrder) {
         return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperByAll(context))
-            .asObservable()
-            .map(cursor -> mapper.transform(new TemplateEntity.CursorWrapper(cursor)))
-            .map(entity -> {
-                try (final EventsEntity.CursorWrapper c = EventsEntity.Utils.toCursorWrapperLastDtStart(context, entity.getCalendarId(), entity.getEventTitle())) {
-                    if (c != null && c.moveToNext()) {
-                        entity.setDtStart(new Date(c.getDtStart()));
-                        entity.setDtEnd(new Date(c.getDtEnd()));
-                    }
-                }
-                return entity;
-            }).toSortedList(TemplateSortOrder.ITEMS.get(sortOrder))
-            .flatMapIterable(entities -> entities);
-    }
-
-    @Override
-    public Single<Template> findById(final long id) {
-        return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperById(context, id))
-            .asObservable()
             .map(cursor -> mapper.transform(new TemplateEntity.CursorWrapper(cursor)))
             .map(entity -> {
                 try (final EventsEntity.CursorWrapper c = EventsEntity.Utils.toCursorWrapperLastDtStart(context, entity.getCalendarId(), entity.getEventTitle())) {
@@ -79,7 +62,24 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                 }
                 return entity;
             })
-            .toSingle();
+            .toSortedList(TemplateSortOrder.ITEMS.get(sortOrder))
+            .flattenAsObservable(entities -> entities);
+    }
+
+    @Override
+    public Single<Template> findById(final long id) {
+        return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperById(context, id))
+            .map(cursor -> mapper.transform(new TemplateEntity.CursorWrapper(cursor)))
+            .map(entity -> {
+                try (final EventsEntity.CursorWrapper c = EventsEntity.Utils.toCursorWrapperLastDtStart(context, entity.getCalendarId(), entity.getEventTitle())) {
+                    if (c != null && c.moveToNext()) {
+                        entity.setDtStart(new Date(c.getDtStart()));
+                        entity.setDtEnd(new Date(c.getDtEnd()));
+                    }
+                }
+                return entity;
+            })
+            .firstOrError();
     }
 
     @Override
@@ -93,20 +93,20 @@ public class TemplateRepositoryImpl implements TemplateRepository {
             return Single.error(new Exception("template entity is null."));
         }
 
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 final Uri uri = TemplateEntity.Utils.insert(context, entity);
 
                 if (uri == null) {
-                    singleSubscriber.onError(new Exception("insert error."));
+                    e.onError(new Exception("insert error."));
                 } else {
                     eventBus.post(new Template.Created(ContentUris.parseId(uri)));
-                    singleSubscriber.onSuccess(ContentUris.parseId(uri));
+                    e.onSuccess(ContentUris.parseId(uri));
                 }
             }
         });
@@ -128,20 +128,20 @@ public class TemplateRepositoryImpl implements TemplateRepository {
             return Single.error(new Exception("template entity is null."));
         }
 
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 final int numberOfRowsUpdated = TemplateEntity.Utils.update(context, entity);
 
                 if (numberOfRowsUpdated == 0) {
-                    singleSubscriber.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
+                    e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
                 } else {
                     eventBus.post(new Template.Updated(model.getId()));
-                    singleSubscriber.onSuccess(entity.id);
+                    e.onSuccess(entity.id);
                 }
             }
         });
@@ -149,20 +149,20 @@ public class TemplateRepositoryImpl implements TemplateRepository {
 
     @Override
     public Single<Long> deleteById(final long id) {
-        return Single.create(new Single.OnSubscribe<Long>() {
+        return Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void call(final SingleSubscriber<? super Long> singleSubscriber) {
-                if (singleSubscriber.isUnsubscribed()) {
+            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+                if (e.isDisposed()) {
                     return;
                 }
 
                 final int numberOfRowsDeleted = TemplateEntity.Utils.deleteById(context, id);
 
                 if (numberOfRowsDeleted == 0) {
-                    singleSubscriber.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
+                    e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
                 } else {
                     eventBus.post(new Template.Deleted(id));
-                    singleSubscriber.onSuccess(id);
+                    e.onSuccess(id);
                 }
             }
         });
@@ -192,7 +192,7 @@ public class TemplateRepositoryImpl implements TemplateRepository {
             return Single.error(new Exception("template is null."));
         }
 
-        final List<Events> eventsList = eventsRepository.findByCalendarIdLast(model.getCalendarId(), model.getEventTitle()).toList().toBlocking().first();
+        final List<Events> eventsList = eventsRepository.findByCalendarIdLast(model.getCalendarId(), model.getEventTitle()).toList().blockingGet();
         final Date now = nowDate();
         final Events events;
         if (eventsList.size() == 0) {

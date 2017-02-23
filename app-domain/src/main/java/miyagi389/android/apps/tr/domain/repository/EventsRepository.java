@@ -1,8 +1,8 @@
 package miyagi389.android.apps.tr.domain.repository;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import miyagi389.android.apps.tr.domain.model.Events;
-import rx.Observable;
-import rx.Single;
 
 public interface EventsRepository {
 

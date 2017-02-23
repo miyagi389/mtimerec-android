@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.squareup.leakcanary.RefWatcher;
-import com.trello.rxlifecycle.components.support.RxDialogFragment;
+import com.trello.rxlifecycle2.components.support.RxDialogFragment;
 
 import miyagi389.android.apps.tr.presentation.BuildConfig;
 import miyagi389.android.apps.tr.presentation.MainApplication;

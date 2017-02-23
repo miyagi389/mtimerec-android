@@ -15,37 +15,39 @@ package rx.android.content;
 
 import android.content.SharedPreferences;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 
-class OnSubscribeSharedPreferenceChange implements Observable.OnSubscribe<String> {
+class OnSubscribeSharedPreferenceChange implements ObservableOnSubscribe<String> {
 
     private final SharedPreferences sharedPreferences;
 
-    public OnSubscribeSharedPreferenceChange(SharedPreferences sharedPreferences) {
+    OnSubscribeSharedPreferenceChange(final SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 
     @Override
-    public void call(final Subscriber<? super String> subscriber) {
+    public void subscribe(final ObservableEmitter<String> e) throws Exception {
         final SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(
-                SharedPreferences sharedPreferences,
-                String key
+                final SharedPreferences sharedPreferences,
+                final String key
             ) {
-                subscriber.onNext(key);
+                e.onNext(key);
             }
         };
 
-        subscriber.add(Subscriptions.create(new Action0() {
+        final Disposable disposable = Disposables.fromAction(new Action() {
             @Override
-            public void call() {
+            public void run() throws Exception {
                 sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener);
             }
-        }));
+        });
+        e.setDisposable(disposable);
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }

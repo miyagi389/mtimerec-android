@@ -1,17 +1,16 @@
 package miyagi389.android.apps.tr.data.provider.repository;
 
 import java.text.Collator;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
-import rx.functions.Func2;
 
 class TemplateSortOrder {
 
-    static Map<TemplateRepository.SortOrder, Func2<Template, Template, Integer>> ITEMS = new HashMap<>();
+    static Map<TemplateRepository.SortOrder, Comparator<Template>> ITEMS = new HashMap<>();
 
     static {
         ITEMS.put(TemplateRepository.SortOrder.DT_START_ASCENDING, new DtStartAscending());
@@ -20,7 +19,7 @@ class TemplateSortOrder {
         ITEMS.put(TemplateRepository.SortOrder.EVENT_TITLE_DESCENDING, new EventTitleDescending());
     }
 
-    static abstract class AbstractSortOrder implements Func2<Template, Template, Integer> {
+    static abstract class AbstractSortOrder implements Comparator<Template> {
 
         private final Collator eventTitleCollator = Collator.getInstance();
 
@@ -63,7 +62,7 @@ class TemplateSortOrder {
     private static class DtStartAscending extends AbstractSortOrder {
 
         @Override
-        public Integer call(
+        public int compare(
             final Template lhs,
             final Template rhs
         ) {
@@ -82,7 +81,7 @@ class TemplateSortOrder {
     private static class DtStartDescending extends AbstractSortOrder {
 
         @Override
-        public Integer call(
+        public int compare(
             final Template lhs,
             final Template rhs
         ) {
@@ -101,7 +100,7 @@ class TemplateSortOrder {
     private static class EventTitleAscending extends AbstractSortOrder {
 
         @Override
-        public Integer call(
+        public int compare(
             final Template lhs,
             final Template rhs
         ) {
@@ -120,7 +119,7 @@ class TemplateSortOrder {
     private static class EventTitleDescending extends AbstractSortOrder {
 
         @Override
-        public Integer call(
+        public int compare(
             final Template lhs,
             final Template rhs
         ) {

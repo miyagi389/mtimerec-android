@@ -23,9 +23,10 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public final class ContentObservable {
+
     private ContentObservable() {
         throw new AssertionError("No instances");
     }
@@ -36,8 +37,8 @@ public final class ContentObservable {
      * @param filter Selects the Intent broadcasts to be received.
      */
     public static Observable<Intent> fromBroadcast(
-        Context context,
-        IntentFilter filter
+        final Context context,
+        final IntentFilter filter
     ) {
         return Observable.create(new OnSubscribeBroadcastRegister(context, filter, null, null));
     }
@@ -45,18 +46,18 @@ public final class ContentObservable {
     /**
      * Create Observable that wraps BroadcastReceiver and emits received intents.
      *
-     * @param filter Selects the Intent broadcasts to be received.
+     * @param filter              Selects the Intent broadcasts to be received.
      * @param broadcastPermission String naming a permissions that a
-     *      broadcaster must hold in order to send an Intent to you.  If null,
-     *      no permission is required.
-     * @param schedulerHandler Handler identifying the thread that will receive
-     *      the Intent.  If null, the main thread of the process will be used.
+     *                            broadcaster must hold in order to send an Intent to you.  If null,
+     *                            no permission is required.
+     * @param schedulerHandler    Handler identifying the thread that will receive
+     *                            the Intent.  If null, the main thread of the process will be used.
      */
     public static Observable<Intent> fromBroadcast(
-        Context context,
-        IntentFilter filter,
-        String broadcastPermission,
-        Handler schedulerHandler
+        final Context context,
+        final IntentFilter filter,
+        final String broadcastPermission,
+        final Handler schedulerHandler
     ) {
         return Observable.create(new OnSubscribeBroadcastRegister(context, filter, broadcastPermission, schedulerHandler));
     }
@@ -68,18 +69,18 @@ public final class ContentObservable {
      * @param filter Selects the Intent broadcasts to be received.
      */
     public static Observable<Intent> fromLocalBroadcast(
-        Context context,
-        IntentFilter filter
+        final Context context,
+        final IntentFilter filter
     ) {
         return Observable.create(new OnSubscribeLocalBroadcastRegister(context, filter));
     }
 
     /**
      * Create Observable that emits String keys whenever it changes in provided SharedPreferences
-     *
+     * <p>
      * Items will be observed on the main Android UI thread
      */
-    public static Observable<String> fromSharedPreferencesChanges(SharedPreferences sharedPreferences) {
+    public static Observable<String> fromSharedPreferencesChanges(final SharedPreferences sharedPreferences) {
         return Observable.create(new OnSubscribeSharedPreferenceChange(sharedPreferences));
     }
 

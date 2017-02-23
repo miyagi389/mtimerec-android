@@ -11,7 +11,6 @@ import java.util.List;
 import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.presentation.BR;
 
-@SuppressWarnings("WeakerAccess")
 public class CalendarsChoiceFragmentViewModel extends BaseObservable implements Parcelable {
 
     private final CalendarsChoiceFragmentViewModel self = this;
@@ -54,6 +53,10 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
         return self.entities;
     }
 
+    public void addEntity(final Calendars item) {
+        self.entities.add(item);
+    }
+
     public void addEntities(final List<Calendars> items) {
         self.entities.addAll(items);
     }
@@ -68,7 +71,6 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
      */
     private CalendarsChoiceFragmentViewModel(final Parcel in) {
         chosenId = in.readLong();
-        //noinspection unchecked
         entities.addAll(in.readArrayList(Calendars.class.getClassLoader()));
         loading = in.readInt() == 1;
     }
@@ -98,10 +100,12 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
      * {@link Parcelable.Creator}
      */
     public static final Parcelable.Creator<CalendarsChoiceFragmentViewModel> CREATOR = new Parcelable.Creator<CalendarsChoiceFragmentViewModel>() {
+        @Override
         public CalendarsChoiceFragmentViewModel createFromParcel(final Parcel in) {
             return new CalendarsChoiceFragmentViewModel(in);
         }
 
+        @Override
         public CalendarsChoiceFragmentViewModel[] newArray(final int size) {
             return new CalendarsChoiceFragmentViewModel[size];
         }

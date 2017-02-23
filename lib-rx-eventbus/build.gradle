@@ -16,7 +16,8 @@ sourceSets {
 }
 
 dependencies {
-    compile "io.reactivex:rxjava:${rxJavaVersion}"
+    // Rx
+    compile "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
 
     testCompile "junit:junit:${jUnitVersion}"
 }

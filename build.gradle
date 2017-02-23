@@ -35,10 +35,10 @@ ext {
     // Libraries
     guavaVersion = "20.0"
     daggerVersion = "2.8"
-    rxJavaVersion = "1.2.4"         // https://github.com/ReactiveX/RxJava/releases
-    rxAndroidVersion = "1.2.1"      // https://github.com/ReactiveX/RxAndroid/releases supported rxJava2
-    rxLifecycleVersion = "0.8.0"    // https://github.com/trello/RxLifecycle/releases supported rxJava2
-    rxPermissionsVersion = "0.9.1"  // https://github.com/tbruyelle/RxPermissions supported rxJava2
+    rxJavaVersion = "2.0.6"         // https://github.com/ReactiveX/RxJava/releases
+    rxAndroidVersion = "2.0.1"      // https://github.com/ReactiveX/RxAndroid/releases
+    rxLifecycleVersion = "2.0.1"    // https://github.com/trello/RxLifecycle/releases
+    rxPermissionsVersion = "0.9.2"  // https://github.com/tbruyelle/RxPermissions
     threetenabpVersion = "1.0.4"    // https://github.com/JakeWharton/ThreeTenABP/releases
     timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
     stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases
