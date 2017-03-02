@@ -3,8 +3,10 @@ package miyagi389.android.apps.tr.presentation;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.facebook.stetho.Stetho;
+import com.google.firebase.crash.FirebaseCrash;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -40,8 +42,27 @@ public class MainApplication extends Application {
                 }
             });
         } else {
-            // TODO Crashlytics.start(this);
-            // TODO Timber.plant(new CrashlyticsTree());
+            Timber.plant(new Timber.Tree() {
+                @Override
+                protected void log(
+                    final int priority,
+                    final String tag,
+                    final String message,
+                    final Throwable t
+                ) {
+                    switch (priority) {
+                        case Log.ERROR:
+                            if (t == null) {
+                                FirebaseCrash.report(new Exception(message));
+                            } else {
+                                FirebaseCrash.report(t);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
         }
     }
 

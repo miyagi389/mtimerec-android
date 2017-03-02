@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.neenbedankt.android-apt"
+apply plugin: 'com.google.firebase.firebase-crash'
 apply plugin: "me.tatarka.retrolambda"
 apply plugin: "com.getkeepsafe.dexcount"
 
@@ -119,6 +120,9 @@ dependencies {
     compile "com.jakewharton.threetenabp:threetenabp:${threetenabpVersion}"
     compile "com.jakewharton.timber:timber:${timberVersion}"
 
+    compile "com.google.firebase:firebase-core:${firebaseVersion}"
+    compile "com.google.firebase:firebase-crash:${firebaseVersion}"
+
     debugCompile "com.facebook.stetho:stetho:${stethoVersion}"
 
     //Development
@@ -128,3 +132,5 @@ dependencies {
 
     testCompile "junit:junit:${jUnitVersion}"
 }
+
+apply plugin: "com.google.gms.google-services"

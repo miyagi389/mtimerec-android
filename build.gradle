@@ -6,6 +6,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.google.firebase:firebase-plugins:1.0.4'
         classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
         classpath "me.tatarka:gradle-retrolambda:3.3.1"
         classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1"
@@ -42,6 +44,7 @@ ext {
     threetenabpVersion = "1.0.4"    // https://github.com/JakeWharton/ThreeTenABP/releases
     timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
     stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases
+    firebaseVersion = "10.0.1"
 
     // Testing
     jUnitVersion = "4.12"
