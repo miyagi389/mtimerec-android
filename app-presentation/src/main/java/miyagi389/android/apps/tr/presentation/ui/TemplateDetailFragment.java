@@ -197,7 +197,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     //noinspection Convert2MethodRef
@@ -231,7 +231,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     //noinspection Convert2MethodRef
@@ -259,7 +259,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 }
             );
     }
@@ -320,7 +320,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 }
             );
     }

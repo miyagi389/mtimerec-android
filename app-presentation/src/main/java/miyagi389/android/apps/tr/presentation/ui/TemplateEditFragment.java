@@ -198,7 +198,7 @@ public class TemplateEditFragment extends BaseFragment {
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     //noinspection Convert2MethodRef
@@ -232,7 +232,7 @@ public class TemplateEditFragment extends BaseFragment {
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     //noinspection Convert2MethodRef
@@ -288,7 +288,7 @@ public class TemplateEditFragment extends BaseFragment {
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 }
             );
     }

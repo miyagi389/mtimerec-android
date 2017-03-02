@@ -246,7 +246,7 @@ public class EventsEditFragment
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     //noinspection Convert2MethodRef
@@ -306,7 +306,7 @@ public class EventsEditFragment
                             throwable -> {
                                 Timber.e(throwable, throwable.getMessage());
                                 renderViewModel();
-                                showError(throwable.getMessage());  // TODO error message
+                                showError(throwable.getMessage());
                             },
                             () -> {
                                 //noinspection Convert2MethodRef
@@ -317,7 +317,7 @@ public class EventsEditFragment
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 }
             );
     }

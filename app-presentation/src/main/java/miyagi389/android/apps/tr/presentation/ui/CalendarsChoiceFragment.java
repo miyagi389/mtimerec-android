@@ -195,7 +195,7 @@ public class CalendarsChoiceFragment
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     renderViewModel();
-                    showError(throwable.getMessage());  // TODO error message
+                    showError(throwable.getMessage());
                 },
                 () -> {
                     renderViewModel();
