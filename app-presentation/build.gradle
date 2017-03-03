@@ -70,7 +70,6 @@ android {
                     "../proguard/android-support-v7-appcompat.pro",
                     "../proguard/dagger.pro",
                     "../proguard/retrolambda.pro",
-                    "../proguard/rxjava.pro",
                     "../proguard/timber.pro"
         }
     }
