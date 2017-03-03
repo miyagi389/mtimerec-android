@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: "com.android.application"
 apply plugin: "com.neenbedankt.android-apt"
 apply plugin: 'com.google.firebase.firebase-crash'
@@ -70,6 +72,18 @@ android {
                     "../proguard/retrolambda.pro",
                     "../proguard/rxjava.pro",
                     "../proguard/timber.pro"
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name.equals("release")) {
+            variant.outputs.each { output ->
+                if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
+                    def file = output.outputFile
+                    def newName = "${archivesBaseName}-release-${defaultConfig.versionName}.apk"
+                    output.outputFile = new File(file.parent, newName)
+                }
+            }
         }
     }
 
