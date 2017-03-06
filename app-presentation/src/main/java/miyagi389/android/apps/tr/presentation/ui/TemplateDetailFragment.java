@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -156,7 +155,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), CalendarContract.Calendars.CONTENT_URI, true)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Calendars"))
@@ -170,7 +169,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     private void requestLoadData() {
         new RxPermissions(getActivity()).request(Manifest.permission.WRITE_CALENDAR)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 granted -> {
@@ -184,7 +183,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
     private void loadDataTemplate() {
         self.templateRepository.findById(self.viewModel.getId())
             .toObservable()
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
@@ -218,7 +217,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
         calendarsObservable
             .take(1)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
@@ -244,7 +243,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         final long calendarId = self.viewModel.getCalendarId();
         final String eventTitle = self.viewModel.getEventTitle();
         self.eventsRepository.findByCalendarId(calendarId, eventTitle, EventsRepository.SortOrder.DT_START_ASCENDING)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
 //            .onBackpressureBuffer()
             .observeOn(AndroidSchedulers.mainThread())
             .toList()
@@ -309,6 +308,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         hideKeyboard(self.binding.getRoot());
 
         self.templateRepository.deleteById(self.viewModel.getId())
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnSuccess(o -> self.viewModel.setLoading(false))

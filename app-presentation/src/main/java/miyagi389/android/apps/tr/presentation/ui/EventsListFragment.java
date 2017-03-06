@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -155,7 +154,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), android.provider.CalendarContract.Events.CONTENT_URI, true)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Events"))
@@ -169,7 +168,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
 
     public void requestLoadData() {
         new RxPermissions(getActivity()).request(Manifest.permission.READ_CALENDAR)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 granted -> {
@@ -183,7 +182,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     private void loadDataTemplate() {
         self.templateRepository.findById(getArgumentsTemplateId())
             .toObservable()
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
@@ -207,7 +206,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
         final long fromDate = getArgumentsFromDate();
         final long toDate = getArgumentsToDate();
         self.eventsRepository.findByCalendarId(calendarId, eventTitle, fromDate, toDate, self.sortOrder)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> {
                 self.viewModel.clearItems();

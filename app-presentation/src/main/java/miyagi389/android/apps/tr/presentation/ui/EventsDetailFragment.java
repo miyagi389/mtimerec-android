@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -150,7 +149,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     private void registerObservable() {
         final Uri contentObserverUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, getArgumentsId());
         ContentObservable.fromContentObserver(getContext(), contentObserverUri, true)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Events"))
@@ -164,7 +163,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
     private void requestLoadData() {
         new RxPermissions(getActivity()).request(Manifest.permission.WRITE_CALENDAR)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 granted -> {
@@ -182,7 +181,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
         self.eventsRepository.findById(self.viewModel.getId())
             .toObservable()
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
@@ -249,6 +248,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
         hideKeyboard(self.binding.getRoot());
 
         self.eventsRepository.deleteById(self.viewModel.getId())
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnSuccess(o -> self.viewModel.setLoading(false))

@@ -18,7 +18,6 @@ import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -143,7 +142,7 @@ public class TemplateListFragment
 
     private void registerObservable() {
         self.eventBus.toObservable(Template.Changed.class)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Template"))
@@ -154,7 +153,7 @@ public class TemplateListFragment
                 }
             );
         ContentObservable.fromContentObserver(getContext(), Calendars.CONTENT_URI, true)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Calendars"))
@@ -169,7 +168,7 @@ public class TemplateListFragment
     private void requestLoadData() {
         Timber.v(new Throwable().getStackTrace()[0].getMethodName());
         new RxPermissions(getActivity()).request(Manifest.permission.WRITE_CALENDAR)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 granted -> {
@@ -182,7 +181,7 @@ public class TemplateListFragment
 
     private void loadData() {
         self.templateRepository.findAll(self.sortOrder)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> {
                 self.viewModel.clearItems();
@@ -351,7 +350,7 @@ public class TemplateListFragment
 
         self.templateRepository.startEvent(selectedTemplate)
             .toObservable()
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -378,7 +377,7 @@ public class TemplateListFragment
 
         self.templateRepository.endEvent(selectedTemplate)
             .toObservable()
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

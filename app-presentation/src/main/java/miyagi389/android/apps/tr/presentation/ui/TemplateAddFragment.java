@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -140,7 +139,7 @@ public class TemplateAddFragment extends BaseFragment {
 
     private void registerObservable() {
         ContentObservable.fromContentObserver(getContext(), CalendarContract.Calendars.CONTENT_URI, true)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> Timber.d("Subscribe: Calendars"))
@@ -154,7 +153,7 @@ public class TemplateAddFragment extends BaseFragment {
 
     private void requestLoadData() {
         new RxPermissions(getActivity()).request(Manifest.permission.WRITE_CALENDAR)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 granted -> {
@@ -177,7 +176,7 @@ public class TemplateAddFragment extends BaseFragment {
 
         calendarsObservable
             .take(1)
-            .compose(self.bindUntilEvent(FragmentEvent.PAUSE))
+            .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
