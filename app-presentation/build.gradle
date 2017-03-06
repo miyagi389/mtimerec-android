@@ -92,6 +92,8 @@ android {
         exclude "META-INF/ASL2.0"
         exclude "META-INF/NOTICE"
         exclude "META-INF/LICENSE"
+        exclude "build-data.properties"
+        exclude "jsr305_annotations/Jsr305_annotations.gwt.xml"
     }
 
     dataBinding {
