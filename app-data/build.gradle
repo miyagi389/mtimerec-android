@@ -1,5 +1,4 @@
 apply plugin: "com.android.library"
-apply plugin: "com.neenbedankt.android-apt"
 apply plugin: "me.tatarka.retrolambda"
 
 android {
@@ -31,7 +30,7 @@ dependencies {
 
     compile project(path: ":lib-rx-eventbus")
 
-    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
     compile "com.google.dagger:dagger:${daggerVersion}"
 
     // Android Support Library

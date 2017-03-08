@@ -1,7 +1,4 @@
-import java.text.SimpleDateFormat
-
 apply plugin: "com.android.application"
-apply plugin: "com.neenbedankt.android-apt"
 apply plugin: 'com.google.firebase.firebase-crash'
 apply plugin: "me.tatarka.retrolambda"
 apply plugin: "com.getkeepsafe.dexcount"
@@ -102,12 +99,7 @@ android {
 }
 
 dependencies {
-    // Android Studio 2.1 + Databinding + Dagger 2.x のビルド環境で
-    // 明示的に guava のバージョンをしていないと、コンパイルエラー: "java.lang.NoSuchMethodError: com.google.common.collect.ImmutableSetMultimap$Builder.putAll(Ljava/lang/Iterable;)Lcom/google/common/collect/ImmutableSetMultimap$Builder;" になる。
-    // 詳細: http://qiita.com/chibatching/items/e5a0f5016093abec884b
-    apt "com.google.guava:guava:${guavaVersion}"
-
-    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
     compile "com.google.dagger:dagger:${daggerVersion}"
 
     debugCompile project(path: ":app-data", configuration: "debug")
