@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import miyagi389.android.apps.tr.data.provider.entity.CalendarsEntity;
@@ -45,11 +46,11 @@ public class CalendarsRepositoryImpl implements CalendarsRepository {
     }
 
     @Override
-    public Single<Calendars> findById(final long id) {
+    public Maybe<Calendars> findById(final long id) {
         final ContentResolver cr = context.getContentResolver();
         final Uri uri = ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, id);
         return ContentObservable.fromContentProvider(cr, uri, null, null, null, null)
             .map(cursor -> mapper.transform(new CalendarsEntity.CursorWrapper(cursor)))
-            .firstOrError();
+            .firstElement();
     }
 }

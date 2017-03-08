@@ -12,10 +12,10 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
+import io.reactivex.MaybeEmitter;
+import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
 import miyagi389.android.apps.tr.data.provider.entity.TemplateEntity;
@@ -67,7 +67,7 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Single<Template> findById(final long id) {
+    public Maybe<Template> findById(final long id) {
         return ContentObservable.fromCursor(TemplateEntity.Utils.toCursorWrapperById(context, id))
             .map(cursor -> mapper.transform(new TemplateEntity.CursorWrapper(cursor)))
             .map(entity -> {
@@ -79,23 +79,23 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                 }
                 return entity;
             })
-            .firstOrError();
+            .firstElement();
     }
 
     @Override
-    public Single<Long> insert(final Template model) {
+    public Maybe<Long> insert(final Template model) {
         if (model == null) {
-            return Single.error(new Exception("template is null."));
+            return Maybe.error(new Exception("template is null."));
         }
 
         final TemplateEntity entity = mapper.transform(model);
         if (entity == null) {
-            return Single.error(new Exception("template entity is null."));
+            return Maybe.error(new Exception("template entity is null."));
         }
 
-        return Single.create(new SingleOnSubscribe<Long>() {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
@@ -113,24 +113,24 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Single<Long> update(final Template model) {
+    public Maybe<Long> update(final Template model) {
         if (model == null) {
-            return Single.error(new Exception("template is null."));
+            return Maybe.error(new Exception("template is null."));
         }
 
         final TemplateEntity existEntity = toTemplateEntity(model);
         if (existEntity == null) {
-            return Single.error(new NotFoundException("template not found on database. id=" + model.getId()));
+            return Maybe.error(new NotFoundException("template not found on database. id=" + model.getId()));
         }
 
         final TemplateEntity entity = mapper.transform(model);
         if (entity == null) {
-            return Single.error(new Exception("template entity is null."));
+            return Maybe.error(new Exception("template entity is null."));
         }
 
-        return Single.create(new SingleOnSubscribe<Long>() {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
@@ -148,10 +148,10 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Single<Long> deleteById(final long id) {
-        return Single.create(new SingleOnSubscribe<Long>() {
+    public Maybe<Long> deleteById(final long id) {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
@@ -169,9 +169,9 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Single<Long> startEvent(final Template model) {
+    public Maybe<Long> startEvent(final Template model) {
         if (model == null) {
-            return Single.error(new Exception("template is null."));
+            return Maybe.error(new Exception("template is null."));
         }
 
         final Date now = nowDate();
@@ -187,9 +187,9 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     }
 
     @Override
-    public Single<Long> endEvent(final Template model) {
+    public Maybe<Long> endEvent(final Template model) {
         if (model == null) {
-            return Single.error(new Exception("template is null."));
+            return Maybe.error(new Exception("template is null."));
         }
 
         final List<Events> eventsList = eventsRepository.findByCalendarIdLast(model.getCalendarId(), model.getEventTitle()).toList().blockingGet();

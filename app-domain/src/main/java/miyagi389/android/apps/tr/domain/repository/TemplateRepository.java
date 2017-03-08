@@ -1,7 +1,7 @@
 package miyagi389.android.apps.tr.domain.repository;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import miyagi389.android.apps.tr.domain.model.Template;
 
 public interface TemplateRepository {
@@ -36,15 +36,15 @@ public interface TemplateRepository {
     Observable<Template> findAll(SortOrder sortOrder);
 
     @SuppressWarnings("unused")
-    Single<Template> findById(long id);
+    Maybe<Template> findById(long id);
 
-    Single<Long> insert(Template model);
+    Maybe<Long> insert(Template model);
 
-    Single<Long> update(Template model);
+    Maybe<Long> update(Template model);
 
-    Single<Long> deleteById(long id);
+    Maybe<Long> deleteById(long id);
 
-    Single<Long> startEvent(Template model);
+    Maybe<Long> startEvent(Template model);
 
-    Single<Long> endEvent(Template model);
+    Maybe<Long> endEvent(Template model);
 }

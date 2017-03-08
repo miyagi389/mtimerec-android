@@ -1,7 +1,7 @@
 package miyagi389.android.apps.tr.domain.repository;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import miyagi389.android.apps.tr.domain.model.Events;
 
 public interface EventsRepository {
@@ -50,11 +50,11 @@ public interface EventsRepository {
         SortOrder sortOrder
     );
 
-    Single<Events> findById(long id);
+    Maybe<Events> findById(long id);
 
-    Single<Long> insert(Events model);
+    Maybe<Long> insert(Events model);
 
-    Single<Long> update(Events model);
+    Maybe<Long> update(Events model);
 
-    Single<Long> deleteById(long id);
+    Maybe<Long> deleteById(long id);
 }

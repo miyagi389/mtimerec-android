@@ -8,10 +8,10 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
+import io.reactivex.MaybeEmitter;
+import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
 import miyagi389.android.apps.tr.data.provider.mapper.EventsMapper;
@@ -63,26 +63,26 @@ public class EventsRepositoryImpl implements EventsRepository {
     }
 
     @Override
-    public Single<Events> findById(final long id) {
+    public Maybe<Events> findById(final long id) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperById(context, id))
             .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)))
-            .firstOrError();
+            .firstElement();
     }
 
     @Override
-    public Single<Long> insert(final Events model) {
+    public Maybe<Long> insert(final Events model) {
         if (model == null) {
-            return Single.error(new Exception("events is null."));
+            return Maybe.error(new Exception("events is null."));
         }
 
         final EventsEntity entity = mapper.transform(model);
         if (entity == null) {
-            return Single.error(new Exception("events entity is null."));
+            return Maybe.error(new Exception("events entity is null."));
         }
 
-        return Single.create(new SingleOnSubscribe<Long>() {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
@@ -99,21 +99,21 @@ public class EventsRepositoryImpl implements EventsRepository {
     }
 
     @Override
-    public Single<Long> update(final Events model) {
+    public Maybe<Long> update(final Events model) {
         if (model == null) {
-            return Single.error(new Exception("events is null."));
+            return Maybe.error(new Exception("events is null."));
         }
 
         final EventsEntity existEntity = toEventsEntity(model);
         if (existEntity == null) {
-            return Single.error(new NotFoundException("events not found on database. id=" + model.getId()));
+            return Maybe.error(new NotFoundException("events not found on database. id=" + model.getId()));
         }
 
         final EventsEntity entity = mapper.transform(model);
 
-        return Single.create(new SingleOnSubscribe<Long>() {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
@@ -135,10 +135,10 @@ public class EventsRepositoryImpl implements EventsRepository {
     }
 
     @Override
-    public Single<Long> deleteById(final long id) {
-        return Single.create(new SingleOnSubscribe<Long>() {
+    public Maybe<Long> deleteById(final long id) {
+        return Maybe.create(new MaybeOnSubscribe<Long>() {
             @Override
-            public void subscribe(final SingleEmitter<Long> e) throws Exception {
+            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
                 if (e.isDisposed()) {
                     return;
                 }
