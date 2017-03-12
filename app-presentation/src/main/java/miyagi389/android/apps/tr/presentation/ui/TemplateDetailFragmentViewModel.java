@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
+import android.view.View;
 
 import miyagi389.android.apps.tr.presentation.BR;
 import miyagi389.android.apps.tr.presentation.R;
@@ -34,17 +35,15 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
     TemplateDetailFragmentViewModel() {
     }
 
-    @Bindable
-    public boolean isEmpty() {
-        return id == 0;
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(final long id) {
         this.id = id;
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
     }
 
     @Bindable
@@ -85,35 +84,46 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         notifyPropertyChanged(BR.eventsCount);
     }
 
-    @Bindable
     public long getEventsDtStart() {
         return eventsDtStart;
     }
 
     public void setEventsDtStart(final long eventsDtStart) {
         this.eventsDtStart = eventsDtStart;
-        notifyPropertyChanged(BR.eventsDtStart);
-    }
-
-    @Bindable
-    public long getEventsDtEnd() {
-        return eventsDtEnd;
     }
 
     public void setEventsDtEnd(final long eventsDtEnd) {
         this.eventsDtEnd = eventsDtEnd;
-        notifyPropertyChanged(BR.eventsDtEnd);
     }
 
-    @Bindable
     public boolean isLoading() {
         return loading;
     }
 
     public void setLoading(final boolean loading) {
         this.loading = loading;
-        notifyPropertyChanged(BR.loading);
-        notifyPropertyChanged(BR.empty);
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
+    }
+
+    public boolean isEmpty() {
+        return id == 0;
+    }
+
+    @Bindable
+    public int getContentViewVisibility() {
+        return (!isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getLoadingViewVisibility() {
+        return isLoading() ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getEmptyViewVisibility() {
+        return (isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
     }
 
     @NonNull

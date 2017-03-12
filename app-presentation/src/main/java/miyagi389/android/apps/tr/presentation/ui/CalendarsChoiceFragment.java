@@ -58,8 +58,8 @@ public class CalendarsChoiceFragment
 
     private Listener listener;
 
+    // Required empty public constructor
     public CalendarsChoiceFragment() {
-        // Required empty public constructor
     }
 
     @NonNull

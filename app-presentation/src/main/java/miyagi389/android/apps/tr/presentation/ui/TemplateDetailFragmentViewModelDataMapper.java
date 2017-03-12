@@ -44,5 +44,6 @@ class TemplateDetailFragmentViewModelDataMapper {
             destination.setEventsDtStart(first.getDtStart().getTime());
             destination.setEventsDtEnd(last.getDtEnd().getTime());
         }
+        destination.notifyChange();
     }
 }

@@ -7,8 +7,6 @@
 
     <data>
 
-        <import type="android.view.View"/>
-
         <variable
             name="viewModel"
             type="miyagi389.android.apps.tr.presentation.ui.TemplateEditFragmentViewModel"/>
@@ -21,7 +19,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.contentViewVisibility}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,23 +106,21 @@
         </ScrollView>
 
         <ProgressBar
-            android:id="@+id/progress"
             style="?android:progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{viewModel.loadingViewVisibility}"/>
 
         <TextView
-            android:id="@+id/empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:text="@string/template_edit_fragment_empty_text"
-            android:visibility="@{viewModel.isEmpty ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{viewModel.emptyViewVisibility}"/>
 
     </RelativeLayout>
 

@@ -62,8 +62,8 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
     private Listener listener;
 
+    // Required empty public constructor
     public EventsDetailFragment() {
-        // Required empty public constructor
     }
 
     @NonNull
@@ -118,15 +118,12 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
         if (savedInstanceState == null) {
             self.viewModel = new EventsDetailFragmentViewModel();
-            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
 
         self.binding = EventsDetailFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
-
-        renderViewModel();
 
         if (savedInstanceState == null) {
             requestLoadData();
@@ -176,11 +173,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     }
 
     private void loadData() {
-        if (self.viewModel.isEmpty()) {
-            return;
-        }
-
-        self.eventsRepository.findById(self.viewModel.getId())
+        self.eventsRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
@@ -191,15 +184,12 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
                 events -> {
                     //noinspection Convert2MethodRef
                     self.dataMapper.transform(events, self.viewModel);
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
     }
@@ -227,11 +217,6 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
         }
     }
 
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-        setHasOptionsMenu(!self.viewModel.isEmpty());
-    }
-
     private void delete() {
         final AlertDialogFragment.Builder builder = new AlertDialogFragment.Builder(
             getContext(),
@@ -248,7 +233,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     private void deleteInternal() {
         hideKeyboard(self.binding.getRoot());
 
-        self.eventsRepository.deleteById(self.viewModel.getId())
+        self.eventsRepository.deleteById(getArgumentsId())
             .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
@@ -269,7 +254,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     private void edit() {
         final Intent intent = EventsEditActivity.newIntent(
             getContext(),
-            self.viewModel.getId()
+            getArgumentsId()
         );
         startActivityForResult(intent, REQUEST_CODE_EVENTS_EDIT);
     }

@@ -6,8 +6,6 @@
 
     <data>
 
-        <import type="android.view.View"/>
-
         <variable
             name="viewModel"
             type="miyagi389.android.apps.tr.presentation.ui.CalendarsChoiceFragmentViewModel"/>
@@ -23,27 +21,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:visibility="@{viewModel.isEmpty ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.contentViewVisibility}"
             tools:listitem="@layout/calendars_choice_item"/>
 
         <ProgressBar
-            android:id="@+id/progress"
             style="?android:progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{viewModel.loadingViewVisibility}"/>
 
         <TextView
-            android:id="@+id/empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:text="@string/calendars_choice_fragment_empty_text"
-            android:visibility="@{viewModel.isEmpty ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{viewModel.emptyViewVisibility}"/>
 
     </RelativeLayout>
 

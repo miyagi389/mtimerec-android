@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,6 @@ import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.presentation.BR;
 
 public class CalendarsChoiceFragmentViewModel extends BaseObservable implements Parcelable {
-
-    private final CalendarsChoiceFragmentViewModel self = this;
 
     private long chosenId;
 
@@ -25,37 +24,53 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
     CalendarsChoiceFragmentViewModel() {
     }
 
-    @Bindable
     public boolean isLoading() {
-        return self.loading;
+        return loading;
     }
 
     public void setLoading(final boolean loading) {
-        self.loading = loading;
-        notifyPropertyChanged(BR.loading);
-        notifyPropertyChanged(BR.empty);
+        this.loading = loading;
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 
     @Bindable
-    public boolean isEmpty() {
-        return self.items.isEmpty();
+    public int getContentViewVisibility() {
+        return (!isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getLoadingViewVisibility() {
+        return isLoading() ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getEmptyViewVisibility() {
+        return (isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
     }
 
     public long getChosenId() {
-        return self.chosenId;
+        return chosenId;
     }
 
     public void setChosenId(final long chosenId) {
-        self.chosenId = chosenId;
+        this.chosenId = chosenId;
     }
 
     public List<Calendars> getItems() {
-        return self.items;
+        return items;
     }
 
     public void setItems(@NonNull final ArrayList<Calendars> items) {
-        self.items = items;
-        notifyPropertyChanged(BR.empty);
+        this.items = items;
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
     }
 
     /**

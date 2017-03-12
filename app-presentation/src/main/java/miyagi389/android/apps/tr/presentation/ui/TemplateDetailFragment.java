@@ -66,8 +66,8 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     private Listener listener;
 
+    // Required empty public constructor
     public TemplateDetailFragment() {
-        // Required empty public constructor
     }
 
     @NonNull
@@ -122,7 +122,6 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
         if (savedInstanceState == null) {
             self.viewModel = new TemplateDetailFragmentViewModel();
-            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -131,8 +130,6 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         self.binding.setViewModel(self.viewModel);
 
         self.binding.eventsButton.setOnClickListener(v -> goEvents());
-
-        renderViewModel();
 
         if (savedInstanceState == null) {
             requestLoadData();
@@ -175,90 +172,50 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadDataTemplate();
+                        loadData();
                     }
                 }
             );
     }
 
-    private void loadDataTemplate() {
-        self.templateRepository.findById(self.viewModel.getId())
+    private void loadData() {
+        self.templateRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnTerminate(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                template -> {
-                    //noinspection CodeBlock2Expr
-                    self.dataMapper.transform(template, self.viewModel);
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
-                    showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    loadDataCalendar();
+            .flatMap(template -> {
+                self.dataMapper.transform(template, self.viewModel);
+
+                final long calendarId = template.getCalendarId();
+                final boolean isEmptyCalendarId = (calendarId <= 0);
+                final Observable<Calendars> calendarsObservable;
+                if (isEmptyCalendarId) {
+                    calendarsObservable = self.calendarsRepository.findWritableCalendar();
+                } else {
+                    calendarsObservable = self.calendarsRepository.findById(calendarId).toObservable();
                 }
-            );
-    }
+                return calendarsObservable
+                    .take(1);
+            })
+            .flatMap(calendars -> {
+                self.dataMapper.transform(calendars, self.viewModel);
 
-    private void loadDataCalendar() {
-        final long calendarId = self.viewModel.getCalendarId();
-        final boolean isEmptyCalendarId = (calendarId <= 0);
-        final Observable<Calendars> calendarsObservable;
-        if (isEmptyCalendarId) {
-            calendarsObservable = self.calendarsRepository.findWritableCalendar();
-        } else {
-            calendarsObservable = self.calendarsRepository.findById(calendarId).toObservable();
-        }
-
-        calendarsObservable
-            .take(1)
-            .compose(self.bindToLifecycle())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(o -> self.viewModel.setLoading(true))
-            .doOnTerminate(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                calendars -> {
-                    //noinspection CodeBlock2Expr
-                    self.dataMapper.transform(calendars, self.viewModel);
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
-                    showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    loadDataEvents();
-                }
-            );
-    }
-
-    private void loadDataEvents() {
-        final long calendarId = self.viewModel.getCalendarId();
-        final String eventTitle = self.viewModel.getEventTitle();
-        self.eventsRepository.findByCalendarId(calendarId, eventTitle, EventsRepository.SortOrder.DT_START_ASCENDING)
-            .compose(self.bindToLifecycle())
-//            .onBackpressureBuffer()
-            .observeOn(AndroidSchedulers.mainThread())
+                final long calendarId = self.viewModel.getCalendarId();
+                final String eventTitle = self.viewModel.getEventTitle();
+                return self.eventsRepository.findByCalendarId(calendarId, eventTitle, EventsRepository.SortOrder.DT_START_ASCENDING);
+            })
             .toList()
-            .doOnSubscribe(o -> self.viewModel.setLoading(true))
-            .doOnSuccess(o -> self.viewModel.setLoading(false))
-            .doOnError(throwable -> self.viewModel.setLoading(false))
             .subscribe(
                 events -> {
                     self.dataMapper.transform(events, self.viewModel);
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
                 }
             );
@@ -287,11 +244,6 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         }
     }
 
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-        setHasOptionsMenu(!self.viewModel.isEmpty());
-    }
-
     private void delete() {
         final AlertDialogFragment.Builder builder = new AlertDialogFragment.Builder(
             getContext(),
@@ -308,7 +260,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
     private void deleteInternal() {
         hideKeyboard(self.binding.getRoot());
 
-        self.templateRepository.deleteById(self.viewModel.getId())
+        self.templateRepository.deleteById(getArgumentsId())
             .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))

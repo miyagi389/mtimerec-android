@@ -69,8 +69,8 @@ public class EventsEditFragment
 
     private Listener listener;
 
+    // Required empty public constructor
     public EventsEditFragment() {
-        // Required empty public constructor
     }
 
     @NonNull
@@ -125,7 +125,6 @@ public class EventsEditFragment
 
         if (savedInstanceState == null) {
             self.viewModel = new EventsEditFragmentViewModel();
-            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -177,8 +176,6 @@ public class EventsEditFragment
 
         self.binding.descriptionErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
-        renderViewModel();
-
         if (savedInstanceState == null) {
             requestLoadData();
         }
@@ -227,11 +224,7 @@ public class EventsEditFragment
     }
 
     private void loadData() {
-        if (self.viewModel.isEmpty()) {
-            return;
-        }
-
-        self.eventsRepository.findById(self.viewModel.getId())
+        self.eventsRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
@@ -242,15 +235,12 @@ public class EventsEditFragment
                 events -> {
                     //noinspection Convert2MethodRef
                     self.dataMapper.transform(events, self.viewModel);
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
     }
@@ -275,15 +265,10 @@ public class EventsEditFragment
         }
     }
 
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-        setHasOptionsMenu(!self.viewModel.isEmpty());
-    }
-
     private void save() {
         hideKeyboard(self.binding.getRoot());
 
-        self.eventsRepository.findById(self.viewModel.getId())
+        self.eventsRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
@@ -305,18 +290,12 @@ public class EventsEditFragment
                             },
                             throwable -> {
                                 Timber.e(throwable, throwable.getMessage());
-                                renderViewModel();
                                 showError(throwable.getMessage());
-                            },
-                            () -> {
-                                //noinspection Convert2MethodRef
-                                renderViewModel();
                             }
                         );
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
                     showError(throwable.getMessage());
                 }
             );

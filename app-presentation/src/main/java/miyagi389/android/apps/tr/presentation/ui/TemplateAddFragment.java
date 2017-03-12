@@ -62,8 +62,8 @@ public class TemplateAddFragment extends BaseFragment {
 
     private Listener listener;
 
+    // Required empty public constructor
     public TemplateAddFragment() {
-        // Required empty public constructor
     }
 
     @NonNull
@@ -119,8 +119,6 @@ public class TemplateAddFragment extends BaseFragment {
         self.binding.calendarErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
         self.binding.calendarButton.setOnClickListener(v -> choiceCalendar());
-
-        renderViewModel();
     }
 
     @Override
@@ -183,18 +181,14 @@ public class TemplateAddFragment extends BaseFragment {
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
-                item -> {
-                    //noinspection Convert2MethodRef
-                    self.viewModel.setCalendars(item);
+                calendars -> {
+                    self.dataMapper.transform(calendars, self.viewModel);
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
     }
@@ -217,11 +211,6 @@ public class TemplateAddFragment extends BaseFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-        setHasOptionsMenu(!self.viewModel.isEmpty());
     }
 
     private void save() {
@@ -315,9 +304,7 @@ public class TemplateAddFragment extends BaseFragment {
             return;
         }
 
-        final Calendars item = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
-        self.viewModel.setCalendars(item);
-
-        renderViewModel();
+        final Calendars calendars = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
+        self.dataMapper.transform(calendars, self.viewModel);
     }
 }

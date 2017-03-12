@@ -64,8 +64,8 @@ public class TemplateEditFragment extends BaseFragment {
 
     private Listener listener;
 
+    // Required empty public constructor
     public TemplateEditFragment() {
-        // Required empty public constructor
     }
 
     @NonNull
@@ -120,7 +120,6 @@ public class TemplateEditFragment extends BaseFragment {
 
         if (savedInstanceState == null) {
             self.viewModel = new TemplateEditFragmentViewModel();
-            self.viewModel.setId(getArgumentsId());
         } else {
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
@@ -133,8 +132,6 @@ public class TemplateEditFragment extends BaseFragment {
         self.binding.calendarErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
         self.binding.calendarButton.setOnClickListener(v -> choiceCalendar());
-
-        renderViewModel();
 
         if (savedInstanceState == null) {
             requestLoadData();
@@ -176,67 +173,43 @@ public class TemplateEditFragment extends BaseFragment {
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadDataTemplate();
+                        loadData();
                     }
                 }
             );
     }
 
-    private void loadDataTemplate() {
-        self.templateRepository.findById(self.viewModel.getId())
+    private void loadData() {
+        self.templateRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnTerminate(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                template -> {
-                    //noinspection Convert2MethodRef
-                    self.dataMapper.transform(template, self.viewModel);
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
-                    showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    loadDataCalendars();
+            .flatMap(template -> {
+                self.dataMapper.transform(template, self.viewModel);
+
+                final long calendarId = template.getCalendarId();
+                final boolean isEmptyCalendarId = (calendarId <= 0);
+                final Observable<Calendars> calendarsObservable;
+                if (isEmptyCalendarId) {
+                    calendarsObservable = self.calendarsRepository.findWritableCalendar();
+                } else {
+                    calendarsObservable = self.calendarsRepository.findById(calendarId).toObservable();
                 }
-            );
-    }
-
-    private void loadDataCalendars() {
-        final long calendarId = self.viewModel.getCalendarId();
-        final boolean isEmptyCalendarId = (calendarId <= 0);
-        final Observable<Calendars> calendarsObservable;
-        if (isEmptyCalendarId) {
-            calendarsObservable = self.calendarsRepository.findWritableCalendar();
-        } else {
-            calendarsObservable = self.calendarsRepository.findById(calendarId).toObservable();
-        }
-
-        calendarsObservable
-            .take(1)
-            .compose(self.bindToLifecycle())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(o -> self.viewModel.setLoading(true))
-            .doOnTerminate(() -> self.viewModel.setLoading(false))
+                return calendarsObservable
+                    .take(1);
+            })
             .subscribe(
                 calendars -> {
-                    //noinspection Convert2MethodRef
                     self.dataMapper.transform(calendars, self.viewModel);
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
     }
@@ -259,11 +232,6 @@ public class TemplateEditFragment extends BaseFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-        setHasOptionsMenu(!self.viewModel.isEmpty());
     }
 
     private void save() {
@@ -360,7 +328,5 @@ public class TemplateEditFragment extends BaseFragment {
 
         final Calendars calendars = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
         self.dataMapper.transform(calendars, self.viewModel);
-
-        renderViewModel();
     }
 }

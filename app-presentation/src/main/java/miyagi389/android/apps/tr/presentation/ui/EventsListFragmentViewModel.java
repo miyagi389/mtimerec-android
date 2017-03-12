@@ -3,6 +3,7 @@ package miyagi389.android.apps.tr.presentation.ui;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,34 +14,48 @@ import miyagi389.android.apps.tr.presentation.BR;
 @SuppressWarnings("WeakerAccess")
 public class EventsListFragmentViewModel extends BaseObservable {
 
-    private final EventsListFragmentViewModel self = this;
+    private List<Events> items = Collections.emptyList();
 
     private boolean loading;
 
-    private List<Events> items = Collections.emptyList();
-
-    @Bindable
     public boolean isLoading() {
-        return self.loading;
+        return loading;
     }
 
     public void setLoading(final boolean loading) {
-        self.loading = loading;
-        notifyPropertyChanged(BR.loading);
-        notifyPropertyChanged(BR.empty);
+        this.loading = loading;
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
     }
 
     @Bindable
-    public boolean isEmpty() {
-        return self.items.isEmpty();
+    public int getContentViewVisibility() {
+        return (!isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getLoadingViewVisibility() {
+        return isLoading() ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getEmptyViewVisibility() {
+        return (isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
     }
 
     public List<Events> getItems() {
-        return self.items;
+        return items;
     }
 
     public void setItems(@NonNull final List<Events> items) {
-        self.items = items;
-        notifyPropertyChanged(BR.empty);
+        this.items = items;
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
     }
 }

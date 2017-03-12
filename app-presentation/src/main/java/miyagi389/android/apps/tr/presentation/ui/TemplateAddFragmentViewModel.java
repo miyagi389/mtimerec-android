@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.presentation.BR;
@@ -23,16 +24,6 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
     }
 
     @Bindable
-    public boolean isEmpty() {
-        return false;
-    }
-
-    void setCalendars(@Nullable final Calendars item) {
-        setCalendarId(item == null ? 0 : item.getId());
-        setCalendarDisplayName(item == null ? "" : item.getCalendarDisplayName() + " (" + item.getAccountName() + ")");
-    }
-
-    @Bindable
     public String getEventTitle() {
         return eventTitle;
     }
@@ -46,7 +37,7 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
         return calendarId;
     }
 
-    private void setCalendarId(final long calendarId) {
+    void setCalendarId(final long calendarId) {
         this.calendarId = calendarId;
     }
 
@@ -55,20 +46,39 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
         return calendarDisplayName;
     }
 
-    private void setCalendarDisplayName(final String calendarDisplayName) {
+    void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
     }
 
-    @Bindable
     public boolean isLoading() {
         return loading;
     }
 
     public void setLoading(final boolean loading) {
         this.loading = loading;
-        notifyPropertyChanged(BR.loading);
-        notifyPropertyChanged(BR.empty);
+        notifyPropertyChanged(BR.contentViewVisibility);
+        notifyPropertyChanged(BR.loadingViewVisibility);
+        notifyPropertyChanged(BR.emptyViewVisibility);
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Bindable
+    public int getContentViewVisibility() {
+        return (!isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getLoadingViewVisibility() {
+        return isLoading() ? View.VISIBLE : View.GONE;
+    }
+
+    @Bindable
+    public int getEmptyViewVisibility() {
+        return (isEmpty() && !isLoading()) ? View.VISIBLE : View.GONE;
     }
 
     /**

@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import miyagi389.android.apps.tr.domain.model.Template;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
@@ -175,13 +174,13 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             .subscribe(
                 granted -> {
                     if (granted) {
-                        loadDataTemplate();
+                        loadData();
                     }
                 }
             );
     }
 
-    private void loadDataTemplate() {
+    private void loadData() {
         self.templateRepository.findById(getArgumentsTemplateId())
             .toObservable()
             .compose(self.bindToLifecycle())
@@ -189,28 +188,13 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnTerminate(() -> self.viewModel.setLoading(false))
-            .subscribe(
-                template -> {
-                    //noinspection Convert2MethodRef
-                    loadDataEvents(template);
-                },
-                throwable -> {
-                    Timber.e(throwable, throwable.getMessage());
-                    showError(throwable.getMessage());
-                }
-            );
-    }
-
-    private void loadDataEvents(@NonNull final Template template) {
-        final long calendarId = template.getCalendarId();
-        final String eventTitle = template.getEventTitle();
-        final long fromDate = getArgumentsFromDate();
-        final long toDate = getArgumentsToDate();
-        self.eventsRepository.findByCalendarId(calendarId, eventTitle, fromDate, toDate, self.sortOrder)
-            .compose(self.bindToLifecycle())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(o -> self.viewModel.setLoading(true))
-            .doOnTerminate(() -> self.viewModel.setLoading(false))
+            .flatMap(template -> {
+                final long calendarId = template.getCalendarId();
+                final String eventTitle = template.getEventTitle();
+                final long fromDate = getArgumentsFromDate();
+                final long toDate = getArgumentsToDate();
+                return self.eventsRepository.findByCalendarId(calendarId, eventTitle, fromDate, toDate, self.sortOrder);
+            })
             .toList()
             .map(events -> {
                 self.viewModel.setItems(events);
