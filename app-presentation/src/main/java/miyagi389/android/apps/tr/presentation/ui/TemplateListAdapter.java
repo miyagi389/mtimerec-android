@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Template;
@@ -35,7 +35,7 @@ class TemplateListAdapter
 
     private final TemplateListAdapter self = this;
 
-    private final List<Template> items = new ArrayList<>();
+    private List<Template> items = Collections.emptyList();
     private final Listener listener;
     private final LayoutInflater layoutInflater;
 
@@ -99,7 +99,6 @@ class TemplateListAdapter
         return template.getId();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         int itemCount = self.items.size();
@@ -113,19 +112,13 @@ class TemplateListAdapter
         return self.items.get(position);
     }
 
-    void addAll(@NonNull final List<Template> items) {
-        self.items.addAll(items);
+    @NonNull
+    List<Template> getItems() {
+        return self.items;
     }
 
-    public void add(
-        final int position,
-        @NonNull final Template item
-    ) {
-        self.items.add(position, item);
-    }
-
-    public void clear() {
-        self.items.clear();
+    void setItems(@NonNull final List<Template> items) {
+        self.items = items;
     }
 
     /**

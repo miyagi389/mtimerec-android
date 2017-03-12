@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Events;
@@ -32,7 +32,7 @@ class EventsListAdapter
 
     private final EventsListAdapter self = this;
 
-    private final List<Events> items = new ArrayList<>();
+    private List<Events> items = Collections.emptyList();
     private final Listener listener;
     private final LayoutInflater layoutInflater;
 
@@ -69,7 +69,6 @@ class EventsListAdapter
         return item.getId();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return self.items.size();
@@ -79,19 +78,13 @@ class EventsListAdapter
         return self.items.get(position);
     }
 
-    void addAll(@NonNull final List<Events> items) {
-        self.items.addAll(items);
+    @NonNull
+    List<Events> getItems() {
+        return self.items;
     }
 
-    public void add(
-        final int position,
-        @NonNull final Events item
-    ) {
-        self.items.add(position, item);
-    }
-
-    public void clear() {
-        self.items.clear();
+    void setItems(@NonNull final List<Events> items) {
+        self.items = items;
     }
 
     /**

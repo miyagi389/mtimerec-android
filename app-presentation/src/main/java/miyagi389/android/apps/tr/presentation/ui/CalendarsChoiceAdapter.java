@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Calendars;
@@ -29,7 +29,7 @@ class CalendarsChoiceAdapter
 
     private final CalendarsChoiceAdapter self = this;
 
-    private final List<Calendars> items = new ArrayList<>();
+    private List<Calendars> items = Collections.emptyList();
     private final Listener listener;
     private final LayoutInflater layoutInflater;
 
@@ -64,7 +64,6 @@ class CalendarsChoiceAdapter
         return super.getItemId(position);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return self.items.size();
@@ -74,19 +73,13 @@ class CalendarsChoiceAdapter
         return self.items.get(position);
     }
 
-    void addAll(@NonNull final List<Calendars> items) {
-        self.items.addAll(items);
+    @NonNull
+    List<Calendars> getItems() {
+        return self.items;
     }
 
-    public void add(
-        final int position,
-        @NonNull final Calendars item
-    ) {
-        self.items.add(position, item);
-    }
-
-    public void clear() {
-        self.items.clear();
+    void setItems(@NonNull final List<Calendars> items) {
+        self.items = items;
     }
 
     public void setItemChecked(int position) {

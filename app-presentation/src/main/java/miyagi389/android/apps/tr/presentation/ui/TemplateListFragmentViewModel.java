@@ -2,8 +2,9 @@ package miyagi389.android.apps.tr.presentation.ui;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Template;
@@ -16,7 +17,7 @@ public class TemplateListFragmentViewModel extends BaseObservable {
 
     private boolean loading;
 
-    private final List<Template> items = new ArrayList<>();
+    private List<Template> items = Collections.emptyList();
 
     @Bindable
     public boolean isLoading() {
@@ -38,13 +39,8 @@ public class TemplateListFragmentViewModel extends BaseObservable {
         return self.items;
     }
 
-    public void addItem(final Template item) {
-        self.items.add(item);
-        notifyPropertyChanged(BR.empty);
-    }
-
-    public void clearItems() {
-        self.items.clear();
+    public void setItems(@NonNull final List<Template> items) {
+        self.items = items;
         notifyPropertyChanged(BR.empty);
     }
 }

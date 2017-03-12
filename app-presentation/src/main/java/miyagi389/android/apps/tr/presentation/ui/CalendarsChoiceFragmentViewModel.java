@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
 
     private long chosenId;
 
-    private final ArrayList<Calendars> items = new ArrayList<>();
+    private ArrayList<Calendars> items = new ArrayList<>();
 
     private boolean loading;
 
@@ -52,16 +53,8 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
         return self.items;
     }
 
-    public void addItem(final Calendars item) {
-        self.items.add(item);
-    }
-
-    public void addItems(final List<Calendars> items) {
-        self.items.addAll(items);
-    }
-
-    public void clearItems() {
-        self.items.clear();
+    public void setItems(@NonNull final ArrayList<Calendars> items) {
+        self.items = items;
         notifyPropertyChanged(BR.empty);
     }
 

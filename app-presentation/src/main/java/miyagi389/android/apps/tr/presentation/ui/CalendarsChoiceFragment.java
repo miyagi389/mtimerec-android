@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.domain.repository.CalendarsRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.CalendarsChoiceFragmentBinding;
+import miyagi389.android.apps.tr.presentation.ui.widget.WrapContentLinearLayoutManager;
 import rx.android.content.ContentObservable;
 import timber.log.Timber;
 
@@ -125,12 +127,10 @@ public class CalendarsChoiceFragment
         self.binding.setViewModel(self.viewModel);
 
         self.binding.recyclerView.setHasFixedSize(true);
-        self.binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        self.binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext()));
         self.binding.recyclerView.setAdapter(self.adapter);
         // RecyclerView の notifyItemChanged() 時のちらつきを止める
         ((DefaultItemAnimator) self.binding.recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-
-        renderViewModel();
     }
 
     @Override
@@ -181,43 +181,31 @@ public class CalendarsChoiceFragment
             .compose(self.bindToLifecycle())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(o -> {
-                self.viewModel.clearItems();
-                self.viewModel.setLoading(true);
-            })
-            .doOnTerminate(() -> {
-                //noinspection CodeBlock2Expr
-                self.viewModel.setLoading(false);
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
+            .toList()
+            .map(calendars -> {
+                self.viewModel.setItems(new ArrayList<>(calendars));
+                return DiffUtil.calculateDiff(
+                    new CalendarsChoiceAdapterDiffUtilCallback(self.adapter.getItems(), self.viewModel.getItems())
+                );
             })
             .subscribe(
-                entities -> {
-                    //noinspection CodeBlock2Expr
-                    self.viewModel.addItem(entities);
+                diffResult -> {
+                    self.adapter.setItems(self.viewModel.getItems());
+                    diffResult.dispatchUpdatesTo(self.adapter);
+                    final int position = self.adapter.getPositionAtId(self.viewModel.getChosenId());
+                    if (position != CalendarsChoiceAdapter.UNSELECTED_ITEM_POSITION) {
+                        self.adapter.setItemChecked(position);
+                    } else {
+                        self.adapter.clearChoices();
+                    }
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
-    }
-
-    private void renderViewModel() {
-        self.binding.setViewModel(self.viewModel);
-
-        self.adapter.clear();
-        self.adapter.addAll(self.viewModel.getItems());
-
-        final int position = self.adapter.getPositionAtId(self.viewModel.getChosenId());
-        if (position != CalendarsChoiceAdapter.UNSELECTED_ITEM_POSITION) {
-            self.adapter.setItemChecked(position);
-        } else {
-            self.adapter.clearChoices();
-        }
     }
 
     private long getArgumentsChosenId() {

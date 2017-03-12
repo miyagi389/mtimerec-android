@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.provider.CalendarContract.Calendars;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +31,7 @@ import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.TemplateListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.IconWithItemAdapter;
+import miyagi389.android.apps.tr.presentation.ui.widget.WrapContentLinearLayoutManager;
 import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
 import rx.android.content.ContentObservable;
 import rx.eventbus.RxEventBus;
@@ -104,14 +105,10 @@ public class TemplateListFragment
         self.binding.setViewModel(self.viewModel);
 
         self.binding.recyclerView.setHasFixedSize(true);
-        self.binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        self.binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext()));
         self.binding.recyclerView.setAdapter(self.adapter);
         // RecyclerView の notifyItemChanged() 時のちらつきを止める
         ((DefaultItemAnimator) self.binding.recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-
-        if (savedInstanceState == null) {
-            renderViewModel();
-        }
     }
 
     @Override
@@ -185,35 +182,25 @@ public class TemplateListFragment
         self.templateRepository.findAll(self.sortOrder)
             .compose(self.bindToLifecycle())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe(o -> {
-                self.viewModel.clearItems();
-                self.viewModel.setLoading(true);
-            })
-            .doOnTerminate(() -> {
-                //noinspection Convert2MethodRef
-                self.viewModel.setLoading(false);
+            .doOnSubscribe(o -> self.viewModel.setLoading(true))
+            .doOnTerminate(() -> self.viewModel.setLoading(false))
+            .toList()
+            .map(templates -> {
+                self.viewModel.setItems(templates);
+                return DiffUtil.calculateDiff(
+                    new TemplateListAdapterDiffUtilCallback(self.adapter.getItems(), self.viewModel.getItems())
+                );
             })
             .subscribe(
-                template -> {
-                    //noinspection Convert2MethodRef
-                    self.viewModel.addItem(template);
+                diffResult -> {
+                    self.adapter.setItems(self.viewModel.getItems());
+                    diffResult.dispatchUpdatesTo(self.adapter);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    renderViewModel();
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    //noinspection Convert2MethodRef
-                    renderViewModel();
                 }
             );
-    }
-
-    private void renderViewModel() {
-        self.adapter.clear();
-        self.adapter.addAll(self.viewModel.getItems());
-        self.adapter.notifyDataSetChanged();
     }
 
     private TemplateListFragmentViewModel createViewModel() {

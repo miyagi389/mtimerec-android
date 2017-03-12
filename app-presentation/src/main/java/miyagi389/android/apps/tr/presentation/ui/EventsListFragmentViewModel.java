@@ -2,8 +2,9 @@ package miyagi389.android.apps.tr.presentation.ui;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import miyagi389.android.apps.tr.domain.model.Events;
@@ -16,7 +17,7 @@ public class EventsListFragmentViewModel extends BaseObservable {
 
     private boolean loading;
 
-    private final List<Events> items = new ArrayList<>();
+    private List<Events> items = Collections.emptyList();
 
     @Bindable
     public boolean isLoading() {
@@ -38,13 +39,8 @@ public class EventsListFragmentViewModel extends BaseObservable {
         return self.items;
     }
 
-    public void addItem(final Events item) {
-        self.items.add(item);
-        notifyPropertyChanged(BR.empty);
-    }
-
-    public void clearItems() {
-        self.items.clear();
+    public void setItems(@NonNull final List<Events> items) {
+        self.items = items;
         notifyPropertyChanged(BR.empty);
     }
 }
