@@ -37,9 +37,9 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
         return eventTitle;
     }
 
-    @Bindable
     public void setEventTitle(final String eventTitle) {
         this.eventTitle = eventTitle;
+        notifyPropertyChanged(BR.eventTitle);
     }
 
     long getCalendarId() {
@@ -55,7 +55,6 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
         return calendarDisplayName;
     }
 
-    @Bindable
     private void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
@@ -66,7 +65,6 @@ public class TemplateAddFragmentViewModel extends BaseObservable implements Parc
         return loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         this.loading = loading;
         notifyPropertyChanged(BR.loading);

@@ -46,9 +46,9 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return title;
     }
 
-    @Bindable
     public void setTitle(final String title) {
         this.title = title;
+        notifyPropertyChanged(BR.title);
     }
 
     @Bindable
@@ -56,9 +56,9 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return description;
     }
 
-    @Bindable
     public void setDescription(final String description) {
         this.description = description;
+        notifyPropertyChanged(BR.description);
     }
 
     @Bindable
@@ -66,7 +66,6 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return dtStart;
     }
 
-    @Bindable
     public void setDtStart(final long dtStart) {
         this.dtStart = dtStart;
         notifyChange();
@@ -77,7 +76,6 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return dtEnd;
     }
 
-    @Bindable
     public void setDtEnd(final long dtEnd) {
         this.dtEnd = dtEnd;
         notifyChange();
@@ -88,7 +86,6 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         return loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         this.loading = loading;
         notifyPropertyChanged(BR.loading);

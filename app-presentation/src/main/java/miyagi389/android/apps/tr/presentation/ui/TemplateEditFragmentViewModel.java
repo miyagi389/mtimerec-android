@@ -40,9 +40,9 @@ public class TemplateEditFragmentViewModel extends BaseObservable implements Par
         return eventTitle;
     }
 
-    @Bindable
     public void setEventTitle(final String eventTitle) {
         this.eventTitle = eventTitle;
+        notifyPropertyChanged(BR.eventTitle);
     }
 
     long getCalendarId() {
@@ -58,7 +58,6 @@ public class TemplateEditFragmentViewModel extends BaseObservable implements Par
         return calendarDisplayName;
     }
 
-    @Bindable
     public void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
@@ -69,7 +68,6 @@ public class TemplateEditFragmentViewModel extends BaseObservable implements Par
         return loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         this.loading = loading;
         notifyPropertyChanged(BR.loading);

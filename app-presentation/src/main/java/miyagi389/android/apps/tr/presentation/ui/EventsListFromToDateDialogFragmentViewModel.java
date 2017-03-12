@@ -31,7 +31,6 @@ public class EventsListFromToDateDialogFragmentViewModel extends BaseObservable 
         return fromDate;
     }
 
-    @Bindable
     public void setFromDate(final long fromDate) {
         this.fromDate = fromDate;
         fixFromDate();
@@ -43,7 +42,6 @@ public class EventsListFromToDateDialogFragmentViewModel extends BaseObservable 
         return toDate;
     }
 
-    @Bindable
     public void setToDate(final long toDate) {
         this.toDate = toDate;
         fixToDate();

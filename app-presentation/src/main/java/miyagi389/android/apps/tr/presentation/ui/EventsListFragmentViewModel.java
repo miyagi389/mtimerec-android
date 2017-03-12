@@ -23,7 +23,6 @@ public class EventsListFragmentViewModel extends BaseObservable {
         return self.loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         self.loading = loading;
         notifyPropertyChanged(BR.loading);

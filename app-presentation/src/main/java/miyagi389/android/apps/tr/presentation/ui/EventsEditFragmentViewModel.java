@@ -54,9 +54,9 @@ public class EventsEditFragmentViewModel extends BaseObservable implements Parce
         return title;
     }
 
-    @Bindable
     public void setTitle(final String title) {
         this.title = title;
+        notifyPropertyChanged(BR.title);
     }
 
     @Bindable
@@ -64,9 +64,9 @@ public class EventsEditFragmentViewModel extends BaseObservable implements Parce
         return description;
     }
 
-    @Bindable
     public void setDescription(final String description) {
         this.description = description;
+        notifyPropertyChanged(BR.description);
     }
 
     @Bindable
@@ -74,7 +74,6 @@ public class EventsEditFragmentViewModel extends BaseObservable implements Parce
         return dtStart;
     }
 
-    @Bindable
     public void setDtStart(final long dtStart) {
         this.dtStart = dtStart;
         notifyChange();
@@ -85,7 +84,6 @@ public class EventsEditFragmentViewModel extends BaseObservable implements Parce
         return dtEnd;
     }
 
-    @Bindable
     public void setDtEnd(final long dtEnd) {
         this.dtEnd = dtEnd;
         notifyChange();
@@ -96,7 +94,6 @@ public class EventsEditFragmentViewModel extends BaseObservable implements Parce
         return loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         this.loading = loading;
         notifyPropertyChanged(BR.loading);

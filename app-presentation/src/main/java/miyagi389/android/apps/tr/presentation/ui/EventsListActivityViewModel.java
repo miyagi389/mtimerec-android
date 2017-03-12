@@ -24,7 +24,6 @@ public class EventsListActivityViewModel extends BaseObservable implements Parce
         return fromDate;
     }
 
-    @Bindable
     public void setFromDate(final long fromDate) {
         this.fromDate = fromDate;
         notifyChange();
@@ -35,7 +34,6 @@ public class EventsListActivityViewModel extends BaseObservable implements Parce
         return toDate;
     }
 
-    @Bindable
     public void setToDate(final long toDate) {
         this.toDate = toDate;
         notifyChange();

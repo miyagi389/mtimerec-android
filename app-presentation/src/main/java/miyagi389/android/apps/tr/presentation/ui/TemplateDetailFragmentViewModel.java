@@ -52,9 +52,9 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return eventTitle;
     }
 
-    @Bindable
     public void setEventTitle(final String eventTitle) {
         this.eventTitle = eventTitle;
+        notifyPropertyChanged(BR.eventTitle);
     }
 
     long getCalendarId() {
@@ -70,7 +70,6 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return calendarDisplayName;
     }
 
-    @Bindable
     public void setCalendarDisplayName(final String calendarDisplayName) {
         this.calendarDisplayName = calendarDisplayName;
         notifyPropertyChanged(BR.calendarDisplayName);
@@ -81,9 +80,9 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return eventsCount;
     }
 
-    @Bindable
     public void setEventsCount(final int eventsCount) {
         this.eventsCount = eventsCount;
+        notifyPropertyChanged(BR.eventsCount);
     }
 
     @Bindable
@@ -91,9 +90,9 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return eventsDtStart;
     }
 
-    @Bindable
     public void setEventsDtStart(final long eventsDtStart) {
         this.eventsDtStart = eventsDtStart;
+        notifyPropertyChanged(BR.eventsDtStart);
     }
 
     @Bindable
@@ -101,9 +100,9 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return eventsDtEnd;
     }
 
-    @Bindable
     public void setEventsDtEnd(final long eventsDtEnd) {
         this.eventsDtEnd = eventsDtEnd;
+        notifyPropertyChanged(BR.eventsDtEnd);
     }
 
     @Bindable
@@ -111,7 +110,6 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
         return loading;
     }
 
-    @Bindable
     public void setLoading(final boolean loading) {
         this.loading = loading;
         notifyPropertyChanged(BR.loading);
