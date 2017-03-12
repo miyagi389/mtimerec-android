@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -16,31 +18,31 @@ public class ErrorLabelLayout extends LinearLayout implements ViewGroup.OnHierar
     public static final int DEFAULT_ERROR_LABEL_TEXT_SIZE = 12;
     public static final int DEFAULT_ERROR_LABEL_PADDING = 4;
 
-    private int mErrorPaddingLeft;
-    private int mErrorPaddingTop;
-    private int mErrorPaddingRight;
-    private int mErrorPaddingBottom;
+    private int errorPaddingLeft;
+    private int errorPaddingTop;
+    private int errorPaddingRight;
+    private int errorPaddingBottom;
 
-    private TextView mErrorLabel;
-    private Drawable mDrawable;
-    private int mErrorColor;
+    private TextView errorLabel;
+    private Drawable drawable;
+    private int errorColor;
 
-    public ErrorLabelLayout(final Context context) {
+    public ErrorLabelLayout(@NonNull final Context context) {
         super(context);
         initView();
     }
 
     public ErrorLabelLayout(
-        final Context context,
-        final AttributeSet attrs
+        @NonNull final Context context,
+        @Nullable final AttributeSet attrs
     ) {
         super(context, attrs);
         initView();
     }
 
     public ErrorLabelLayout(
-        final Context context,
-        final AttributeSet attrs,
+        @NonNull final Context context,
+        @Nullable final AttributeSet attrs,
         final int defStyleAttr
     ) {
         super(context, attrs, defStyleAttr);
@@ -50,21 +52,21 @@ public class ErrorLabelLayout extends LinearLayout implements ViewGroup.OnHierar
     private void initView() {
         setOnHierarchyChangeListener(this);
         setOrientation(VERTICAL);
-        mErrorColor = Color.parseColor("#D32F2F");
-        mErrorPaddingLeft = dipsToPix(DEFAULT_ERROR_LABEL_PADDING);
-        mErrorPaddingTop = 0;
-        mErrorPaddingRight = dipsToPix(DEFAULT_ERROR_LABEL_PADDING);
-        mErrorPaddingBottom = 0;
+        errorColor = Color.parseColor("#D32F2F");
+        errorPaddingLeft = dipsToPix(DEFAULT_ERROR_LABEL_PADDING);
+        errorPaddingTop = 0;
+        errorPaddingRight = dipsToPix(DEFAULT_ERROR_LABEL_PADDING);
+        errorPaddingBottom = 0;
         initErrorLabel();
     }
 
     private void initErrorLabel() {
-        mErrorLabel = new TextView(getContext());
-        mErrorLabel.setFocusable(true);
-        mErrorLabel.setFocusableInTouchMode(true);
-        mErrorLabel.setTextSize(DEFAULT_ERROR_LABEL_TEXT_SIZE);
-        mErrorLabel.setTextColor(mErrorColor);
-        mErrorLabel.setPadding(mErrorPaddingLeft, mErrorPaddingTop, mErrorPaddingRight, mErrorPaddingBottom);
+        errorLabel = new TextView(getContext());
+        errorLabel.setFocusable(true);
+        errorLabel.setFocusableInTouchMode(true);
+        errorLabel.setTextSize(DEFAULT_ERROR_LABEL_TEXT_SIZE);
+        errorLabel.setTextColor(errorColor);
+        errorLabel.setPadding(errorPaddingLeft, errorPaddingTop, errorPaddingRight, errorPaddingBottom);
     }
 
     public void setErrorPadding(
@@ -73,32 +75,32 @@ public class ErrorLabelLayout extends LinearLayout implements ViewGroup.OnHierar
         final int right,
         final int bottom
     ) {
-        mErrorPaddingLeft = dipsToPix(left);
-        mErrorPaddingTop = dipsToPix(top);
-        mErrorPaddingRight = dipsToPix(right);
-        mErrorPaddingBottom = dipsToPix(bottom);
-        mErrorLabel.setPadding(mErrorPaddingLeft, mErrorPaddingTop, mErrorPaddingRight, mErrorPaddingBottom);
+        errorPaddingLeft = dipsToPix(left);
+        errorPaddingTop = dipsToPix(top);
+        errorPaddingRight = dipsToPix(right);
+        errorPaddingBottom = dipsToPix(bottom);
+        errorLabel.setPadding(errorPaddingLeft, errorPaddingTop, errorPaddingRight, errorPaddingBottom);
     }
 
     @SuppressWarnings("unused")
     public void setErrorColor(final int color) {
-        mErrorColor = color;
-        mErrorLabel.setTextColor(mErrorColor);
+        errorColor = color;
+        errorLabel.setTextColor(errorColor);
     }
 
     public void clearError() {
-        mErrorLabel.setVisibility(INVISIBLE);
-        mDrawable.clearColorFilter();
+        errorLabel.setVisibility(INVISIBLE);
+        drawable.clearColorFilter();
     }
 
-    public void setError(final String text) {
-        mErrorLabel.setVisibility(VISIBLE);
-        mErrorLabel.setText(text);
+    public void setError(@Nullable final String text) {
+        errorLabel.setVisibility(VISIBLE);
+        errorLabel.setText(text);
         // tint drawable
-        mDrawable.setColorFilter(mErrorColor, PorterDuff.Mode.SRC_ATOP);
+        drawable.setColorFilter(errorColor, PorterDuff.Mode.SRC_ATOP);
         // changing focus from EditText to error label, necessary for Android L only
         // EditText background Drawable is not tinted, until EditText remains focus
-        mErrorLabel.requestFocus();
+        errorLabel.requestFocus();
     }
 
     /**
@@ -111,8 +113,8 @@ public class ErrorLabelLayout extends LinearLayout implements ViewGroup.OnHierar
     ) {
         final int childCount = getChildCount();
         if (childCount == 1) {
-            mDrawable = getChildAt(0).getBackground();
-            addView(mErrorLabel);
+            drawable = getChildAt(0).getBackground();
+            addView(errorLabel);
         }
     }
 
