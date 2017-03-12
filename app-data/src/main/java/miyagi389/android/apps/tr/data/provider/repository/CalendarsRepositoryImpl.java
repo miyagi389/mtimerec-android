@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import miyagi389.android.apps.tr.data.provider.entity.CalendarsEntity;
 import miyagi389.android.apps.tr.data.provider.mapper.CalendarsMapper;
 import miyagi389.android.apps.tr.domain.model.Calendars;
