@@ -36,7 +36,7 @@ public class IconWithItemAdapter extends ArrayAdapter<IconWithItemAdapter.Item> 
         }
     }
 
-    private final Context context;
+    private final int padding;
 
     public IconWithItemAdapter(
         @NonNull final Context context,
@@ -48,7 +48,7 @@ public class IconWithItemAdapter extends ArrayAdapter<IconWithItemAdapter.Item> 
             android.R.id.text1,
             items
         );
-        this.context = context;
+        this.padding = (int) (16 * context.getResources().getDisplayMetrics().density + 0.5f);
     }
 
     @NonNull
@@ -71,7 +71,6 @@ public class IconWithItemAdapter extends ArrayAdapter<IconWithItemAdapter.Item> 
         tv.setCompoundDrawablesWithIntrinsicBounds(item.iconResId, 0, 0, 0);
 
         //Add margin between image and text (support various screen densities)
-        final int padding = (int) (16 * context.getResources().getDisplayMetrics().density + 0.5f);
         tv.setCompoundDrawablePadding(padding);
 
         return v;
