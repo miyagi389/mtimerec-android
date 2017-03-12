@@ -163,6 +163,7 @@ public class TemplateEditFragment extends BaseFragment {
             .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );

@@ -34,6 +34,7 @@ public class CalendarsEntity implements Parcelable {
             mColumnIndexVisible = getColumnIndex(Calendars.VISIBLE);
         }
 
+        @SuppressWarnings("unused")
         @NonNull
         public CalendarsEntity toEntity() {
             final CalendarsEntity o = new CalendarsEntity();
@@ -103,13 +104,18 @@ public class CalendarsEntity implements Parcelable {
 
     public long id;
     public String name;
+    @SuppressWarnings("WeakerAccess")
     public String accountName;
+    @SuppressWarnings("WeakerAccess")
     public String accountType;
+    @SuppressWarnings("WeakerAccess")
     public int calendarColor;
     public String calendarDisplayName;
+    @SuppressWarnings("WeakerAccess")
     public int calendarAccessLevel;
     public boolean visible;
 
+    @SuppressWarnings("WeakerAccess")
     public CalendarsEntity() {
     }
 

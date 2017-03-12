@@ -51,7 +51,6 @@ public class EventsListFromToDateDialogFragment extends BaseDialogFragment imple
 
     @NonNull
     /*package*/ static EventsListFromToDateDialogFragment newInstance(
-        @NonNull final Activity targetActivity,
         final int requestCode,
         final long fromDate,
         final long toDate

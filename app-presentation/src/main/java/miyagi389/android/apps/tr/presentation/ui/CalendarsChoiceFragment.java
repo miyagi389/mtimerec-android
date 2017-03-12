@@ -156,6 +156,7 @@ public class CalendarsChoiceFragment
             .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );
@@ -181,15 +182,17 @@ public class CalendarsChoiceFragment
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> {
-                self.viewModel.clearEntities();
+                self.viewModel.clearItems();
                 self.viewModel.setLoading(true);
             })
             .doOnTerminate(() -> {
+                //noinspection CodeBlock2Expr
                 self.viewModel.setLoading(false);
             })
             .subscribe(
                 entities -> {
-                    self.viewModel.addEntity(entities);
+                    //noinspection CodeBlock2Expr
+                    self.viewModel.addItem(entities);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
@@ -197,6 +200,7 @@ public class CalendarsChoiceFragment
                     showError(throwable.getMessage());
                 },
                 () -> {
+                    //noinspection Convert2MethodRef
                     renderViewModel();
                 }
             );
@@ -206,7 +210,7 @@ public class CalendarsChoiceFragment
         self.binding.setViewModel(self.viewModel);
 
         self.adapter.clear();
-        self.adapter.addAll(self.viewModel.getEntities());
+        self.adapter.addAll(self.viewModel.getItems());
 
         final int position = self.adapter.getPositionAtId(self.viewModel.getChosenId());
         if (position != CalendarsChoiceAdapter.UNSELECTED_ITEM_POSITION) {

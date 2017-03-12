@@ -162,6 +162,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );

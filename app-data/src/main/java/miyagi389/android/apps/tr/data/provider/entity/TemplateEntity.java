@@ -45,6 +45,7 @@ public class TemplateEntity implements Parcelable {
     /**
      * column strings
      */
+    @SuppressWarnings("WeakerAccess")
     public interface Columns extends BaseColumns {
 
         /**
@@ -128,6 +129,7 @@ public class TemplateEntity implements Parcelable {
         public static CursorWrapper toCursorWrapperByAll(
             @NonNull final Context context
         ) {
+            //noinspection UnnecessaryLocalVariable
             final Uri uri = CONTENT_URI;
             final ContentResolver cr = context.getContentResolver();
             @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, null, null, null);
@@ -155,6 +157,7 @@ public class TemplateEntity implements Parcelable {
             @NonNull final Context context,
             @NonNull final TemplateEntity entity
         ) {
+            //noinspection UnnecessaryLocalVariable
             final Uri uri = CONTENT_URI;
             final ContentResolver cr = context.getContentResolver();
             return cr.insert(uri, entity.toContentValues());
@@ -179,6 +182,7 @@ public class TemplateEntity implements Parcelable {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public ContentValues toContentValues() {
         final ContentValues v = new ContentValues();

@@ -149,6 +149,7 @@ public class TemplateListFragment
             .doOnTerminate(() -> Timber.d("Terminate: Template"))
             .subscribe(
                 event -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );
@@ -160,6 +161,7 @@ public class TemplateListFragment
             .doOnTerminate(() -> Timber.d("Terminate: Calendars"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );

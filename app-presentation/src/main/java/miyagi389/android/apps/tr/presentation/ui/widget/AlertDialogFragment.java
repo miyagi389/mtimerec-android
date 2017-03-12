@@ -26,6 +26,7 @@ import android.widget.ListAdapter;
 @SuppressWarnings("Convert2Lambda")
 public class AlertDialogFragment extends DialogFragment {
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnItemClickListener {
         void onItemClick(
             @NonNull AlertDialogFragment dialog,
@@ -33,6 +34,7 @@ public class AlertDialogFragment extends DialogFragment {
         );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnMultiItemClickListener {
         void onItemClick(
             @NonNull AlertDialogFragment dialog,
@@ -41,29 +43,36 @@ public class AlertDialogFragment extends DialogFragment {
         );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnClickPositiveListener {
         void onClickPositive(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnClickNeutralListener {
         void onClickNeutral(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnClickNegativeListener {
         void onClickNegative(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnClickListener extends OnClickPositiveListener, OnClickNeutralListener, OnClickNegativeListener {
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnCancelListener {
         void onCancel(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnDismissListener {
         void onDismiss(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface OnKeyListener {
         boolean onKey(
             @NonNull AlertDialogFragment dialog,
@@ -72,11 +81,13 @@ public class AlertDialogFragment extends DialogFragment {
         );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface ViewDelegate {
         @NonNull
         View getView(@NonNull AlertDialogFragment dialog);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public interface ListAdapterDelegate {
         @NonNull
         ListAdapter getListAdapter(@NonNull AlertDialogFragment dialog);

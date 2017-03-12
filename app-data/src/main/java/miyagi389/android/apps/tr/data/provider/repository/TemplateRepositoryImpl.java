@@ -13,8 +13,6 @@ import java.util.TimeZone;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
-import io.reactivex.MaybeEmitter;
-import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.Observable;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
@@ -38,7 +36,7 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     private final TemplateMapper mapper;
 
     @Inject
-    public TemplateRepositoryImpl(
+    TemplateRepositoryImpl(
         @NonNull final Context context,
         @NonNull final RxEventBus eventBus,
         final EventsRepository eventsRepository
@@ -93,21 +91,18 @@ public class TemplateRepositoryImpl implements TemplateRepository {
             return Maybe.error(new Exception("template entity is null."));
         }
 
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                final Uri uri = TemplateEntity.Utils.insert(context, entity);
+            final Uri uri = TemplateEntity.Utils.insert(context, entity);
 
-                if (uri == null) {
-                    e.onError(new Exception("insert error."));
-                } else {
-                    eventBus.post(new Template.Created(ContentUris.parseId(uri)));
-                    e.onSuccess(ContentUris.parseId(uri));
-                }
+            if (uri == null) {
+                e.onError(new Exception("insert error."));
+            } else {
+                eventBus.post(new Template.Created(ContentUris.parseId(uri)));
+                e.onSuccess(ContentUris.parseId(uri));
             }
         });
     }
@@ -128,42 +123,36 @@ public class TemplateRepositoryImpl implements TemplateRepository {
             return Maybe.error(new Exception("template entity is null."));
         }
 
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                final int numberOfRowsUpdated = TemplateEntity.Utils.update(context, entity);
+            final int numberOfRowsUpdated = TemplateEntity.Utils.update(context, entity);
 
-                if (numberOfRowsUpdated == 0) {
-                    e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
-                } else {
-                    eventBus.post(new Template.Updated(model.getId()));
-                    e.onSuccess(entity.id);
-                }
+            if (numberOfRowsUpdated == 0) {
+                e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
+            } else {
+                eventBus.post(new Template.Updated(model.getId()));
+                e.onSuccess(entity.id);
             }
         });
     }
 
     @Override
     public Maybe<Long> deleteById(final long id) {
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                final int numberOfRowsDeleted = TemplateEntity.Utils.deleteById(context, id);
+            final int numberOfRowsDeleted = TemplateEntity.Utils.deleteById(context, id);
 
-                if (numberOfRowsDeleted == 0) {
-                    e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
-                } else {
-                    eventBus.post(new Template.Deleted(id));
-                    e.onSuccess(id);
-                }
+            if (numberOfRowsDeleted == 0) {
+                e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
+            } else {
+                eventBus.post(new Template.Deleted(id));
+                e.onSuccess(id);
             }
         });
     }

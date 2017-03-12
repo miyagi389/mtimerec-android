@@ -50,6 +50,7 @@ public class DatePickerDialogFragment
         return f;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final Bundle args = getArguments();

@@ -80,7 +80,6 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
 
     private void choiceFromToDate() {
         final EventsListFromToDateDialogFragment f = EventsListFromToDateDialogFragment.newInstance(
-            self,
             REQUEST_CODE_EVENTS_LIST_FROM_TO_DATE,
             self.viewModel.getFromDate(),
             self.viewModel.getToDate()

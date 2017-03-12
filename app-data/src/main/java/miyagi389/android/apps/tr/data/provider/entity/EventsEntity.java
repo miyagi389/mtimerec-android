@@ -280,6 +280,7 @@ public class EventsEntity implements Parcelable {
             '}';
     }
 
+    @SuppressWarnings("WeakerAccess")
     @NonNull
     public ContentValues toContentValues() {
         final ContentValues v = new ContentValues();

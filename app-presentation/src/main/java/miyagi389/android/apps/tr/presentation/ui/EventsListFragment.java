@@ -161,6 +161,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
             .doOnTerminate(() -> Timber.d("Terminate: Events"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );

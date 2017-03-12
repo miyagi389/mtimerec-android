@@ -9,8 +9,6 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 
 import io.reactivex.Maybe;
-import io.reactivex.MaybeEmitter;
-import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.Observable;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
@@ -80,20 +78,17 @@ public class EventsRepositoryImpl implements EventsRepository {
             return Maybe.error(new Exception("events entity is null."));
         }
 
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                final Uri uri = EventsEntity.Utils.insert(context, entity);
+            final Uri uri = EventsEntity.Utils.insert(context, entity);
 
-                if (uri == null) {
-                    e.onError(new Exception("insert error."));
-                } else {
-                    e.onSuccess(ContentUris.parseId(uri));
-                }
+            if (uri == null) {
+                e.onError(new Exception("insert error."));
+            } else {
+                e.onSuccess(ContentUris.parseId(uri));
             }
         });
     }
@@ -111,45 +106,39 @@ public class EventsRepositoryImpl implements EventsRepository {
 
         final EventsEntity entity = mapper.transform(model);
 
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                if (entity == null) {
-                    e.onError(new Exception("model transform error. model is null."));
-                    return;
-                }
+            if (entity == null) {
+                e.onError(new Exception("model transform error. model is null."));
+                return;
+            }
 
-                final int numberOfRowsUpdated = EventsEntity.Utils.update(context, entity);
+            final int numberOfRowsUpdated = EventsEntity.Utils.update(context, entity);
 
-                if (numberOfRowsUpdated == 0) {
-                    e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
-                } else {
-                    e.onSuccess(entity.id);
-                }
+            if (numberOfRowsUpdated == 0) {
+                e.onError(new Exception("update error. numberOfRowsUpdated=" + numberOfRowsUpdated));
+            } else {
+                e.onSuccess(entity.id);
             }
         });
     }
 
     @Override
     public Maybe<Long> deleteById(final long id) {
-        return Maybe.create(new MaybeOnSubscribe<Long>() {
-            @Override
-            public void subscribe(final MaybeEmitter<Long> e) throws Exception {
-                if (e.isDisposed()) {
-                    return;
-                }
+        return Maybe.create(e -> {
+            if (e.isDisposed()) {
+                return;
+            }
 
-                final int numberOfRowsDeleted = EventsEntity.Utils.deleteById(context, id);
+            final int numberOfRowsDeleted = EventsEntity.Utils.deleteById(context, id);
 
-                if (numberOfRowsDeleted == 0) {
-                    e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
-                } else {
-                    e.onSuccess(id);
-                }
+            if (numberOfRowsDeleted == 0) {
+                e.onError(new Exception("delete error. numberOfRowsDeleted=" + numberOfRowsDeleted));
+            } else {
+                e.onSuccess(id);
             }
         });
     }

@@ -17,7 +17,7 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
 
     private long chosenId;
 
-    private final ArrayList<Calendars> entities = new ArrayList<>();
+    private final ArrayList<Calendars> items = new ArrayList<>();
 
     private boolean loading;
 
@@ -38,7 +38,7 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
 
     @Bindable
     public boolean isEmpty() {
-        return self.entities.isEmpty();
+        return self.items.isEmpty();
     }
 
     public long getChosenId() {
@@ -49,20 +49,20 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
         self.chosenId = chosenId;
     }
 
-    public List<Calendars> getEntities() {
-        return self.entities;
+    public List<Calendars> getItems() {
+        return self.items;
     }
 
-    public void addEntity(final Calendars item) {
-        self.entities.add(item);
+    public void addItem(final Calendars item) {
+        self.items.add(item);
     }
 
-    public void addEntities(final List<Calendars> items) {
-        self.entities.addAll(items);
+    public void addItems(final List<Calendars> items) {
+        self.items.addAll(items);
     }
 
-    public void clearEntities() {
-        self.entities.clear();
+    public void clearItems() {
+        self.items.clear();
         notifyPropertyChanged(BR.empty);
     }
 
@@ -71,7 +71,7 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
      */
     private CalendarsChoiceFragmentViewModel(final Parcel in) {
         chosenId = in.readLong();
-        entities.addAll(in.readArrayList(Calendars.class.getClassLoader()));
+        items.addAll(in.readArrayList(Calendars.class.getClassLoader()));
         loading = in.readInt() == 1;
     }
 
@@ -84,7 +84,7 @@ public class CalendarsChoiceFragmentViewModel extends BaseObservable implements 
         final int flags
     ) {
         dest.writeLong(chosenId);
-        dest.writeList(entities);
+        dest.writeList(items);
         dest.writeInt(loading ? 1 : 0);
     }
 

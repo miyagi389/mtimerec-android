@@ -156,6 +156,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
             .doOnTerminate(() -> Timber.d("Terminate: Events"))
             .subscribe(
                 uri -> {
+                    //noinspection CodeBlock2Expr
                     requestLoadData();
                 }
             );

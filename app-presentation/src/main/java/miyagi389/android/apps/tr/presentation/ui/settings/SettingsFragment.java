@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
-    abstract class PreferenceWrapper<T extends Preference> {
+    private abstract class PreferenceWrapper<T extends Preference> {
 
         private final T preference;
 
@@ -116,10 +116,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             return getKey().equals(key);
         }
 
-        final void setEnabled(final boolean enabled) {
-            this.preference.setEnabled(enabled);
-        }
-
         @NonNull
         abstract String getKey();
 
@@ -132,7 +128,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
-    class AboutAppVersionPreferenceWrapper extends PreferenceWrapper<Preference> {
+    private class AboutAppVersionPreferenceWrapper extends PreferenceWrapper<Preference> {
 
         @NonNull
         @Override

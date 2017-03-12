@@ -8,10 +8,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 
-import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneOffset;
-import org.threeten.bp.ZonedDateTime;
-
 import miyagi389.android.apps.tr.presentation.BR;
 
 @SuppressWarnings("WeakerAccess")
@@ -97,18 +93,6 @@ public class EventsDetailFragmentViewModel extends BaseObservable implements Par
         this.loading = loading;
         notifyPropertyChanged(BR.loading);
         notifyPropertyChanged(BR.empty);
-    }
-
-    @NonNull
-    public ZonedDateTime getDtStartAsZonedDateTime() {
-        final Instant instant = Instant.ofEpochMilli(this.dtStart);
-        return instant.atZone(ZoneOffset.systemDefault());
-    }
-
-    @NonNull
-    public ZonedDateTime getDtEndAsZonedDateTime() {
-        final Instant instant = Instant.ofEpochMilli(this.dtEnd);
-        return instant.atZone(ZoneOffset.systemDefault());
     }
 
     @NonNull

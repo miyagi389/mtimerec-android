@@ -67,6 +67,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         final TypedValue floatingWindowFlag = new TypedValue();
 
         // Check isFloatingWindow flag is defined in theme.
+        //noinspection SimplifiableIfStatement
         if (theme == null || !theme
             .resolveAttribute(R.attr.isFloatingWindow, floatingWindowFlag, true)) {
             return false;
