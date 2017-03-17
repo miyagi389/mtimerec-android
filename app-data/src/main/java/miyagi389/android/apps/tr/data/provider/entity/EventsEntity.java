@@ -158,33 +158,6 @@ public class EventsEntity implements Parcelable {
             @NonNull final Context context,
             final long calendarId,
             @NonNull final String title,
-            @NonNull final EventsRepository.SortOrder sortOrder
-        ) {
-            final Uri uri = Events.CONTENT_URI;
-            final String selection = Events.CALENDAR_ID + " = ? AND " +
-                Events.TITLE + " = ? AND " +
-                Events.RRULE + " IS NULL AND " +
-                Events.ALL_DAY + " = 0 AND " +
-                Events.DELETED + " = 0";
-            final String[] selectionArgs = new String[]{
-                Long.toString(calendarId),
-                title
-            };
-            final String querySortOrder = toSortOrder(sortOrder);
-            final ContentResolver cr = context.getContentResolver();
-            //noinspection MissingPermission Permission check は呼び出し元で行う。
-            @SuppressLint("Recycle") final Cursor cursor = cr.query(uri, null, selection, selectionArgs, querySortOrder);
-            if (cursor == null) {
-                return null;
-            }
-            return new CursorWrapper(cursor);
-        }
-
-        @Nullable
-        public static CursorWrapper toCursorWrapperCalendarId(
-            @NonNull final Context context,
-            final long calendarId,
-            @NonNull final String title,
             final long fromDate,
             final long toDate,
             @NonNull final EventsRepository.SortOrder sortOrder

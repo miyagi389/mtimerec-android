@@ -11,9 +11,12 @@ import javax.inject.Inject;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import miyagi389.android.apps.tr.data.exception.NotFoundException;
+import miyagi389.android.apps.tr.data.provider.entity.EventsCountEntity;
 import miyagi389.android.apps.tr.data.provider.entity.EventsEntity;
+import miyagi389.android.apps.tr.data.provider.mapper.EventsCountMapper;
 import miyagi389.android.apps.tr.data.provider.mapper.EventsMapper;
 import miyagi389.android.apps.tr.domain.model.Events;
+import miyagi389.android.apps.tr.domain.model.EventsCount;
 import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import rx.android.content.ContentObservable;
 
@@ -21,12 +24,14 @@ public class EventsRepositoryImpl implements EventsRepository {
 
     private final Context context;
 
-    private final EventsMapper mapper;
+    private final EventsMapper eventsMapper;
+    private final EventsCountMapper eventsCountMapper;
 
     @Inject
     EventsRepositoryImpl(@NonNull final Context context) {
         this.context = context;
-        this.mapper = new EventsMapper();
+        this.eventsMapper = new EventsMapper();
+        this.eventsCountMapper = new EventsCountMapper();
     }
 
     @Override
@@ -35,17 +40,17 @@ public class EventsRepositoryImpl implements EventsRepository {
         final String title
     ) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperLastDtStart(context, calendarId, title))
-            .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
+            .map(cursor -> eventsMapper.transform(new EventsEntity.CursorWrapper(cursor)));
     }
 
     @Override
-    public Observable<Events> findByCalendarId(
+    public Maybe<EventsCount> countByCalendarId(
         final long calendarId,
-        final String title,
-        final SortOrder sortOrder
+        final String title
     ) {
-        return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title, sortOrder))
-            .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
+        return ContentObservable.fromCursor(EventsCountEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title))
+            .map(cursor -> eventsCountMapper.transform(new EventsCountEntity.CursorWrapper(cursor)))
+            .firstElement();
     }
 
     @Override
@@ -57,13 +62,13 @@ public class EventsRepositoryImpl implements EventsRepository {
         final SortOrder sortOrder
     ) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperCalendarId(context, calendarId, title, fromDate, toDate, sortOrder))
-            .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)));
+            .map(cursor -> eventsMapper.transform(new EventsEntity.CursorWrapper(cursor)));
     }
 
     @Override
     public Maybe<Events> findById(final long id) {
         return ContentObservable.fromCursor(EventsEntity.Utils.toCursorWrapperById(context, id))
-            .map(cursor -> mapper.transform(new EventsEntity.CursorWrapper(cursor)))
+            .map(cursor -> eventsMapper.transform(new EventsEntity.CursorWrapper(cursor)))
             .firstElement();
     }
 
@@ -73,7 +78,7 @@ public class EventsRepositoryImpl implements EventsRepository {
             return Maybe.error(new Exception("events is null."));
         }
 
-        final EventsEntity entity = mapper.transform(model);
+        final EventsEntity entity = eventsMapper.transform(model);
         if (entity == null) {
             return Maybe.error(new Exception("events entity is null."));
         }
@@ -104,7 +109,7 @@ public class EventsRepositoryImpl implements EventsRepository {
             return Maybe.error(new NotFoundException("events not found on database. id=" + model.getId()));
         }
 
-        final EventsEntity entity = mapper.transform(model);
+        final EventsEntity entity = eventsMapper.transform(model);
 
         return Maybe.create(e -> {
             if (e.isDisposed()) {

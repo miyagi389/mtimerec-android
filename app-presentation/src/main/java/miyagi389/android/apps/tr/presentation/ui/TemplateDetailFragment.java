@@ -205,12 +205,11 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
                 final long calendarId = self.viewModel.getCalendarId();
                 final String eventTitle = self.viewModel.getEventTitle();
-                return self.eventsRepository.findByCalendarId(calendarId, eventTitle, EventsRepository.SortOrder.DT_START_ASCENDING);
+                return self.eventsRepository.countByCalendarId(calendarId, eventTitle).toObservable();
             })
-            .toList()
             .subscribe(
-                events -> {
-                    self.dataMapper.transform(events, self.viewModel);
+                eventsCount -> {
+                    self.dataMapper.transform(eventsCount, self.viewModel);
                     setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {

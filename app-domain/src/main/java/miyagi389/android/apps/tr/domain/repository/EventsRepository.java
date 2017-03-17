@@ -3,6 +3,7 @@ package miyagi389.android.apps.tr.domain.repository;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import miyagi389.android.apps.tr.domain.model.Events;
+import miyagi389.android.apps.tr.domain.model.EventsCount;
 
 public interface EventsRepository {
 
@@ -36,10 +37,9 @@ public interface EventsRepository {
         }
     }
 
-    Observable<Events> findByCalendarId(
+    Maybe<EventsCount> countByCalendarId(
         long calendarId,
-        String title,
-        SortOrder sortOrder
+        String title
     );
 
     Observable<Events> findByCalendarId(
