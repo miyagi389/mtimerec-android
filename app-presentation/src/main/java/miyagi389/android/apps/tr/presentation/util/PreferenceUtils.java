@@ -28,7 +28,7 @@ public final class PreferenceUtils {
             @Nonnull
             public static EventsRepository.SortOrder getSortOrder(@Nonnull final Context context) {
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                final String str = prefs.getString(context.getString(R.string.pref_ui_events_list_sort_order_key), null);
+                final String str = prefs.getString(context.getString(R.string.settings_ui_events_list_sort_order_key), null);
                 final int value = IntegerUtils.tryParse(StringUtils.nullToEmpty(str), EventsRepository.SortOrder.DEFAULT.value);
                 return EventsRepository.SortOrder.valueOfAsInt(value, EventsRepository.SortOrder.DEFAULT);
             }
@@ -39,7 +39,7 @@ public final class PreferenceUtils {
             ) {
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 final SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(context.getString(R.string.pref_ui_events_list_sort_order_key), Integer.toString(value.value));
+                editor.putString(context.getString(R.string.settings_ui_events_list_sort_order_key), Integer.toString(value.value));
                 editor.apply();
             }
         }
@@ -52,7 +52,7 @@ public final class PreferenceUtils {
             @Nonnull
             public static TemplateRepository.SortOrder getSortOrder(@Nonnull final Context context) {
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                final String str = prefs.getString(context.getString(R.string.pref_ui_template_list_sort_order_key), null);
+                final String str = prefs.getString(context.getString(R.string.settings_ui_template_list_sort_order_key), null);
                 final int value = IntegerUtils.tryParse(StringUtils.nullToEmpty(str), TemplateRepository.SortOrder.DEFAULT.value);
                 return TemplateRepository.SortOrder.valueOfAsInt(value, TemplateRepository.SortOrder.DEFAULT);
             }
@@ -63,7 +63,7 @@ public final class PreferenceUtils {
             ) {
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 final SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(context.getString(R.string.pref_ui_template_list_sort_order_key), Integer.toString(value.value));
+                editor.putString(context.getString(R.string.settings_ui_template_list_sort_order_key), Integer.toString(value.value));
                 editor.apply();
             }
         }

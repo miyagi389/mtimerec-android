@@ -133,7 +133,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         @NonNull
         @Override
         String getKey() {
-            return getString(R.string.pref_about_app_version_key);
+            return getString(R.string.settings_about_app_version_key);
         }
 
         @Override
