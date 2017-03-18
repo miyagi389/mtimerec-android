@@ -1,6 +1,8 @@
 package miyagi389.android.apps.tr.presentation.ui.settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 import miyagi389.android.apps.tr.presentation.BuildConfig;
 import miyagi389.android.apps.tr.presentation.R;
+import miyagi389.android.apps.tr.presentation.ui.WebViewActivity;
 import miyagi389.android.apps.tr.presentation.util.ContextUtils;
 
 /**
@@ -41,7 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         final String rootKey
     ) {
         setPreferencesFromResource(R.xml.settings, rootKey);
-        init();
+        initialize();
     }
 
     @Override
@@ -76,12 +79,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
-    private void init() {
+    private void initialize() {
         addPreferenceWrapper(new AboutAppVersionPreferenceWrapper());
+        addPreferenceWrapper(new LegalOssPreferenceWrapper());
 
         for (final Map.Entry<String, PreferenceWrapper> entry : self.preferenceWrappers.entrySet()) {
             final PreferenceWrapper p = entry.getValue();
-            p.init();
+            p.initialize();
         }
     }
 
@@ -120,11 +124,33 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         abstract String getKey();
 
         @SuppressWarnings("unused")
-        void init() {
+        void initialize() {
         }
 
         @SuppressWarnings("unused")
         void updateSummary() {
+        }
+    }
+
+
+    private class LegalOssPreferenceWrapper extends PreferenceWrapper<Preference> {
+
+        @NonNull
+        @Override
+        String getKey() {
+            return getString(R.string.settings_legal_oss_key);
+        }
+
+        @Override
+        void initialize() {
+            final Preference p = getPreference();
+            if (p != null) {
+                final Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClass(getContext(), WebViewActivity.class);
+                intent.setData(Uri.parse("file:///android_asset/oss.html"));
+                intent.putExtra(Intent.EXTRA_TITLE, p.getTitle());
+                p.setIntent(intent);
+            }
         }
     }
 

@@ -2,6 +2,10 @@
     <string name="settings_ui_events_list_sort_order_key" translatable="false">settings_ui_events_list_sort_order_key</string>
     <string name="settings_ui_template_list_sort_order_key" translatable="false">settings_ui_template_list_sort_order_key</string>
 
+    <string name="settings_legal_title">"Legal information"</string>
+    <string name="settings_legal_oss_key" translatable="false">settings_legal_oss_key</string>
+    <string name="settings_legal_oss_title">"Open Source Licenses"</string>
+
     <string name="settings_about_title">"About"</string>
     <string name="settings_about_app_version_key" translatable="false">settings_about_app_version_key</string>
     <string name="settings_about_app_version_title">"Version"</string>

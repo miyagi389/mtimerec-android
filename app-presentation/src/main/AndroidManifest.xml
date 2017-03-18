@@ -76,6 +76,14 @@
         </activity>
 
         <activity
+            android:name=".ui.WebViewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenSize|smallestScreenSize"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/AppTheme.Toolbar.HomeAsUp">
+        </activity>
+
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenSize|smallestScreenSize"
             android:exported="false"

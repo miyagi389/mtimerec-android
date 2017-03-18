@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:title="@string/settings_legal_title">
+
+        <Preference
+            android:key="@string/settings_legal_oss_key"
+            android:title="@string/settings_legal_oss_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/settings_about_title">
 
         <Preference
