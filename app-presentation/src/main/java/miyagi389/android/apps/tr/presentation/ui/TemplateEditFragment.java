@@ -180,6 +180,7 @@ public class TemplateEditFragment extends BaseFragment {
     }
 
     private void loadData() {
+        //noinspection CodeBlock2Expr
         self.templateRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
@@ -204,12 +205,13 @@ public class TemplateEditFragment extends BaseFragment {
             .subscribe(
                 calendars -> {
                     self.dataMapper.transform(calendars, self.viewModel);
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
+                },
+                () -> {
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }

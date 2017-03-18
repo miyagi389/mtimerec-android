@@ -173,6 +173,7 @@ public class TemplateAddFragment extends BaseFragment {
             calendarsObservable = self.calendarsRepository.findById(calendarId).toObservable();
         }
 
+        //noinspection CodeBlock2Expr
         calendarsObservable
             .take(1)
             .compose(self.bindToLifecycle())
@@ -183,12 +184,13 @@ public class TemplateAddFragment extends BaseFragment {
             .subscribe(
                 calendars -> {
                     self.dataMapper.transform(calendars, self.viewModel);
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
+                },
+                () -> {
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }

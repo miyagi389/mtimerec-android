@@ -173,6 +173,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
     }
 
     private void loadData() {
+        //noinspection CodeBlock2Expr
         self.eventsRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
@@ -182,14 +183,14 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
             .doOnTerminate(() -> self.viewModel.setLoading(false))
             .subscribe(
                 events -> {
-                    //noinspection Convert2MethodRef
                     self.dataMapper.transform(events, self.viewModel);
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
+                },
+                () -> {
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }

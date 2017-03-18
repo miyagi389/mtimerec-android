@@ -179,6 +179,7 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
     }
 
     private void loadData() {
+        //noinspection CodeBlock2Expr
         self.templateRepository.findById(getArgumentsId())
             .toObservable()
             .compose(self.bindToLifecycle())
@@ -210,12 +211,13 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             .subscribe(
                 eventsCount -> {
                     self.dataMapper.transform(eventsCount, self.viewModel);
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                     showError(throwable.getMessage());
+                },
+                () -> {
+                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }
