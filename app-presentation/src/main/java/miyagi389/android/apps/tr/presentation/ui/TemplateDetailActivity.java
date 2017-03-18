@@ -14,6 +14,9 @@ public class TemplateDetailActivity extends BaseActivity implements TemplateDeta
 
     public static final String EXTRA_ID = "EXTRA_ID";
 
+    public static final int RESULT_SAVED = RESULT_FIRST_USER + 1;
+    public static final int RESULT_DELETED = RESULT_FIRST_USER + 2;
+
     private final TemplateDetailActivity self = this;
 
     private TemplateDetailActivityBinding binding;
@@ -62,11 +65,19 @@ public class TemplateDetailActivity extends BaseActivity implements TemplateDeta
     }
 
     /**
+     * {@link TemplateDetailFragment.Listener#onSaved(TemplateDetailFragment)}
+     */
+    @Override
+    public void onSaved(@NonNull final TemplateDetailFragment fragment) {
+        setResult(RESULT_SAVED);
+    }
+
+    /**
      * {@link TemplateDetailFragment.Listener#onDeleted(TemplateDetailFragment)}
      */
     @Override
     public void onDeleted(@NonNull final TemplateDetailFragment fragment) {
-        setResult(RESULT_OK);
+        setResult(RESULT_DELETED);
         finish();
     }
 }

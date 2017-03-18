@@ -38,12 +38,16 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
 
     public interface Listener {
 
+        void onSaved(@NonNull TemplateDetailFragment fragment);
+
         void onDeleted(@NonNull TemplateDetailFragment fragment);
     }
 
+    public static final String EXTRA_ID = "EXTRA_ID";
+
     private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
-    public static final String EXTRA_ID = "EXTRA_ID";
+    private static final int REQUEST_CODE_TEMPLATE_EDIT = 1;
 
     private static final String STATE_MODEL = "STATE_MODEL";
 
@@ -130,10 +134,6 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         self.binding.setViewModel(self.viewModel);
 
         self.binding.eventsButton.setOnClickListener(v -> goEvents());
-
-        if (savedInstanceState == null) {
-            requestLoadData();
-        }
     }
 
     @Override
@@ -282,13 +282,41 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
     private void edit() {
         final long id = getArgumentsId();
         final Intent intent = TemplateEditActivity.newIntent(getContext(), id);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_TEMPLATE_EDIT);
     }
 
     private void goEvents() {
         final long id = getArgumentsId();
         final Intent intent = EventsListActivity.newIntent(getContext(), id);
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(
+        final int requestCode,
+        final int resultCode,
+        final Intent data
+    ) {
+        switch (requestCode) {
+            case REQUEST_CODE_TEMPLATE_EDIT:
+                onActivityResultTemplateEdit(resultCode);
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+
+    private void onActivityResultTemplateEdit(
+        final int resultCode
+    ) {
+        switch (resultCode) {
+            case TemplateEditActivity.RESULT_SAVED:
+                self.listener.onSaved(self);
+                break;
+            default:
+                break;
+        }
     }
 
     /**

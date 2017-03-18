@@ -14,6 +14,8 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
 
     public static final String EXTRA_ID = "EXTRA_ID";
 
+    public static final int RESULT_SAVED = RESULT_FIRST_USER + 1;
+
     private final TemplateEditActivity self = this;
 
     private TemplateEditActivityBinding binding;
@@ -66,7 +68,7 @@ public class TemplateEditActivity extends BaseActivity implements TemplateEditFr
      */
     @Override
     public void onSaved(@NonNull final TemplateEditFragment fragment) {
-        setResult(RESULT_OK);
+        setResult(RESULT_SAVED);
         finish();
     }
 }

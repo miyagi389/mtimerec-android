@@ -45,9 +45,9 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
     private static final String REQUEST_TAG_DELETE = "REQUEST_TAG_DELETE";
 
-    private static final String STATE_MODEL = "STATE_MODEL";
-
     private static final int REQUEST_CODE_EVENTS_EDIT = 1;
+
+    private static final String STATE_MODEL = "STATE_MODEL";
 
     private final EventsDetailFragment self = this;
 
@@ -124,10 +124,6 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
 
         self.binding = EventsDetailFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
-
-        if (savedInstanceState == null) {
-            requestLoadData();
-        }
     }
 
     @Override
@@ -141,6 +137,7 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
         Timber.v(new Throwable().getStackTrace()[0].getMethodName());
         super.onResume();
         registerObservable();
+        requestLoadData();
     }
 
     private void registerObservable() {
@@ -271,15 +268,17 @@ public class EventsDetailFragment extends BaseFragment implements AlertDialogFra
                 onActivityResultEventsEdit(resultCode);
                 break;
             default:
+                super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
     }
 
-    private void onActivityResultEventsEdit(final int resultCode) {
+    private void onActivityResultEventsEdit(
+        final int resultCode
+    ) {
         switch (resultCode) {
             case EventsEditActivity.RESULT_SAVED:
                 self.listener.onSaved(self);
-                requestLoadData();
                 break;
             default:
                 break;
