@@ -3,6 +3,7 @@ package miyagi389.android.apps.tr.presentation.ui;
 import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
+import android.databinding.Observable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -172,13 +173,22 @@ public class EventsEditFragment
             );
             f.show(getFragmentManager(), f.getClass().getName());
         });
+        self.binding.addOnPropertyChangedCallback(propertyChangedCallback);
         self.binding.setViewModel(self.viewModel);
+        self.binding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
 
         self.binding.descriptionErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
         if (savedInstanceState == null) {
             requestLoadData();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        self.binding.removeOnPropertyChangedCallback(propertyChangedCallback);
+        self.binding.getViewModel().removeOnPropertyChangedCallback(propertyChangedCallback);
     }
 
     @Override
@@ -189,7 +199,6 @@ public class EventsEditFragment
 
     @Override
     public void onResume() {
-        Timber.v(new Throwable().getStackTrace()[0].getMethodName());
         super.onResume();
         registerObservable();
     }
@@ -239,9 +248,6 @@ public class EventsEditFragment
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }
@@ -350,4 +356,14 @@ public class EventsEditFragment
                 break;
         }
     }
+
+    private final Observable.OnPropertyChangedCallback propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(
+            Observable sender,
+            int propertyId
+        ) {
+            setHasOptionsMenu(!self.viewModel.isEmpty());
+        }
+    };
 }

@@ -131,7 +131,9 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
         }
 
         self.binding = TemplateDetailFragmentBinding.bind(getView());
+        self.binding.addOnPropertyChangedCallback(propertyChangedCallback);
         self.binding.setViewModel(self.viewModel);
+        self.binding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
 
         self.binding.eventsButton.setOnClickListener(v -> goEvents());
     }
@@ -215,9 +217,6 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }
@@ -328,4 +327,14 @@ public class TemplateDetailFragment extends BaseFragment implements AlertDialogF
             deleteInternal();
         }
     }
+
+    private final android.databinding.Observable.OnPropertyChangedCallback propertyChangedCallback = new android.databinding.Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(
+            android.databinding.Observable sender,
+            int propertyId
+        ) {
+            setHasOptionsMenu(!self.viewModel.isEmpty());
+        }
+    };
 }

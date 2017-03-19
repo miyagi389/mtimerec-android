@@ -125,7 +125,9 @@ public class TemplateEditFragment extends BaseFragment {
         }
 
         self.binding = TemplateEditFragmentBinding.bind(getView());
+        self.binding.addOnPropertyChangedCallback(propertyChangedCallback);
         self.binding.setViewModel(self.viewModel);
+        self.binding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
 
         self.binding.eventTitleErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
@@ -209,9 +211,6 @@ public class TemplateEditFragment extends BaseFragment {
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }
@@ -331,4 +330,14 @@ public class TemplateEditFragment extends BaseFragment {
         final Calendars calendars = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
         self.dataMapper.transform(calendars, self.viewModel);
     }
+
+    private final android.databinding.Observable.OnPropertyChangedCallback propertyChangedCallback = new android.databinding.Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(
+            android.databinding.Observable sender,
+            int propertyId
+        ) {
+            setHasOptionsMenu(!self.viewModel.isEmpty());
+        }
+    };
 }

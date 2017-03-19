@@ -112,13 +112,22 @@ public class TemplateAddFragment extends BaseFragment {
         }
 
         self.binding = TemplateAddFragmentBinding.bind(getView());
+        self.binding.addOnPropertyChangedCallback(propertyChangedCallback);
         self.binding.setViewModel(self.viewModel);
+        self.binding.getViewModel().addOnPropertyChangedCallback(propertyChangedCallback);
 
         self.binding.eventTitleErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
         self.binding.calendarErrorLabelLayout.setErrorPadding(0, 0, ErrorLabelLayout.DEFAULT_ERROR_LABEL_PADDING, 0);
 
         self.binding.calendarButton.setOnClickListener(v -> choiceCalendar());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        self.binding.removeOnPropertyChangedCallback(propertyChangedCallback);
+        self.binding.getViewModel().removeOnPropertyChangedCallback(propertyChangedCallback);
     }
 
     @Override
@@ -188,9 +197,6 @@ public class TemplateAddFragment extends BaseFragment {
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());
                     showError(throwable.getMessage());
-                },
-                () -> {
-                    setHasOptionsMenu(!self.viewModel.isEmpty());
                 }
             );
     }
@@ -309,4 +315,14 @@ public class TemplateAddFragment extends BaseFragment {
         final Calendars calendars = (Calendars) data.getSerializableExtra(CalendarsChoiceActivity.INTENT_CHOSEN_ITEM);
         self.dataMapper.transform(calendars, self.viewModel);
     }
+
+    private final android.databinding.Observable.OnPropertyChangedCallback propertyChangedCallback = new android.databinding.Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(
+            android.databinding.Observable sender,
+            int propertyId
+        ) {
+            setHasOptionsMenu(!self.viewModel.isEmpty());
+        }
+    };
 }
