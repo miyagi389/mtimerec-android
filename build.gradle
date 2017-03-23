@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'com.google.firebase:firebase-plugins:1.0.4'
         classpath "me.tatarka:gradle-retrolambda:3.5.0" // https://github.com/evant/gradle-retrolambda/releases
         classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.3"   // https://github.com/KeepSafe/dexcount-gradle-plugin/releases
     }
