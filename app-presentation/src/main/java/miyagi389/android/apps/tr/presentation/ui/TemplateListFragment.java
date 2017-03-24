@@ -32,7 +32,7 @@ import miyagi389.android.apps.tr.presentation.databinding.TemplateListFragmentBi
 import miyagi389.android.apps.tr.presentation.ui.widget.AlertDialogFragment;
 import miyagi389.android.apps.tr.presentation.ui.widget.IconWithItemAdapter;
 import miyagi389.android.apps.tr.presentation.ui.widget.WrapContentLinearLayoutManager;
-import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
+import miyagi389.android.apps.tr.presentation.util.SettingsUtils;
 import rx.android.content.ContentObservable;
 import rx.eventbus.RxEventBus;
 import timber.log.Timber;
@@ -115,7 +115,7 @@ public class TemplateListFragment
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        self.sortOrder = PreferenceUtils.UI.TemplateList.getSortOrder(getContext());
+        self.sortOrder = SettingsUtils.UI.TemplateList.getSortOrder(getContext());
 
         if (savedInstanceState != null) {
             self.selectedTemplate = (Template) savedInstanceState.getSerializable(STATE_SELECTED_TEMPLATE);
@@ -241,22 +241,22 @@ public class TemplateListFragment
         switch (item.getItemId()) {
             case R.id.menu_sort_by_dt_start_ascending:
                 self.sortOrder = TemplateRepository.SortOrder.DT_START_ASCENDING;
-                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             case R.id.menu_sort_by_dt_start_descending:
                 self.sortOrder = TemplateRepository.SortOrder.DT_START_DESCENDING;
-                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             case R.id.menu_sort_by_event_title_ascending:
                 self.sortOrder = TemplateRepository.SortOrder.EVENT_TITLE_ASCENDING;
-                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             case R.id.menu_sort_by_event_title_descending:
                 self.sortOrder = TemplateRepository.SortOrder.EVENT_TITLE_DESCENDING;
-                PreferenceUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.TemplateList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             default:

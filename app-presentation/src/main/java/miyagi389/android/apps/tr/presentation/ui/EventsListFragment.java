@@ -27,7 +27,7 @@ import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.databinding.EventsListFragmentBinding;
 import miyagi389.android.apps.tr.presentation.ui.widget.WrapContentLinearLayoutManager;
-import miyagi389.android.apps.tr.presentation.util.PreferenceUtils;
+import miyagi389.android.apps.tr.presentation.util.SettingsUtils;
 import rx.android.content.ContentObservable;
 import rx.eventbus.RxEventBus;
 import timber.log.Timber;
@@ -142,7 +142,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        self.sortOrder = PreferenceUtils.UI.EventsList.getSortOrder(getContext());
+        self.sortOrder = SettingsUtils.UI.EventsList.getSortOrder(getContext());
     }
 
     @Override
@@ -246,12 +246,12 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
         switch (item.getItemId()) {
             case R.id.menu_sort_by_dt_start_ascending:
                 self.sortOrder = EventsRepository.SortOrder.DT_START_ASCENDING;
-                PreferenceUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             case R.id.menu_sort_by_dt_start_descending:
                 self.sortOrder = EventsRepository.SortOrder.DT_START_DESCENDING;
-                PreferenceUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
+                SettingsUtils.UI.EventsList.setSortOrder(getContext(), self.sortOrder);
                 requestLoadData();
                 return true;
             default:

@@ -10,9 +10,9 @@ import miyagi389.android.apps.tr.domain.repository.EventsRepository;
 import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 import miyagi389.android.apps.tr.presentation.R;
 
-public final class PreferenceUtils {
+public final class SettingsUtils {
 
-    private PreferenceUtils() {
+    private SettingsUtils() {
     }
 
     public static final class UI {
