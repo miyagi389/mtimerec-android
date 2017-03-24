@@ -126,8 +126,8 @@ dependencies {
     compile "com.jakewharton.threetenabp:threetenabp:${threetenabpVersion}"
     compile "com.jakewharton.timber:timber:${timberVersion}"
 
-    compile "com.google.firebase:firebase-core:${firebaseVersion}"
-    compile "com.google.firebase:firebase-crash:${firebaseVersion}"
+    releaseCompile "com.google.firebase:firebase-core:${firebaseVersion}"
+    releaseCompile "com.google.firebase:firebase-crash:${firebaseVersion}"
 
     debugCompile "com.facebook.stetho:stetho:${stethoVersion}"
 
@@ -139,4 +139,6 @@ dependencies {
     testCompile "junit:junit:${jUnitVersion}"
 }
 
-apply plugin: "com.google.gms.google-services"
+if (file("google-services.json").exists()) {
+    apply plugin: "com.google.gms.google-services"
+}

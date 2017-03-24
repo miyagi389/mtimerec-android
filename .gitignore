@@ -27,3 +27,6 @@ build/
 */build/
 gradle.properties
 
+# Application
+google-services.json
+
