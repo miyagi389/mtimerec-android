@@ -121,11 +121,10 @@ public class CalendarsChoiceFragment
             self.viewModel = savedInstanceState.getParcelable(STATE_MODEL);
         }
 
-        self.adapter = new CalendarsChoiceAdapter(getContext(), self);
-
         self.binding = CalendarsChoiceFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
 
+        self.adapter = new CalendarsChoiceAdapter(getContext(), self);
         self.binding.recyclerView.setHasFixedSize(true);
         self.binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext()));
         self.binding.recyclerView.setAdapter(self.adapter);

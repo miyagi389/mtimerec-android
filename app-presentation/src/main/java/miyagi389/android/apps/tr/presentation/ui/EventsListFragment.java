@@ -125,13 +125,12 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     ) {
         super.onViewCreated(view, savedInstanceState);
 
-        self.viewModel = createViewModel();
-
-        self.adapter = new EventsListAdapter(getContext(), self);
+        self.viewModel = new EventsListFragmentViewModel();
 
         self.binding = EventsListFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
 
+        self.adapter = new EventsListAdapter(getContext(), self);
         self.binding.recyclerView.setHasFixedSize(true);
         self.binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext()));
         self.binding.recyclerView.setAdapter(self.adapter);
@@ -212,10 +211,6 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
                     showError(throwable.getMessage());
                 }
             );
-    }
-
-    private EventsListFragmentViewModel createViewModel() {
-        return new EventsListFragmentViewModel();
     }
 
     @Override

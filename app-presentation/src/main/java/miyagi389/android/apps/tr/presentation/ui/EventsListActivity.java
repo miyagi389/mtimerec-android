@@ -43,9 +43,9 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
     }
 
     private void bindingContentView() {
-        self.binding = DataBindingUtil.setContentView(self, R.layout.events_list_activity);
+        self.viewModel = new EventsListActivityViewModel();
 
-        self.viewModel = createViewModel();
+        self.binding = DataBindingUtil.setContentView(self, R.layout.events_list_activity);
         self.binding.setViewModel(self.viewModel);
 
         self.binding.periodButton.setOnClickListener(v -> choiceFromToDate());
@@ -72,10 +72,6 @@ public class EventsListActivity extends BaseActivity implements EventsListFromTo
     private long getIntentTemplateId() {
         final Intent intent = getIntent();
         return intent == null ? 0L : intent.getLongExtra(EXTRA_TEMPLATE_ID, 0L);
-    }
-
-    private EventsListActivityViewModel createViewModel() {
-        return new EventsListActivityViewModel();
     }
 
     private void choiceFromToDate() {

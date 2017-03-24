@@ -97,13 +97,12 @@ public class TemplateListFragment
     ) {
         super.onViewCreated(view, savedInstanceState);
 
-        self.viewModel = createViewModel();
-
-        self.adapter = new TemplateListAdapter(getContext(), self);
+        self.viewModel = new TemplateListFragmentViewModel();
 
         self.binding = TemplateListFragmentBinding.bind(getView());
         self.binding.setViewModel(self.viewModel);
 
+        self.adapter = new TemplateListAdapter(getContext(), self);
         self.binding.recyclerView.setHasFixedSize(true);
         self.binding.recyclerView.setLayoutManager(new WrapContentLinearLayoutManager(getContext()));
         self.binding.recyclerView.setAdapter(self.adapter);
@@ -201,10 +200,6 @@ public class TemplateListFragment
                     showError(throwable.getMessage());
                 }
             );
-    }
-
-    private TemplateListFragmentViewModel createViewModel() {
-        return new TemplateListFragmentViewModel();
     }
 
     @Override
