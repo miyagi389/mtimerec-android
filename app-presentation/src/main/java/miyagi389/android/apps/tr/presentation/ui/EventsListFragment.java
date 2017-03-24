@@ -145,8 +145,9 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        Timber.v(new Throwable().getStackTrace()[0].getMethodName());
+        super.onStart();
         registerObservable();
         requestLoadData();
     }

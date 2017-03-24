@@ -17,6 +17,7 @@ import miyagi389.android.apps.tr.presentation.BuildConfig;
 import miyagi389.android.apps.tr.presentation.R;
 import miyagi389.android.apps.tr.presentation.ui.WebViewActivity;
 import miyagi389.android.apps.tr.presentation.util.ContextUtils;
+import timber.log.Timber;
 
 /**
  * 注意事項:
@@ -48,8 +49,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        Timber.v(new Throwable().getStackTrace()[0].getMethodName());
+        super.onStart();
 
         final SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(self);
@@ -57,8 +59,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         final SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(self);
     }

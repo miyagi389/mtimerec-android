@@ -139,9 +139,9 @@ public class CalendarsChoiceFragment
     }
 
     @Override
-    public void onResume() {
+    public void onStart() {
         Timber.v(new Throwable().getStackTrace()[0].getMethodName());
-        super.onResume();
+        super.onStart();
         registerObservable();
         requestLoadData();
     }
