@@ -149,7 +149,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             if (p != null) {
                 final Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setClass(getContext(), WebViewActivity.class);
-                intent.setData(Uri.parse("file:///android_asset/oss.html"));
+                intent.setData(Uri.parse("file:///android_asset/licenses.html"));
                 intent.putExtra(Intent.EXTRA_TITLE, p.getTitle());
                 p.setIntent(intent);
             }

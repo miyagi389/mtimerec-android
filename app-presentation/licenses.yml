@@ -1,0 +1,225 @@
+- artifact: com.android.databinding:adapters:+
+  name: adapters
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  skip: true
+- artifact: com.android.databinding:baseLibrary:+
+  name: com.android.databinding.baseLibrary
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://tools.android.com/
+  skip: true
+- artifact: com.android.databinding:library:+
+  name: library
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  skip: true
+- artifact: com.android.support:animated-vector-drawable:+
+  name: animated-vector-drawable
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:appcompat-v7:+
+  name: appcompat-v7
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:cardview-v7:+
+  name: cardview-v7
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:design:+
+  name: design
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:preference-v14:+
+  name: preference-v14
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:preference-v7:+
+  name: preference-v7
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:recyclerview-v7:+
+  name: recyclerview-v7
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-annotations:+
+  name: support-annotations
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-compat:+
+  name: support-compat
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-core-ui:+
+  name: support-core-ui
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-core-utils:+
+  name: support-core-utils
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-fragment:+
+  name: support-fragment
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-media-compat:+
+  name: support-media-compat
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-v4:+
+  name: support-v4
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:support-vector-drawable:+
+  name: support-vector-drawable
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.android.support:transition:+
+  name: transition
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.android.gms:play-services-basement:+
+  name: play-services-basement
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.android.gms:play-services-tasks:+
+  name: play-services-tasks
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.code.findbugs:jsr305:+
+  name: FindBugs-jsr305
+  copyrightHolder: FindBugs
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://findbugs.sourceforge.net/
+- artifact: com.google.dagger:dagger:+
+  name: Dagger
+  copyrightHolder: Dagger Authors
+  license: The Apache License, Version 2.0
+- artifact: com.google.firebase:firebase-analytics-impl:+
+  name: firebase-analytics-impl
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.firebase:firebase-analytics:+
+  name: firebase-analytics
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.firebase:firebase-common:+
+  name: firebase-common
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.firebase:firebase-core:+
+  name: firebase-core
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.firebase:firebase-crash:+
+  name: firebase-crash
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.google.firebase:firebase-iid:+
+  name: firebase-iid
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+- artifact: com.jakewharton.threetenabp:threetenabp:+
+  name: ThreeTenAbp
+  copyrightHolder: Jake Wharton
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/ThreeTenABP/
+- artifact: com.jakewharton.timber:timber:+
+  name: Timber
+  copyrightHolder: Jake Wharton
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/timber
+- artifact: com.squareup.leakcanary:leakcanary-android-no-op:+
+  name: LeakCanary
+  copyrightHolder: Square, Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://github.com/square/leakcanary/
+- artifact: com.tbruyelle.rxpermissions2:rxpermissions:+
+  name: RxPermissions
+  copyrightHolder: tbruyelle
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/tbruyelle/RxPermissions
+- artifact: com.trello.rxlifecycle2:rxlifecycle-android:+
+  name: RxLifecycle-Android
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/trello/RxLifecycle
+  skip: true
+- artifact: com.trello.rxlifecycle2:rxlifecycle-components:+
+  name: RxLifecycle-Components
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/trello/RxLifecycle
+  skip: true
+- artifact: com.trello.rxlifecycle2:rxlifecycle:+
+  name: RxLifecycle
+  copyrightHolder: Trello
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/trello/RxLifecycle
+- artifact: io.reactivex.rxjava2:rxandroid:+
+  name: RxAndroid
+  copyrightHolder: RxAndroid authors
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ReactiveX/RxAndroid
+- artifact: io.reactivex.rxjava2:rxjava:+
+  name: rxjava
+  copyrightHolder: RxJava authors
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ReactiveX/RxJava
+- artifact: javax.inject:javax.inject:+
+  name: javax.inject
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://code.google.com/p/atinject/
+  skip: true
+- artifact: org.reactivestreams:reactive-streams:+
+  name: reactive-streams
+  copyrightHolder: reactive-streams
+  license: CC0
+  licenseUrl: http://creativecommons.org/publicdomain/zero/1.0/
+  url: http://www.reactive-streams.org/
+  skip: true
+- artifact: org.threeten:threetenbp:+
+  name: ThreeTen backport
+  copyrightHolder: Jake Wharton
+  license: BSD 3-clause
+  licenseUrl: https://raw.githubusercontent.com/ThreeTen/threetenbp/master/LICENSE.txt
+  url: https://www.threeten.org/threetenbp
