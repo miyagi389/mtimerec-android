@@ -131,6 +131,7 @@ dependencies {
     releaseCompile "com.google.firebase:firebase-crash:${firebaseVersion}"
 
     debugCompile "com.facebook.stetho:stetho:${stethoVersion}"
+    debugCompile "com.facebook.stetho:stetho-timber:${stethoVersion}@aar"
 
     //Development
     debugCompile "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"

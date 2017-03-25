@@ -1,6 +1,7 @@
 package miyagi389.android.apps.tr.presentation;
 
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.timber.StethoTree;
 
 import timber.log.Timber;
 
@@ -19,5 +20,6 @@ public class MainApplication extends AbstractMainApplication {
     @Override
     protected void initializeStetho() {
         Stetho.initializeWithDefaults(this);
+        Timber.plant(new StethoTree());
     }
 }
