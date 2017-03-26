@@ -29,4 +29,5 @@ gradle.properties
 
 # Application
 google-services.json
+release.keystore
 
