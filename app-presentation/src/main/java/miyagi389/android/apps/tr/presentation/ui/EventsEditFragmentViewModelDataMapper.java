@@ -30,15 +30,4 @@ class EventsEditFragmentViewModelDataMapper {
         destination.setDtStart(source == null ? 0 : source.getDtStart().getTime());
         destination.setDtEnd(source == null ? 0 : source.getDtEnd().getTime());
     }
-
-    public void transform(
-        @NonNull final Events source,
-        @NonNull final Events destination
-    ) {
-        destination.setId(source.getId());
-        destination.setTitle(source.getTitle());
-        destination.setDescription(source.getDescription());
-        destination.setDtStart(source.getDtStart());
-        destination.setDtEnd(source.getDtEnd());
-    }
 }

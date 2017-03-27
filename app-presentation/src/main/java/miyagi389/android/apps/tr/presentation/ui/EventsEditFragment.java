@@ -283,24 +283,15 @@ public class EventsEditFragment
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe(o -> self.viewModel.setLoading(true))
             .doOnTerminate(() -> self.viewModel.setLoading(false))
+            .flatMap(existEvents -> {
+                final Events updateEvents = new Events(existEvents);
+                self.dataMapper.transform(self.viewModel, updateEvents);
+                return self.eventsRepository.update(updateEvents).toObservable();
+            })
             .subscribe(
-                existEvents -> {
-                    final Events updateEvents = new Events();
-                    self.dataMapper.transform(self.viewModel, updateEvents);
-                    self.dataMapper.transform(updateEvents, existEvents);
-                    self.eventsRepository.update(existEvents)
-                        .toObservable()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                            id -> {
-                                //noinspection Convert2MethodRef
-                                self.listener.onSaved(self);
-                            },
-                            throwable -> {
-                                Timber.e(throwable, throwable.getMessage());
-                                showError(throwable.getMessage());
-                            }
-                        );
+                id -> {
+                    //noinspection Convert2MethodRef
+                    self.listener.onSaved(self);
                 },
                 throwable -> {
                     Timber.e(throwable, throwable.getMessage());

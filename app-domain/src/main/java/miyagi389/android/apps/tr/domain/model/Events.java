@@ -46,6 +46,16 @@ public class Events implements Serializable {
     public Events() {
     }
 
+    public Events(final Events copy) {
+        this.id = copy.id;
+        this.calendarId = copy.calendarId;
+        this.title = copy.title;
+        this.description = copy.description;
+        this.dtStart = copy.dtStart;
+        this.dtEnd = copy.dtEnd;
+        this.timezone = copy.timezone;
+    }
+
     public long getId() {
         return id;
     }
