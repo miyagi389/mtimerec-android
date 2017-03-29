@@ -18,6 +18,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.annimon.stream.Optional;
+
 import timber.log.Timber;
 
 public class WebViewFragment extends Fragment {
@@ -196,7 +198,9 @@ public class WebViewFragment extends Fragment {
             // FIXME #loadDataWithBaseURL で読み込むと、WebView.goBack()で戻らない。
             webView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
         } else {
-            getActivity().onBackPressed();
+            Optional.of(getActivity()).ifPresent(activity -> {
+                activity.onBackPressed();
+            });
         }
     }
 

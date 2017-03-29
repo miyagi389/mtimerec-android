@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Optional;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.concurrent.TimeUnit;
@@ -168,16 +169,18 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     }
 
     public void requestLoadData() {
-        new RxPermissions(getActivity()).request(Manifest.permission.READ_CALENDAR)
-            .compose(self.bindToLifecycle())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                granted -> {
-                    if (granted) {
-                        loadData();
+        Optional.of(getActivity()).ifPresent(activity -> {
+            new RxPermissions(activity).request(Manifest.permission.READ_CALENDAR)
+                .compose(self.bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    granted -> {
+                        if (granted) {
+                            loadData();
+                        }
                     }
-                }
-            );
+                );
+        });
     }
 
     private void loadData() {

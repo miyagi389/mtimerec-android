@@ -39,6 +39,7 @@ ext {
     rxAndroidVersion = "2.0.1"      // https://github.com/ReactiveX/RxAndroid/releases
     rxLifecycleVersion = "2.0.1"    // https://github.com/trello/RxLifecycle/releases
     rxPermissionsVersion = "0.9.3"  // https://github.com/tbruyelle/RxPermissions
+    lightweightStreamApiVersion = "1.1.7"   // https://github.com/aNNiMON/Lightweight-Stream-API/releases
     threetenabpVersion = "1.0.5"    // https://github.com/JakeWharton/ThreeTenABP/releases
     timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
     stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases

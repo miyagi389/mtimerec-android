@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Optional;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.threeten.bp.ZonedDateTime;
@@ -221,16 +222,18 @@ public class EventsEditFragment
     }
 
     private void requestLoadData() {
-        new RxPermissions(getActivity()).request(Manifest.permission.WRITE_CALENDAR)
-            .compose(self.bindToLifecycle())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                granted -> {
-                    if (granted) {
-                        loadData();
+        Optional.of(getActivity()).ifPresent(activity -> {
+            new RxPermissions(activity).request(Manifest.permission.WRITE_CALENDAR)
+                .compose(self.bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    granted -> {
+                        if (granted) {
+                            loadData();
+                        }
                     }
-                }
-            );
+                );
+        });
     }
 
     private void loadData() {

@@ -42,6 +42,8 @@ dependencies {
     compile "com.trello.rxlifecycle2:rxlifecycle:${rxLifecycleVersion}"
     compile "com.trello.rxlifecycle2:rxlifecycle-components:${rxLifecycleVersion}"
 
+    compile "com.annimon:stream:${lightweightStreamApiVersion}"
+
     compile "com.jakewharton.threetenabp:threetenabp:${threetenabpVersion}"
     compile "com.jakewharton.timber:timber:${timberVersion}"
 
