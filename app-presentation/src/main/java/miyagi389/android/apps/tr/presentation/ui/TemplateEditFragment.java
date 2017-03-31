@@ -277,7 +277,7 @@ public class TemplateEditFragment extends BaseFragment {
         final String value = self.viewModel.getEventTitle();
         Timber.d("getEventTitle = %s", value);
         if (TextUtils.isEmpty(value)) {
-            self.binding.eventTitleErrorLabelLayout.setError(getString(R.string.template_add_fragment_event_title_edit_error));
+            self.binding.eventTitleErrorLabelLayout.setError(getString(R.string.template_edit_fragment_event_title_edit_error));
             return false;
         } else {
             self.binding.eventTitleErrorLabelLayout.clearError();
@@ -288,7 +288,7 @@ public class TemplateEditFragment extends BaseFragment {
     private boolean validateCalendarId() {
         final long value = self.viewModel.getCalendarId();
         if (value == 0) {
-            self.binding.calendarErrorLabelLayout.setError(getString(R.string.template_add_fragment_calendar_button_error));
+            self.binding.calendarErrorLabelLayout.setError(getString(R.string.template_edit_fragment_calendar_button_error));
             return false;
         } else {
             self.binding.calendarErrorLabelLayout.clearError();
