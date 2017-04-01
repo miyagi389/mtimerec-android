@@ -128,7 +128,11 @@ public class TemplateDetailFragmentViewModel extends BaseObservable implements P
 
     @NonNull
     public String formatEventsCount(@NonNull final Context context) {
-        return context.getString(R.string.template_detail_fragment_events_count_text, eventsCount);
+        return context.getResources().getQuantityString(
+            R.plurals.template_detail_fragment_events_count_text,
+            eventsCount,
+            eventsCount
+        );
     }
 
     @NonNull

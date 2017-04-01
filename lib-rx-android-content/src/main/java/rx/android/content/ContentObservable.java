@@ -89,6 +89,7 @@ public final class ContentObservable {
      * of the cursor moving to the next position before each call and closing the cursor whether the
      * Observable completes or an error occurs.
      */
+    @SuppressWarnings("unchecked")
     public static <E extends Cursor> Observable<E> fromCursor(final E cursor) {
         return Observable.create(new OnSubscribeCursor(cursor));
     }

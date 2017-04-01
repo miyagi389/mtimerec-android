@@ -101,7 +101,8 @@
                         android:orientation="horizontal"
                         android:paddingBottom="?attr/listPreferredItemPaddingBottom"
                         android:paddingStart="?attr/listPreferredItemPaddingStart"
-                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+                        android:paddingTop="?attr/listPreferredItemPaddingTop"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"

@@ -142,7 +142,7 @@ public class MasterDataProvider extends AbstractProvider {
         TEMPLATE(new TemplateEntity.ProviderStrategy()),
         TEMPLATE_ID(new TemplateEntity.ProviderStrategyId());
 
-        public AbstractProviderStrategy strategy;
+        public final AbstractProviderStrategy strategy;
 
         UriPattern(@NonNull final AbstractProviderStrategy strategy) {
             this.strategy = strategy;

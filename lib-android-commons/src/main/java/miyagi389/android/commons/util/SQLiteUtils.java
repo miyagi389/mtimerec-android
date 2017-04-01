@@ -8,6 +8,7 @@ public final class SQLiteUtils {
     private SQLiteUtils() {
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static void execSQL(
         @NonNull final SQLiteDatabase db,
         @NonNull final String sql
@@ -19,9 +20,8 @@ public final class SQLiteUtils {
         @NonNull final SQLiteDatabase db,
         @NonNull final String[] sqls
     ) {
-        final int length = sqls.length;
-        for (int i = 0; i < length; i++) {
-            execSQL(db, sqls[i]);
+        for (final String sql : sqls) {
+            execSQL(db, sql);
         }
     }
 }

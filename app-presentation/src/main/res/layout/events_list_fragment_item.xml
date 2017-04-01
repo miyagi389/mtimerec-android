@@ -42,7 +42,8 @@
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_info_outline_black_24dp"/>
+                android:src="@drawable/ic_info_outline_black_24dp"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 

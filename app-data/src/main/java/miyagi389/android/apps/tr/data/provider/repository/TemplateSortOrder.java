@@ -10,7 +10,7 @@ import miyagi389.android.apps.tr.domain.repository.TemplateRepository;
 
 class TemplateSortOrder {
 
-    static Map<TemplateRepository.SortOrder, Comparator<Template>> ITEMS = new HashMap<>();
+    static final Map<TemplateRepository.SortOrder, Comparator<Template>> ITEMS = new HashMap<>();
 
     static {
         ITEMS.put(TemplateRepository.SortOrder.DT_START_ASCENDING, new DtStartAscending());

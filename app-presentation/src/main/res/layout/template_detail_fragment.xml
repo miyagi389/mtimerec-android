@@ -44,7 +44,8 @@
                         android:orientation="horizontal"
                         android:paddingBottom="?attr/listPreferredItemPaddingBottom"
                         android:paddingStart="?attr/listPreferredItemPaddingStart"
-                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+                        android:paddingTop="?attr/listPreferredItemPaddingTop"
+                        tools:ignore="RtlSymmetry,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -85,7 +86,8 @@
                         android:orientation="horizontal"
                         android:paddingBottom="?attr/listPreferredItemPaddingBottom"
                         android:paddingStart="?attr/listPreferredItemPaddingStart"
-                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+                        android:paddingTop="?attr/listPreferredItemPaddingTop"
+                        tools:ignore="RtlSymmetry,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -127,7 +129,8 @@
                         android:orientation="horizontal"
                         android:paddingBottom="?attr/listPreferredItemPaddingBottom"
                         android:paddingStart="?attr/listPreferredItemPaddingStart"
-                        android:paddingTop="?attr/listPreferredItemPaddingTop">
+                        android:paddingTop="?attr/listPreferredItemPaddingTop"
+                        tools:ignore="RtlSymmetry">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -148,7 +151,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
-                                android:singleLine="true"
+                                android:maxLines="1"
                                 android:text="@{viewModel.formatEventsCount(context)}"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 tools:text="128 events"/>
@@ -169,7 +172,8 @@
                             android:layout_width="?attr/actionBarSize"
                             android:layout_height="match_parent"
                             android:scaleType="center"
-                            android:src="@drawable/ic_info_outline_black_24dp"/>
+                            android:src="@drawable/ic_info_outline_black_24dp"
+                            tools:ignore="ContentDescription"/>
 
                     </LinearLayout>
 

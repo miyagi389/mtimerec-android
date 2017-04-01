@@ -12,6 +12,6 @@
         android:id="@+id/menu_edit"
         android:icon="@drawable/ic_menu_edit_white_24dp"
         android:title="@string/template_detail_fragment_menu_edit_title"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>

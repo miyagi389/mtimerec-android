@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     tools:text="タイトル"/>
 
@@ -57,7 +57,8 @@
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/ic_info_outline_black_24dp"/>
+                android:src="@drawable/ic_info_outline_black_24dp"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 

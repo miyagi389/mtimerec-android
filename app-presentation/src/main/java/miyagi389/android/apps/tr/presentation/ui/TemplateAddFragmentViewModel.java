@@ -4,10 +4,8 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.view.View;
 
-import miyagi389.android.apps.tr.domain.model.Calendars;
 import miyagi389.android.apps.tr.presentation.BR;
 
 public class TemplateAddFragmentViewModel extends BaseObservable implements Parcelable {
