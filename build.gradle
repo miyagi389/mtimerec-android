@@ -30,20 +30,20 @@ ext {
     androidBuildToolsVersion = "25.0.2"
     androidMinSdkVersion = 23
     androidTargetSdkVersion = 25
-    androidSupportPackageVersion = "25.3.0" // https://developer.android.com/topic/libraries/support-library/revisions.html
-    googlePlayServicesVersion = "9.6.1"
+    androidSupportPackageVersion = "25.3.1" // https://developer.android.com/topic/libraries/support-library/revisions.html
+    googlePlayServicesVersion = "10.2.1"
+    firebaseVersion = "10.2.1"      // https://firebase.google.com/docs/android/setup
 
     // Libraries
-    daggerVersion = "2.9"           // https://github.com/google/dagger/releases
-    rxJavaVersion = "2.0.7"         // https://github.com/ReactiveX/RxJava/releases
+    daggerVersion = "2.10"          // https://github.com/google/dagger/releases
+    rxJavaVersion = "2.0.8"         // https://github.com/ReactiveX/RxJava/releases
     rxAndroidVersion = "2.0.1"      // https://github.com/ReactiveX/RxAndroid/releases
     rxLifecycleVersion = "2.0.1"    // https://github.com/trello/RxLifecycle/releases
-    rxPermissionsVersion = "0.9.3"  // https://github.com/tbruyelle/RxPermissions
+    rxPermissionsVersion = "0.9.3"  // https://github.com/tbruyelle/RxPermissions/releases
     lightweightStreamApiVersion = "1.1.7"   // https://github.com/aNNiMON/Lightweight-Stream-API/releases
     threetenabpVersion = "1.0.5"    // https://github.com/JakeWharton/ThreeTenABP/releases
     timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
     stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases
-    firebaseVersion = "10.2.0"      // https://firebase.google.com/docs/android/setup
 
     // Testing
     jUnitVersion = "4.12"
