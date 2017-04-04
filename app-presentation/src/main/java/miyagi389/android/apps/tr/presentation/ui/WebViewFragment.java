@@ -198,7 +198,7 @@ public class WebViewFragment extends Fragment {
             // FIXME #loadDataWithBaseURL で読み込むと、WebView.goBack()で戻らない。
             webView.loadDataWithBaseURL(null, text, "text/html", "UTF-8", null);
         } else {
-            Optional.of(getActivity()).ifPresent(activity -> {
+            Optional.ofNullable(getActivity()).ifPresent(activity -> {
                 activity.onBackPressed();
             });
         }

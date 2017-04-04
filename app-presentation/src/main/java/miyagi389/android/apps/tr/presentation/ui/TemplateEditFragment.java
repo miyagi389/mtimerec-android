@@ -170,7 +170,7 @@ public class TemplateEditFragment extends BaseFragment {
     }
 
     private void requestLoadData() {
-        Optional.of(getActivity()).ifPresent(activity -> {
+        Optional.ofNullable(getActivity()).ifPresent(activity -> {
             new RxPermissions(activity).request(Manifest.permission.WRITE_CALENDAR)
                 .compose(self.bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())

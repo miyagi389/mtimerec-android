@@ -167,7 +167,7 @@ public class TemplateListFragment
 
     private void requestLoadData() {
         Timber.v(new Throwable().getStackTrace()[0].getMethodName());
-        Optional.of(getActivity()).ifPresent(activity -> {
+        Optional.ofNullable(getActivity()).ifPresent(activity -> {
             new RxPermissions(activity).request(Manifest.permission.WRITE_CALENDAR)
                 .compose(self.bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())

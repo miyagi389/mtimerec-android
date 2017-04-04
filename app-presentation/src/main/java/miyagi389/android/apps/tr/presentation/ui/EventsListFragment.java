@@ -169,7 +169,7 @@ public class EventsListFragment extends BaseFragment implements EventsListAdapte
     }
 
     public void requestLoadData() {
-        Optional.of(getActivity()).ifPresent(activity -> {
+        Optional.ofNullable(getActivity()).ifPresent(activity -> {
             new RxPermissions(activity).request(Manifest.permission.READ_CALENDAR)
                 .compose(self.bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
