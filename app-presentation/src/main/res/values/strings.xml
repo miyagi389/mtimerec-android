@@ -5,7 +5,7 @@
 
     <string name="unselected">(unselected)</string>
 
-    <string name="calendars_choice_activity_title">"Choice Calendar"</string>
+    <string name="calendars_choice_activity_title">"Calendar choice"</string>
 
     <string name="calendars_choice_fragment_empty_text">"Not Found"</string>
 
