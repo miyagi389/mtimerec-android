@@ -9,7 +9,7 @@ import java.util.Date;
 public class EventsCount implements Serializable {
 
     /**
-     * id
+     * events count
      */
     private int count;
 
