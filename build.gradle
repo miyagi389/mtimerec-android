@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.google.gms:google-services:3.1.0'
         classpath "me.tatarka:gradle-retrolambda:3.5.0" // https://github.com/evant/gradle-retrolambda/releases
         classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.3"   // https://github.com/KeepSafe/dexcount-gradle-plugin/releases
         classpath "com.cookpad.android.licensetools:license-tools-plugin:0.20.0"    // https://github.com/cookpad/license-tools-plugin/releases
@@ -16,6 +16,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 
@@ -27,27 +30,27 @@ task clean(type: Delete) {
 ext {
     // Android
     androidCompileSdkVersion = 25
-    androidBuildToolsVersion = "25.0.2"
+    androidBuildToolsVersion = "26.0.0"
     androidMinSdkVersion = 23
     androidTargetSdkVersion = 25
-    androidSupportPackageVersion = "25.3.1" // https://developer.android.com/topic/libraries/support-library/revisions.html
-    googlePlayServicesVersion = "10.2.1"
-    firebaseVersion = "10.2.1"      // https://firebase.google.com/docs/android/setup
+    androidSupportPackageVersion = "25.4.0" // https://developer.android.com/topic/libraries/support-library/revisions.html
+    googlePlayServicesVersion = "11.0.1"
+    firebaseVersion = "11.0.1"      // https://firebase.google.com/docs/android/setup
 
     // Libraries
-    daggerVersion = "2.10"          // https://github.com/google/dagger/releases
-    rxJavaVersion = "2.0.8"         // https://github.com/ReactiveX/RxJava/releases
+    daggerVersion = "2.11"          // https://github.com/google/dagger/releases
+    rxJavaVersion = "2.1.1"         // https://github.com/ReactiveX/RxJava/releases
     rxAndroidVersion = "2.0.1"      // https://github.com/ReactiveX/RxAndroid/releases
-    rxLifecycleVersion = "2.0.1"    // https://github.com/trello/RxLifecycle/releases
+    rxLifecycleVersion = "2.1.0"    // https://github.com/trello/RxLifecycle/releases
     rxPermissionsVersion = "0.9.3"  // https://github.com/tbruyelle/RxPermissions/releases
-    lightweightStreamApiVersion = "1.1.7"   // https://github.com/aNNiMON/Lightweight-Stream-API/releases
+    lightweightStreamApiVersion = "1.1.8"   // https://github.com/aNNiMON/Lightweight-Stream-API/releases
     threetenabpVersion = "1.0.5"    // https://github.com/JakeWharton/ThreeTenABP/releases
     timberVersion = "4.1.2"         // https://github.com/JakeWharton/timber/releases
-    stethoVersion = "1.4.2"         // https://github.com/facebook/stetho/releases
+    stethoVersion = "1.5.0"         // https://github.com/facebook/stetho/releases
 
     // Testing
     jUnitVersion = "4.12"
 
     // Development
-    leakCanaryVersion = "1.5"       // https://github.com/square/leakcanary/releases
+    leakCanaryVersion = "1.5.1"     // https://github.com/square/leakcanary/releases
 }
